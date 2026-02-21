@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genie Edge Demo</title>
+    <meta http-equiv="refresh" content="0; url=https://genie-edge-demo-private-1771625824.s3.amazonaws.com/index.html?AWSAccessKeyId=REDACTED&Signature=REDACTED&x-amz-security-token=REDACTED&Expires=1772231903">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+        .spinner {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top: 3px solid white;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        a {
+            color: white;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Genie Edge Demo</h1>
+        <div class="spinner"></div>
+        <p>Loading dashboard...</p>
+        <p style="font-size: 0.9em; opacity: 0.8; margin-top: 20px;">
+            If you're not redirected automatically,
+            <a href="https://genie-edge-demo-private-1771625824.s3.amazonaws.com/index.html?AWSAccessKeyId=REDACTED&Signature=REDACTED&x-amz-security-token=REDACTED&Expires=1772231903">click here</a>
+        </p>
+    </div>
+</body>
+</html>
