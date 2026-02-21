@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #000000;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -81,12 +81,33 @@
 
         /* Content styles */
         .person-image {
-            width: 320px;
-            height: 400px;
+            width: 360px;
+            height: 480px;
             object-fit: cover;
-            border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
             margin-bottom: 20px;
+            border: 3px solid transparent;
+            background: linear-gradient(#000, #000) padding-box,
+                        linear-gradient(45deg, #FFD700, #FFA500, #FF6B6B, #9B59B6, #3498DB, #2ECC71, #FFD700) border-box;
+            animation: glow 3s ease-in-out infinite;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5),
+                        0 0 60px rgba(255, 215, 0, 0.3),
+                        0 0 90px rgba(255, 215, 0, 0.2);
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                filter: brightness(1) contrast(1);
+                box-shadow: 0 0 30px rgba(255, 215, 0, 0.5),
+                           0 0 60px rgba(255, 215, 0, 0.3),
+                           0 0 90px rgba(255, 215, 0, 0.2);
+            }
+            50% {
+                filter: brightness(1.1) contrast(1.1);
+                box-shadow: 0 0 40px rgba(255, 215, 0, 0.7),
+                           0 0 80px rgba(255, 215, 0, 0.5),
+                           0 0 120px rgba(255, 215, 0, 0.3);
+            }
         }
 
         .quiz-content {
@@ -233,14 +254,14 @@
             position: absolute;
             top: 30px;
             left: 30px;
-            color: white;
+            color: #FFD700;
             z-index: 100;
         }
 
         .main-title h1 {
             font-size: 36px;
             margin-bottom: 5px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
         }
 
         .main-title p {
@@ -301,8 +322,8 @@
             }
 
             .person-image {
-                width: 280px;
-                height: 350px;
+                width: 320px;
+                height: 420px;
             }
         }
 
@@ -313,12 +334,12 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #000000;
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            color: white;
+            color: #FFD700;
             font-size: 24px;
             transition: opacity 0.5s ease;
         }
@@ -342,7 +363,7 @@
         <!-- Score -->
         <div class="score-board">
             <div class="score-title">SCORE</div>
-            <div class="score-value" id="score">0/7</div>
+            <div class="score-value" id="score">0/12</div>
         </div>
 
         <!-- Flipbook -->
@@ -352,7 +373,7 @@
                 <div class="page-face cover-page">
                     <h1>Tech Leaders Quiz</h1>
                     <p>Test your knowledge of influential tech figures</p>
-                    <p style="font-size: 16px; margin-bottom: 30px;">7 leaders to identify</p>
+                    <p style="font-size: 16px; margin-bottom: 30px;">12 leaders to identify</p>
                     <button class="start-button" onclick="startQuiz()">Start Quiz →</button>
                 </div>
                 <div class="page-face back"></div>
@@ -404,6 +425,31 @@
                 src: 'pics/boris_cherny.png',
                 name: 'Boris Cherny',
                 hint: 'Software engineer and author of "Programming TypeScript"'
+            },
+            {
+                src: 'pics/dwarkesh_patel.png',
+                name: 'Dwarkesh Patel',
+                hint: 'Podcaster and host of "The Dwarkesh Podcast", interviewing leading AI researchers and tech leaders'
+            },
+            {
+                src: 'pics/alex_wang.jpg',
+                name: 'Alex Wang',
+                hint: 'Founder and CEO of Scale AI, youngest self-made billionaire'
+            },
+            {
+                src: 'pics/demis_hassabis.png',
+                name: 'Demis Hassabis',
+                hint: 'CEO and co-founder of DeepMind, creator of AlphaGo and AlphaFold'
+            },
+            {
+                src: 'pics/yann_lecun.png',
+                name: 'Yann LeCun',
+                hint: 'Chief AI Scientist at Meta, Turing Award winner, pioneer of convolutional neural networks'
+            },
+            {
+                src: 'pics/geoffrey_hinton.png',
+                name: 'Geoffrey Hinton',
+                hint: 'Godfather of AI, Turing Award winner, pioneer of deep learning and backpropagation'
             }
         ];
 
@@ -437,7 +483,7 @@
                             <div class="person-hint">${person.hint}</div>
                         </div>
                     </div>
-                    <div class="page-number">Page ${index + 1} of 7</div>
+                    <div class="page-number">Page ${index + 1} of 12</div>
                 `;
 
                 // Back face (empty)
@@ -520,7 +566,7 @@
             if (currentPage === 0) {
                 indicator.textContent = 'Cover';
             } else {
-                indicator.textContent = `${currentPage} of 7`;
+                indicator.textContent = `${currentPage} of 12`;
             }
         }
 
@@ -541,7 +587,7 @@
 
         // Update score display
         function updateScore() {
-            document.getElementById('score').textContent = `${score}/7`;
+            document.getElementById('score').textContent = `${score}/12`;
         }
 
         // Keyboard navigation
