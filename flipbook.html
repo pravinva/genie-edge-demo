@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Leaders Flipbook Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 2000px;
+        }
+
+        /* Flipbook styles */
+        .flipbook {
+            position: relative;
+            width: 800px;
+            height: 600px;
+            transform-style: preserve-3d;
+        }
+
+        .page {
+            position: absolute;
+            width: 400px;
+            height: 600px;
+            transform-style: preserve-3d;
+            transform-origin: left center;
+            transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+
+        .page.left-page {
+            left: 0;
+        }
+
+        .page.right-page {
+            left: 400px;
+        }
+
+        .page-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            background: white;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .page-face.back {
+            transform: rotateY(180deg);
+        }
+
+        .page.flipped {
+            transform: rotateY(-180deg);
+        }
+
+        /* Content styles */
+        .person-image {
+            width: 320px;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .quiz-content {
+            text-align: center;
+            width: 100%;
+        }
+
+        .quiz-prompt {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .reveal-button {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .reveal-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .answer-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .answer-section.show {
+            display: block;
+        }
+
+        .person-name {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .person-hint {
+            font-size: 18px;
+            color: #666;
+            font-style: italic;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Page number */
+        .page-number {
+            position: absolute;
+            bottom: 20px;
+            font-size: 14px;
+            color: #999;
+        }
+
+        /* Navigation */
+        .nav-controls {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 30px;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+        }
+
+        .nav-button {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .nav-button:hover:not(:disabled) {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .page-indicator {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        /* Score */
+        .score-board {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+        }
+
+        .score-title {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .score-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        /* Title */
+        .main-title {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            color: white;
+            z-index: 100;
+        }
+
+        .main-title h1 {
+            font-size: 36px;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .main-title p {
+            font-size: 16px;
+            opacity: 0.95;
+        }
+
+        /* Cover page */
+        .cover-page {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .cover-page h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .cover-page p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .start-button {
+            padding: 15px 40px;
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .start-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 850px) {
+            .flipbook {
+                width: 400px;
+                height: 600px;
+            }
+
+            .page {
+                width: 400px;
+            }
+
+            .page.right-page {
+                display: none;
+            }
+
+            .person-image {
+                width: 280px;
+                height: 350px;
+            }
+        }
+
+        /* Loading */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            color: white;
+            font-size: 24px;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading" id="loading">Loading Quiz...</div>
+
+    <div class="container">
+        <!-- Title -->
+        <div class="main-title">
+            <h1>Tech Leaders Quiz</h1>
+            <p>Can you identify these innovators?</p>
+        </div>
+
+        <!-- Score -->
+        <div class="score-board">
+            <div class="score-title">SCORE</div>
+            <div class="score-value" id="score">0/7</div>
+        </div>
+
+        <!-- Flipbook -->
+        <div class="flipbook" id="flipbook">
+            <!-- Cover Page -->
+            <div class="page left-page" id="cover">
+                <div class="page-face cover-page">
+                    <h1>Tech Leaders Quiz</h1>
+                    <p>Test your knowledge of influential tech figures</p>
+                    <p style="font-size: 16px; margin-bottom: 30px;">7 leaders to identify</p>
+                    <button class="start-button" onclick="startQuiz()">Start Quiz →</button>
+                </div>
+                <div class="page-face back"></div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-controls">
+            <button class="nav-button" id="prevBtn" onclick="previousPage()" disabled>‹</button>
+            <div class="page-indicator" id="pageIndicator">Cover</div>
+            <button class="nav-button" id="nextBtn" onclick="nextPage()">›</button>
+        </div>
+    </div>
+
+    <script>
+        // Quiz data
+        const quizData = [
+            {
+                src: 'pics/C.E._Shannon._Tekniska_museet_43069_(cropped).jpg',
+                name: 'Claude Shannon',
+                hint: 'Father of Information Theory, laid the foundation for digital circuit design theory'
+            },
+            {
+                src: 'pics/dario.jpg',
+                name: 'Dario Amodei',
+                hint: 'CEO and co-founder of Anthropic, former VP of Research at OpenAI'
+            },
+            {
+                src: 'pics/pete_steinberger.png',
+                name: 'Peter Steinberger',
+                hint: 'Founder and CEO of PSPDFKit, iOS development expert'
+            },
+            {
+                src: 'pics/sam_altman.png',
+                name: 'Sam Altman',
+                hint: 'CEO of OpenAI, former president of Y Combinator'
+            },
+            {
+                src: 'pics/jensen_huang.jpg',
+                name: 'Jensen Huang',
+                hint: 'Founder and CEO of NVIDIA, architect of GPU computing and AI hardware revolution'
+            },
+            {
+                src: 'pics/david_blackwell.png',
+                name: 'David Blackwell',
+                hint: 'Pioneering statistician and mathematician, first African American inducted into the National Academy of Sciences'
+            },
+            {
+                src: 'pics/boris_cherny.png',
+                name: 'Boris Cherny',
+                hint: 'Software engineer and author of "Programming TypeScript"'
+            }
+        ];
+
+        let currentPage = 0;
+        let score = 0;
+        let answered = new Set();
+        let pagesCreated = false;
+
+        // Create quiz pages
+        function createPages() {
+            if (pagesCreated) return;
+
+            const flipbook = document.getElementById('flipbook');
+
+            quizData.forEach((person, index) => {
+                const page = document.createElement('div');
+                page.className = 'page right-page';
+                page.id = `page-${index}`;
+                page.style.display = 'none';
+
+                // Front face with quiz
+                const front = document.createElement('div');
+                front.className = 'page-face';
+                front.innerHTML = `
+                    <div class="quiz-content">
+                        <img src="${person.src}" alt="Mystery Person" class="person-image">
+                        <div class="quiz-prompt">Who is this?</div>
+                        <button class="reveal-button" onclick="revealAnswer(${index})">Reveal Answer</button>
+                        <div class="answer-section" id="answer-${index}">
+                            <div class="person-name">${person.name}</div>
+                            <div class="person-hint">${person.hint}</div>
+                        </div>
+                    </div>
+                    <div class="page-number">Page ${index + 1} of 7</div>
+                `;
+
+                // Back face (empty)
+                const back = document.createElement('div');
+                back.className = 'page-face back';
+
+                page.appendChild(front);
+                page.appendChild(back);
+                flipbook.appendChild(page);
+            });
+
+            pagesCreated = true;
+        }
+
+        // Start quiz
+        function startQuiz() {
+            createPages();
+            document.getElementById('cover').style.display = 'none';
+            currentPage = 1;
+            showPage(currentPage);
+            updateNavigation();
+        }
+
+        // Show specific page
+        function showPage(pageNum) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.style.display = 'none';
+            });
+
+            if (pageNum === 0) {
+                // Show cover
+                document.getElementById('cover').style.display = 'block';
+            } else {
+                // Show quiz page
+                const page = document.getElementById(`page-${pageNum - 1}`);
+                if (page) {
+                    page.style.display = 'block';
+
+                    // Check if already answered
+                    if (answered.has(pageNum - 1)) {
+                        const answerSection = document.getElementById(`answer-${pageNum - 1}`);
+                        answerSection.classList.add('show');
+                    }
+                }
+            }
+        }
+
+        // Navigate to next page
+        function nextPage() {
+            if (currentPage < quizData.length) {
+                if (currentPage === 0) {
+                    startQuiz();
+                } else {
+                    currentPage++;
+                    showPage(currentPage);
+                    updateNavigation();
+                }
+            }
+        }
+
+        // Navigate to previous page
+        function previousPage() {
+            if (currentPage > 0) {
+                currentPage--;
+                showPage(currentPage);
+                updateNavigation();
+            }
+        }
+
+        // Update navigation buttons and indicator
+        function updateNavigation() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const indicator = document.getElementById('pageIndicator');
+
+            prevBtn.disabled = currentPage === 0;
+            nextBtn.disabled = currentPage === quizData.length;
+
+            if (currentPage === 0) {
+                indicator.textContent = 'Cover';
+            } else {
+                indicator.textContent = `${currentPage} of 7`;
+            }
+        }
+
+        // Reveal answer
+        function revealAnswer(index) {
+            if (!answered.has(index)) {
+                answered.add(index);
+                score++;
+                updateScore();
+
+                const answerSection = document.getElementById(`answer-${index}`);
+                answerSection.classList.add('show');
+
+                // Hide reveal button
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Update score display
+        function updateScore() {
+            document.getElementById('score').textContent = `${score}/7`;
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextPage();
+            if (e.key === 'ArrowLeft') previousPage();
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateScore();
+            updateNavigation();
+
+            // Hide loading
+            setTimeout(() => {
+                document.getElementById('loading').classList.add('fade-out');
+            }, 500);
+        });
+    </script>
+</body>
+</html>
