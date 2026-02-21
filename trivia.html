@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Leaders Trivia Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            perspective: 1200px;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .rolodex {
+            position: relative;
+            width: 400px;
+            height: 600px;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        .card {
+            position: absolute;
+            width: 400px;
+            height: 600px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            transform-origin: center bottom;
+            transition: all 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
+            backface-visibility: hidden;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .card img {
+            width: 100%;
+            height: 80%;
+            object-fit: cover;
+            border-radius: 20px 20px 0 0;
+            user-select: none;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80%;
+            background: linear-gradient(
+                to bottom,
+                transparent 60%,
+                rgba(0, 0, 0, 0.7) 100%
+            );
+            border-radius: 20px 20px 0 0;
+            pointer-events: none;
+        }
+
+        .quiz-prompt {
+            position: absolute;
+            bottom: 10%;
+            left: 0;
+            right: 0;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            z-index: 1;
+        }
+
+        .reveal-button {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF3333 100%);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 51, 51, 0.3);
+        }
+
+        .reveal-button:hover {
+            transform: translateX(-50%) translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 51, 51, 0.4);
+        }
+
+        .answer-reveal {
+            position: absolute;
+            bottom: 60px;
+            left: 20px;
+            right: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            color: #FFD700;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            pointer-events: none;
+        }
+
+        .answer-reveal.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Rolodex positioning */
+        .card.active {
+            transform: rotateX(0deg) translateZ(0px);
+            z-index: 10;
+        }
+
+        .card.prev {
+            transform: rotateX(45deg) translateZ(-200px) translateY(-100px);
+            opacity: 0.8;
+            z-index: 5;
+        }
+
+        .card.next {
+            transform: rotateX(-45deg) translateZ(-200px) translateY(100px);
+            opacity: 0.8;
+            z-index: 5;
+        }
+
+        .card.hidden-up {
+            transform: rotateX(90deg) translateZ(-400px) translateY(-200px);
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .card.hidden-down {
+            transform: rotateX(-90deg) translateZ(-400px) translateY(200px);
+            opacity: 0;
+            z-index: 1;
+        }
+
+        /* Navigation */
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 100;
+            color: white;
+            font-size: 24px;
+        }
+
+        .nav-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-prev {
+            left: 50px;
+        }
+
+        .nav-next {
+            right: 50px;
+        }
+
+        /* Score display */
+        .score-board {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            color: white;
+            z-index: 100;
+        }
+
+        .score-title {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .score-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #FFD700;
+        }
+
+        /* Title */
+        .main-title {
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 42px;
+            font-weight: bold;
+            text-align: center;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+            z-index: 100;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            font-weight: normal;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+
+        /* Indicators */
+        .indicators {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .indicator.active {
+            background: white;
+            transform: scale(1.3);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .indicator.answered {
+            background: #FFD700;
+        }
+
+        /* Confetti effect */
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #FFD700;
+            position: absolute;
+            animation: confetti-fall 3s ease-in-out;
+        }
+
+        /* Loading state */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            color: white;
+            font-size: 28px;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .rolodex {
+                width: 300px;
+                height: 450px;
+            }
+
+            .card {
+                width: 300px;
+                height: 450px;
+            }
+
+            .quiz-prompt {
+                font-size: 22px;
+            }
+
+            .nav-button {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+
+            .nav-prev {
+                left: 20px;
+            }
+
+            .nav-next {
+                right: 20px;
+            }
+
+            .main-title {
+                font-size: 32px;
+            }
+
+            .score-board {
+                top: 20px;
+                right: 20px;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading" id="loading">Loading Trivia Quiz...</div>
+
+    <div class="container">
+        <!-- Title -->
+        <div class="main-title">
+            Tech Leaders Trivia
+            <div class="subtitle">Can you identify these innovators?</div>
+        </div>
+
+        <!-- Score -->
+        <div class="score-board">
+            <div class="score-title">SCORE</div>
+            <div class="score-value" id="score">0/7</div>
+        </div>
+
+        <!-- Rolodex container -->
+        <div class="rolodex" id="rolodex"></div>
+
+        <!-- Navigation -->
+        <div class="nav-button nav-prev" id="prevBtn">‹</div>
+        <div class="nav-button nav-next" id="nextBtn">›</div>
+
+        <!-- Indicators -->
+        <div class="indicators" id="indicators"></div>
+    </div>
+
+    <script>
+        // Quiz data with people to identify
+        const quizData = [
+            {
+                src: 'pics/C.E._Shannon._Tekniska_museet_43069_(cropped).jpg',
+                name: 'Claude Shannon',
+                hint: 'Father of Information Theory'
+            },
+            {
+                src: 'pics/dario.jpg',
+                name: 'Dario Amodei',
+                hint: 'CEO of Anthropic'
+            },
+            {
+                src: 'pics/pete_steinberger.jpg',
+                name: 'Pete Steinberger',
+                hint: 'Tech Industry Leader'
+            },
+            {
+                src: 'pics/sam_altman.jpg',
+                name: 'Sam Altman',
+                hint: 'CEO of OpenAI'
+            },
+            {
+                src: 'pics/jensen_blackwell.jpg',
+                name: 'Jensen Huang',
+                hint: 'NVIDIA CEO with Blackwell chip'
+            },
+            {
+                src: 'pics/david_blackwell.jpg',
+                name: 'Professor David Blackwell',
+                hint: 'Pioneering Statistician'
+            },
+            {
+                src: 'pics/boris_cherny.jpg',
+                name: 'Boris Cherny',
+                hint: 'Software Engineering Expert'
+            }
+        ];
+
+        let currentIndex = 0;
+        let score = 0;
+        let answered = new Set();
+
+        // Create rolodex cards
+        function createCards() {
+            const rolodex = document.getElementById('rolodex');
+            const indicators = document.getElementById('indicators');
+
+            quizData.forEach((person, index) => {
+                // Create card
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.dataset.index = index;
+
+                const img = document.createElement('img');
+                img.src = person.src;
+                img.alt = 'Mystery Person';
+                img.loading = 'lazy';
+                img.onerror = function() {
+                    // Use placeholder if image doesn't exist
+                    this.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                    this.style.display = 'flex';
+                    this.style.alignItems = 'center';
+                    this.style.justifyContent = 'center';
+                    this.innerHTML = '';
+                };
+
+                const prompt = document.createElement('div');
+                prompt.className = 'quiz-prompt';
+                prompt.textContent = 'Who is this?';
+
+                const answer = document.createElement('div');
+                answer.className = 'answer-reveal';
+                answer.id = `answer-${index}`;
+                answer.innerHTML = `${person.name}<br><small style="font-size: 16px; opacity: 0.9;">${person.hint}</small>`;
+
+                const revealBtn = document.createElement('button');
+                revealBtn.className = 'reveal-button';
+                revealBtn.textContent = 'Reveal Answer';
+                revealBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    revealAnswer(index);
+                };
+
+                card.appendChild(img);
+                card.appendChild(prompt);
+                card.appendChild(answer);
+                card.appendChild(revealBtn);
+                rolodex.appendChild(card);
+
+                // Add click handler to card for navigation
+                card.addEventListener('click', (e) => {
+                    if (e.target !== revealBtn && index !== currentIndex) {
+                        goToSlide(index);
+                    }
+                });
+
+                // Create indicator
+                const indicator = document.createElement('div');
+                indicator.className = 'indicator';
+                indicator.dataset.index = index;
+                indicator.addEventListener('click', () => goToSlide(index));
+                indicators.appendChild(indicator);
+            });
+
+            updateDisplay();
+        }
+
+        // Reveal answer for current card
+        function revealAnswer(index) {
+            if (!answered.has(index)) {
+                answered.add(index);
+                score++;
+                updateScore();
+
+                const answer = document.getElementById(`answer-${index}`);
+                answer.classList.add('show');
+
+                // Update indicator
+                const indicators = document.querySelectorAll('.indicator');
+                indicators[index].classList.add('answered');
+
+                // Celebration effect for correct answer
+                createConfetti();
+
+                // Hide reveal button
+                const cards = document.querySelectorAll('.card');
+                const btn = cards[index].querySelector('.reveal-button');
+                btn.style.display = 'none';
+            }
+        }
+
+        // Update score display
+        function updateScore() {
+            document.getElementById('score').textContent = `${score}/${quizData.length}`;
+        }
+
+        // Create confetti effect
+        function createConfetti() {
+            const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#95E77E', '#FA8072'];
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = `${Math.random() * 100}%`;
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    document.body.appendChild(confetti);
+
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 50);
+            }
+        }
+
+        // Update card positions and states
+        function updateDisplay() {
+            const cards = document.querySelectorAll('.card');
+            const indicators = document.querySelectorAll('.indicator');
+
+            cards.forEach((card, index) => {
+                card.className = 'card';
+
+                const diff = index - currentIndex;
+                const totalCards = quizData.length;
+
+                // Handle wrapping
+                let adjustedDiff = diff;
+                if (diff > totalCards / 2) adjustedDiff = diff - totalCards;
+                if (diff < -totalCards / 2) adjustedDiff = diff + totalCards;
+
+                if (adjustedDiff === 0) {
+                    card.classList.add('active');
+                } else if (adjustedDiff === 1 || (adjustedDiff === -(totalCards - 1))) {
+                    card.classList.add('next');
+                } else if (adjustedDiff === -1 || (adjustedDiff === (totalCards - 1))) {
+                    card.classList.add('prev');
+                } else if (adjustedDiff > 0) {
+                    card.classList.add('hidden-down');
+                } else {
+                    card.classList.add('hidden-up');
+                }
+
+                // Show/hide answer if already revealed
+                if (answered.has(index)) {
+                    const answer = document.getElementById(`answer-${index}`);
+                    answer.classList.add('show');
+                    const btn = card.querySelector('.reveal-button');
+                    btn.style.display = 'none';
+                }
+            });
+
+            // Update indicators
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentIndex);
+                if (answered.has(index)) {
+                    indicator.classList.add('answered');
+                }
+            });
+        }
+
+        // Navigate to specific slide
+        function goToSlide(index) {
+            currentIndex = index;
+            updateDisplay();
+        }
+
+        // Navigate to next slide
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % quizData.length;
+            updateDisplay();
+        }
+
+        // Navigate to previous slide
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + quizData.length) % quizData.length;
+            updateDisplay();
+        }
+
+        // Keyboard navigation
+        function handleKeyboard(e) {
+            if (e.key === 'ArrowLeft') prevSlide();
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === ' ') {
+                e.preventDefault();
+                revealAnswer(currentIndex);
+            }
+        }
+
+        // Touch support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        function handleTouchStart(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        }
+
+        function handleTouchEnd(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createCards();
+            updateScore();
+
+            // Event listeners
+            document.getElementById('prevBtn').addEventListener('click', prevSlide);
+            document.getElementById('nextBtn').addEventListener('click', nextSlide);
+            document.addEventListener('keydown', handleKeyboard);
+
+            // Touch events
+            document.addEventListener('touchstart', handleTouchStart);
+            document.addEventListener('touchend', handleTouchEnd);
+
+            // Hide loading screen
+            setTimeout(() => {
+                document.getElementById('loading').classList.add('fade-out');
+            }, 500);
+        });
+    </script>
+</body>
+</html>
