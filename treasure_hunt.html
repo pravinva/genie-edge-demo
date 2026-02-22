@@ -708,6 +708,11 @@ function disableEnhance() {
     clearTimeout(enhanceTimeout);
     enhanceTimeout = null;
   }
+  // Update button text
+  const btn = document.getElementById("enhance-button");
+  if (btn) {
+    btn.innerHTML = "🔍 ENHANCE";
+  }
 }
 
 // Listen for "enhance" keyword
@@ -725,55 +730,156 @@ document.addEventListener("keydown", function(e) {
 // Add voice recognition for "enhance" (if supported)
 if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  const recognition = new SpeechRecognition();
+  let recognition = null;
+  let isListening = false;
+  let voiceBtn = null;
 
-  recognition.continuous = true;
-  recognition.interimResults = false;
-  recognition.lang = 'en-US';
+  function createRecognition() {
+    recognition = new SpeechRecognition();
+    recognition.continuous = false;  // Changed to false for better reliability
+    recognition.interimResults = true;  // Show results as speaking
+    recognition.lang = 'en-US';
+    recognition.maxAlternatives = 3;
 
-  recognition.onresult = function(event) {
-    const last = event.results.length - 1;
-    const command = event.results[last][0].transcript.toLowerCase();
+    recognition.onresult = function(event) {
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript.toLowerCase();
+        console.log("Heard: " + transcript);
 
-    if (command.includes('enhance')) {
-      triggerEnhance();
-    } else if (command.includes('normal') || command.includes('reset')) {
-      disableEnhance();
+        if (transcript.includes('enhance')) {
+          triggerEnhance();
+          // Restart recognition after command
+          setTimeout(() => {
+            if (isListening) restartRecognition();
+          }, 1000);
+        } else if (transcript.includes('normal') || transcript.includes('reset')) {
+          disableEnhance();
+        }
+      }
+    };
+
+    recognition.onerror = function(event) {
+      console.log('Speech recognition error:', event.error);
+      isListening = false;
+      if (voiceBtn) {
+        voiceBtn.innerHTML = "🎤 Voice Error - Click to Retry";
+        voiceBtn.style.background = "#FF6B6B";
+      }
+    };
+
+    recognition.onend = function() {
+      console.log('Speech recognition ended');
+      // Auto-restart if button is still active
+      if (isListening) {
+        setTimeout(() => {
+          restartRecognition();
+        }, 100);
+      }
+    };
+  }
+
+  function restartRecognition() {
+    if (recognition) {
+      try {
+        recognition.stop();
+      } catch(e) {}
     }
-  };
+    setTimeout(() => {
+      createRecognition();
+      if (isListening) {
+        try {
+          recognition.start();
+          console.log("Voice recognition restarted");
+        } catch(e) {
+          console.log("Failed to restart:", e);
+        }
+      }
+    }, 200);
+  }
 
   // Start listening when game starts
   window.startVoiceRecognition = function() {
+    if (!recognition) {
+      createRecognition();
+    }
+
     try {
       recognition.start();
+      isListening = true;
       console.log("Voice recognition started. Say 'enhance' to zoom!");
+      if (voiceBtn) {
+        voiceBtn.innerHTML = "🎤 Say 'Enhance'";
+        voiceBtn.style.background = "#00ff00";
+      }
     } catch(e) {
-      console.log("Voice recognition already started");
+      console.log("Recognition error:", e);
+      // Try to restart
+      restartRecognition();
+    }
+  };
+
+  window.stopVoiceRecognition = function() {
+    isListening = false;
+    if (recognition) {
+      try {
+        recognition.stop();
+      } catch(e) {}
+    }
+    if (voiceBtn) {
+      voiceBtn.innerHTML = "🎤 Enable Voice";
+      voiceBtn.style.background = "#FFD700";
     }
   };
 
   // Add button to enable voice
   setTimeout(() => {
     if (document.getElementById("game")) {
-      const btn = document.createElement("button");
-      btn.innerHTML = "🎤 Enable Voice";
-      btn.style.cssText = "position:fixed;bottom:20px;right:20px;background:#FFD700;color:#000;border:none;padding:10px 20px;border-radius:20px;font-weight:bold;cursor:pointer;z-index:200";
-      btn.onclick = function() {
-        window.startVoiceRecognition();
-        btn.innerHTML = "🎤 Listening...";
-        btn.style.background = "#00ff00";
+      voiceBtn = document.createElement("button");
+      voiceBtn.innerHTML = "🎤 Enable Voice";
+      voiceBtn.style.cssText = "position:fixed;bottom:20px;right:20px;background:#FFD700;color:#000;border:none;padding:10px 20px;border-radius:20px;font-weight:bold;cursor:pointer;z-index:200;font-size:14px";
+      voiceBtn.onclick = function() {
+        if (!isListening) {
+          window.startVoiceRecognition();
+        } else {
+          window.stopVoiceRecognition();
+        }
       };
-      document.body.appendChild(btn);
+      document.body.appendChild(voiceBtn);
     }
   }, 1000);
 }
 
-// Add instructions
+// Add manual enhance button (always works)
 window.addEventListener("load", function() {
   setTimeout(() => {
+    // Add enhance button
+    const enhanceBtn = document.createElement("button");
+    enhanceBtn.innerHTML = "🔍 ENHANCE";
+    enhanceBtn.style.cssText = "position:fixed;bottom:20px;left:20px;background:linear-gradient(135deg, #00ff00, #00cc00);color:#000;border:none;padding:10px 20px;border-radius:20px;font-weight:bold;cursor:pointer;z-index:200;font-size:14px;box-shadow:0 0 20px rgba(0,255,0,0.3);transition:all 0.3s";
+    enhanceBtn.id = "enhance-button";
+    enhanceBtn.onclick = function() {
+      if (!enhanceActive) {
+        triggerEnhance();
+        enhanceBtn.innerHTML = "🔍 NORMAL";
+      } else {
+        disableEnhance();
+        enhanceBtn.innerHTML = "🔍 ENHANCE";
+      }
+    };
+    enhanceBtn.onmouseenter = function() {
+      this.style.transform = "scale(1.1)";
+      this.style.boxShadow = "0 0 30px rgba(0,255,0,0.5)";
+    };
+    enhanceBtn.onmouseleave = function() {
+      this.style.transform = "scale(1)";
+      this.style.boxShadow = "0 0 20px rgba(0,255,0,0.3)";
+    };
+    document.body.appendChild(enhanceBtn);
+
+    // Add hint
     const hint = document.createElement("div");
-    hint.innerHTML = "💡 Press 'E' or say 'Enhance' to zoom in!";
-    hint.style.cssText = "position:fixed;bottom:20px;left:20px;background:rgba(0,255,0,0.1);color:#00ff00;padding:10px 20px;border-radius:10px;border:1px solid #00ff00;font-size:14px;z-index:200;animation:fadeIn 1s";
+    hint.innerHTML = "💡 Press 'E' or click ENHANCE to zoom!";
+    hint.style.cssText = "position:fixed;top:100px;left:50%;transform:translateX(-50%);background:rgba(0,255,0,0.1);color:#00ff00;padding:10px 20px;border-radius:10px;border:1px solid #00ff00;font-size:14px;z-index:200;animation:fadeIn 1s";
     hint.id = "enhance-hint";
     document.body.appendChild(hint);
 
