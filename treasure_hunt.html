@@ -111,6 +111,7 @@ button:active{transform:translateY(0)}
 .case-header{padding:20px 24px 0}
 .case-tag{font-size:10px;font-weight:800;color:var(--orange);text-transform:uppercase;letter-spacing:2px;margin-bottom:6px}
 .case-title{font-family:'Cinzel',serif;font-size:22px;font-weight:900;color:var(--gold);margin-bottom:6px;line-height:1.3}
+.case-subtitle{font-size:15px;color:var(--orange);font-style:italic;margin-bottom:12px;opacity:0.9;font-weight:500}
 .case-flavour{font-size:14px;color:var(--muted);line-height:1.65;padding-bottom:18px;border-bottom:1px solid var(--border)}
 .lock-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 40px;gap:16px;text-align:center}
 .lock-icon{font-size:64px;animation:lockWobble 3s ease-in-out infinite}
@@ -272,8 +273,9 @@ var CASES = [
     label: "Case 1 — Stakeholder Management",
     emoji: "E1",
     title: "The Executive Escalation",
+    subtitle: "I love the smell of exec escalation on a Monday morning",
     icon: "&#x1F4E7;",
-    flavour: "8:47am Monday. You're on your second coffee. Slack pings: your Delivery Lead has forwarded this — 'heads up, this went to our RVP too.' You think to yourself: 'I love the smell of exec escalation on a Monday morning' — Colonel Kurtz, Apocalypse Now.",
+    flavour: "8:47am Monday. You're on your second coffee. Slack pings: your Delivery Lead has forwarded this — 'heads up, this went to our RVP too.'",
     artifact: {
       type: "email",
       subject: "RE: RE: Databricks Delivery — Serious Concerns",
@@ -290,8 +292,9 @@ var CASES = [
     label: "Case 2 — AI and Genie",
     emoji: "E2",
     title: "Genie Told the CFO What?",
+    subtitle: "You can't handle the truth!",
     icon: "&#x1F916;",
-    flavour: "A superannuation fund went live with Databricks AI/BI Genie last month. The CFO used it to prep a board presentation. Unsupervised. You get this Slack message at 9am. 'You can't handle the truth!' — but Genie told it anyway.",
+    flavour: "A superannuation fund went live with Databricks AI/BI Genie last month. The CFO used it to prep a board presentation. Unsupervised. You get this Slack message at 9am.",
     artifact: {
       type: "email",
       subject: "URGENT - Genie numbers completely wrong in board pack",
@@ -308,8 +311,9 @@ var CASES = [
     label: "Case 3 — Program Management",
     emoji: "E3",
     title: "The Status Report Nobody Can Read",
+    subtitle: "Houston, we have a status report problem",
     icon: "&#x1F4CA;",
-    flavour: "A Delivery SA forwards the weekly status report going to the steering committee. 'Does this look OK to send?' they ask. Houston, we have a status report problem.",
+    flavour: "A Delivery SA forwards the weekly status report going to the steering committee. 'Does this look OK to send?' they ask.",
     artifact: {
       type: "email",
       subject: "Week 8 Status — DataPlatform Modernisation",
@@ -326,8 +330,9 @@ var CASES = [
     label: "Case 4 — Technical: Spark",
     emoji: "E4",
     title: "6pm Friday. NZ Telco. Goes Live Monday.",
+    subtitle: "May the Spark be with you",
     icon: "&#x1F525;",
-    flavour: "It's 6:03pm AEST Friday. The on-call pings you. A major NZ telco's nightly load job just failed. They go live Monday. May the Spark be with you... but not after 6pm on Friday.",
+    flavour: "It's 6:03pm AEST Friday. The on-call pings you. A major NZ telco's nightly load job just failed. They go live Monday.",
     artifact: {
       type: "log",
       body: "[18:01 NZST] Job FAILED: prod_nightly_load_v3  (runtime: 2h 14m, OOM)\n\nSparkContext: Driver OOM -- Java heap space\n  at org.apache.spark.sql.execution.collect (CollectExec.scala:89)\n\nQuery (simplified):\n  df = spark.read.table('silver.customer_events')   # 4.1B rows\n  summary = df.groupBy('customer_id','event_type') \\\n               .agg(collect_list('payload'))          # line 47 PROBLEM\n  summary.toPandas().to_csv('/tmp/output.csv')        # line 48 PROBLEM\n\nCluster config:\n  Driver:  r5.xlarge  (30 GB RAM)\n  Workers: 4 x m5.large\n  Mode:    Single-node legacy cluster (created 2022)\n\nLast successful run: Thursday  (600M rows)\nData note: Full NZ customer base onboarded at 5pm today (+3.5B new rows)"
@@ -341,8 +346,9 @@ var CASES = [
     label: "Case 5 — Delivery and Compatibility",
     emoji: "E5",
     title: "You Broke Our Pipelines",
+    subtitle: "You're gonna need a bigger cluster",
     icon: "&#x1F621;",
-    flavour: "A large Australian retailer upgraded to Databricks Runtime 15.x as part of a planned migration. Two days later, this lands — CC'd to their CTO and your Delivery Lead. You're gonna need a bigger cluster.",
+    flavour: "A large Australian retailer upgraded to Databricks Runtime 15.x as part of a planned migration. Two days later, this lands — CC'd to their CTO and your Delivery Lead.",
     artifact: {
       type: "email",
       subject: "Databricks upgrade has broken production — demanding explanation",
@@ -359,8 +365,9 @@ var CASES = [
     label: "Case 6 — Cost Governance",
     emoji: "E6",
     title: "The $340K Surprise",
+    subtitle: "Show me the money!",
     icon: "&#x1F4B8;",
-    flavour: "Last business day of the quarter. The customer's cloud finance team just ran their monthly reconciliation. Your AE forwards this with three question marks and nothing else. 'Show me the money!' Wait, where did ALL the money go?",
+    flavour: "Last business day of the quarter. The customer's cloud finance team just ran their monthly reconciliation. Your AE forwards this with three question marks and nothing else.",
     artifact: {
       type: "email",
       subject: "Databricks spend — Q3 actuals vs budget SEVERE variance",
@@ -377,8 +384,9 @@ var CASES = [
     label: "Case 7 — Enablement and Training",
     emoji: "E7",
     title: "The Enablement Disaster",
+    subtitle: "Life is like a box of demos",
     icon: "&#x1F9D1;&#x200D;&#x1F3EB;",
-    flavour: "You're reviewing the post-engagement survey for a 3-day Databricks enablement you ran for a major energy retailer in Brisbane. Life is like a box of demos — you never know if anyone's actually learning.",
+    flavour: "You're reviewing the post-engagement survey for a 3-day Databricks enablement you ran for a major energy retailer in Brisbane.",
     artifact: {
       type: "slides",
       title: "Post-Training Feedback — EnergyRetail AU",
@@ -401,8 +409,9 @@ var CASES = [
     label: "Case 8 — The Final Riddle",
     emoji: "E8",
     title: "The Vault",
+    subtitle: "The first rule is: nobody talks about it",
     icon: "&#x1F9E9;",
-    flavour: "One lock remains. Solve this riddle and the workspace admin password is yours. The first rule of SOW Club is: nobody reads the SOW.",
+    flavour: "One lock remains. Solve this riddle and the workspace admin password is yours.",
     artifact: {
       type: "riddle",
       body: "I'm on every slide deck but live in no data centre.\nI'm promised in Week 1 and defined in Week 8.\nCustomers ask if I'm done. I'm never done.\nI have owners, but they're always in a meeting.\n\nI'm not a sprint. I'm not a ticket.\nI'm not a runbook — though I should be.\nI contain the answers to everything,\nbut no-one reads me after sign-off.\n\nSuccess teams love me.\nDelivery teams fear me.\nPresales promised me.\nI sit in Confluence, unread and unmerged.\n\nWhat am I?"
@@ -595,6 +604,7 @@ function renderCase() {
     '<div class="case-header">'
     + '<div class="case-tag">' + esc(c.label) + '</div>'
     + '<div class="case-title">' + c.icon + ' ' + esc(c.title) + '</div>'
+    + (c.subtitle ? '<div class="case-subtitle">' + esc(c.subtitle) + '</div>' : '')
     + '<div class="case-flavour">' + esc(c.flavour) + '</div>'
     + '</div>'
     + inner
