@@ -26,6 +26,9 @@ button:active{transform:translateY(0)}
 @keyframes fadeSlide{0%{opacity:0;transform:translateY(-8px)}100%{opacity:1;transform:translateY(0)}}
 @keyframes confFall{0%{transform:translateY(-20px) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:.3}}
 @keyframes lockWobble{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+@keyframes enhance{0%{transform:scale(1) translate(0,0);filter:blur(0)}20%{filter:blur(2px)}100%{transform:scale(1.8) translate(0,-50px);filter:blur(0) contrast(1.2) brightness(1.1)}}
+@keyframes scanlines{0%{background-position:0 0}100%{background-position:0 10px}}
+@keyframes techGlitch{0%,100%{transform:translate(0)}20%{transform:translate(-2px,2px)}40%{transform:translate(-2px,-2px)}60%{transform:translate(2px,2px)}80%{transform:translate(2px,-2px)}}
 
 /* SCREENS */
 #intro,#setup,#victory{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:40px 24px}
@@ -97,7 +100,14 @@ button:active{transform:translateY(0)}
 .q-line.done{background:var(--orange);box-shadow:0 0 6px rgba(255,54,33,.4)}
 
 /* CASE CARD */
-.case-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.4)}
+.case-card{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.4);transition:all 1s cubic-bezier(0.4,0,0.2,1)}
+.enhanced .case-card{animation:enhance 1.5s forwards;position:relative;z-index:100}
+.enhance-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:99;opacity:0;pointer-events:none;transition:opacity 0.5s}
+.enhanced .enhance-overlay{opacity:1;pointer-events:auto}
+.scanlines{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,0,0.03) 2px,rgba(0,255,0,0.03) 4px);pointer-events:none;z-index:101;opacity:0}
+.enhanced .scanlines{opacity:1;animation:scanlines 0.5s linear infinite}
+.enhance-text{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-size:48px;font-weight:900;color:#00ff00;text-shadow:0 0 20px #00ff00;letter-spacing:8px;opacity:0;z-index:102;font-family:'Courier New',monospace;pointer-events:none}
+.enhanced .enhance-text{animation:techGlitch 0.5s linear}
 .case-header{padding:20px 24px 0}
 .case-tag{font-size:10px;font-weight:800;color:var(--orange);text-transform:uppercase;letter-spacing:2px;margin-bottom:6px}
 .case-title{font-family:'Cinzel',serif;font-size:22px;font-weight:900;color:var(--gold);margin-bottom:6px;line-height:1.3}
@@ -138,7 +148,7 @@ button:active{transform:translateY(0)}
 .gm-panel{padding:20px 24px;background:#0a0718;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:12px}
 .gm-label{font-size:10px;font-weight:800;color:var(--orange);letter-spacing:2px;text-transform:uppercase}
 .gm-btns{display:flex;gap:10px;flex-wrap:wrap}
-.gmbtn{border-radius:8px;padding:11px 22px;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;border:none;transition:.15s;letter-spacing:.3px}
+.gmbtn{border-radius:8px;padding:11px 22px;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;border:none;transition:.15s;letter-spacing:.3px;position:relative;z-index:103}
 .gmbtn:hover{transform:translateY(-2px);filter:brightness(1.1)}
 .gmbtn-unlock{background:linear-gradient(135deg,#c42200,var(--orange));color:#fff;box-shadow:0 4px 20px rgba(255,54,33,.4)}
 .gmbtn-hint{background:#2a2040;border:1px solid var(--border);color:var(--gold)}
@@ -244,6 +254,11 @@ button:active{transform:translateY(0)}
     <button class="replay-btn" onclick="location.reload()">&#x21A9; Play Again</button>
   </div>
 </div>
+
+<!-- ENHANCE OVERLAY -->
+<div class="enhance-overlay" id="enhance-overlay"></div>
+<div class="scanlines" id="scanlines"></div>
+<div class="enhance-text" id="enhance-text">ENHANCING...</div>
 
 <!-- UNLOCK OVERLAY -->
 <div class="unlock-overlay" id="unlock-overlay">
@@ -648,6 +663,127 @@ function esc(s) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 }
+
+// ENHANCE FEATURE
+let enhanceActive = false;
+let enhanceTimeout = null;
+
+function triggerEnhance() {
+  if (enhanceActive || document.getElementById("game").style.display !== "flex") return;
+
+  enhanceActive = true;
+  document.body.classList.add("enhanced");
+  document.getElementById("enhance-text").style.opacity = "1";
+
+  // Play a tech sound effect (using Web Audio API)
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  const oscillator = audioContext.createOscillator();
+  const gainNode = audioContext.createGain();
+
+  oscillator.connect(gainNode);
+  gainNode.connect(audioContext.destination);
+
+  oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+  oscillator.frequency.exponentialRampToValueAtTime(880, audioContext.currentTime + 0.2);
+  gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+  gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+
+  oscillator.start(audioContext.currentTime);
+  oscillator.stop(audioContext.currentTime + 0.5);
+
+  setTimeout(() => {
+    document.getElementById("enhance-text").style.opacity = "0";
+  }, 500);
+
+  // Auto-disable after 3 seconds
+  enhanceTimeout = setTimeout(() => {
+    disableEnhance();
+  }, 3000);
+}
+
+function disableEnhance() {
+  enhanceActive = false;
+  document.body.classList.remove("enhanced");
+  if (enhanceTimeout) {
+    clearTimeout(enhanceTimeout);
+    enhanceTimeout = null;
+  }
+}
+
+// Listen for "enhance" keyword
+document.addEventListener("keydown", function(e) {
+  // Trigger on 'E' key
+  if (e.key === "e" || e.key === "E") {
+    if (!enhanceActive) {
+      triggerEnhance();
+    } else {
+      disableEnhance();
+    }
+  }
+});
+
+// Add voice recognition for "enhance" (if supported)
+if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const recognition = new SpeechRecognition();
+
+  recognition.continuous = true;
+  recognition.interimResults = false;
+  recognition.lang = 'en-US';
+
+  recognition.onresult = function(event) {
+    const last = event.results.length - 1;
+    const command = event.results[last][0].transcript.toLowerCase();
+
+    if (command.includes('enhance')) {
+      triggerEnhance();
+    } else if (command.includes('normal') || command.includes('reset')) {
+      disableEnhance();
+    }
+  };
+
+  // Start listening when game starts
+  window.startVoiceRecognition = function() {
+    try {
+      recognition.start();
+      console.log("Voice recognition started. Say 'enhance' to zoom!");
+    } catch(e) {
+      console.log("Voice recognition already started");
+    }
+  };
+
+  // Add button to enable voice
+  setTimeout(() => {
+    if (document.getElementById("game")) {
+      const btn = document.createElement("button");
+      btn.innerHTML = "🎤 Enable Voice";
+      btn.style.cssText = "position:fixed;bottom:20px;right:20px;background:#FFD700;color:#000;border:none;padding:10px 20px;border-radius:20px;font-weight:bold;cursor:pointer;z-index:200";
+      btn.onclick = function() {
+        window.startVoiceRecognition();
+        btn.innerHTML = "🎤 Listening...";
+        btn.style.background = "#00ff00";
+      };
+      document.body.appendChild(btn);
+    }
+  }, 1000);
+}
+
+// Add instructions
+window.addEventListener("load", function() {
+  setTimeout(() => {
+    const hint = document.createElement("div");
+    hint.innerHTML = "💡 Press 'E' or say 'Enhance' to zoom in!";
+    hint.style.cssText = "position:fixed;bottom:20px;left:20px;background:rgba(0,255,0,0.1);color:#00ff00;padding:10px 20px;border-radius:10px;border:1px solid #00ff00;font-size:14px;z-index:200;animation:fadeIn 1s";
+    hint.id = "enhance-hint";
+    document.body.appendChild(hint);
+
+    // Hide hint after 5 seconds
+    setTimeout(() => {
+      hint.style.opacity = "0";
+      setTimeout(() => hint.remove(), 500);
+    }, 5000);
+  }, 2000);
+});
 </script>
 </body>
 </html>
