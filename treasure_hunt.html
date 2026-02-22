@@ -695,10 +695,12 @@ function triggerEnhance() {
     document.getElementById("enhance-text").style.opacity = "0";
   }, 500);
 
-  // Auto-disable after 3 seconds
-  enhanceTimeout = setTimeout(() => {
-    disableEnhance();
-  }, 3000);
+  // NO AUTO-DISABLE - stays enhanced until user says so
+  // Update button text
+  const btn = document.getElementById("enhance-button");
+  if (btn) {
+    btn.innerHTML = "🔍 NORMAL";
+  }
 }
 
 function disableEnhance() {
@@ -808,7 +810,7 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       isListening = true;
       console.log("Voice recognition started. Say 'enhance' to zoom!");
       if (voiceBtn) {
-        voiceBtn.innerHTML = "🎤 Say 'Enhance'";
+        voiceBtn.innerHTML = "🎤 Listening...";
         voiceBtn.style.background = "#00ff00";
       }
     } catch(e) {
@@ -878,8 +880,8 @@ window.addEventListener("load", function() {
 
     // Add hint
     const hint = document.createElement("div");
-    hint.innerHTML = "💡 Press 'E' or click ENHANCE to zoom!";
-    hint.style.cssText = "position:fixed;top:100px;left:50%;transform:translateX(-50%);background:rgba(0,255,0,0.1);color:#00ff00;padding:10px 20px;border-radius:10px;border:1px solid #00ff00;font-size:14px;z-index:200;animation:fadeIn 1s";
+    hint.innerHTML = "💡 Press 'E' to ENHANCE (zoom in) - Press 'E' again to return to NORMAL";
+    hint.style.cssText = "position:fixed;top:100px;left:50%;transform:translateX(-50%);background:rgba(0,255,0,0.1);color:#00ff00;padding:10px 20px;border-radius:10px;border:1px solid #00ff00;font-size:14px;z-index:200;animation:fadeIn 1s;max-width:400px;text-align:center";
     hint.id = "enhance-hint";
     document.body.appendChild(hint);
 
