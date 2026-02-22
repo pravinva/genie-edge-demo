@@ -34,15 +34,15 @@
         /* Flipbook styles */
         .flipbook {
             position: relative;
-            width: 800px;
-            height: 600px;
+            width: 1200px;
+            height: 800px;
             transform-style: preserve-3d;
         }
 
         .page {
             position: absolute;
-            width: 400px;
-            height: 600px;
+            width: 600px;
+            height: 800px;
             transform-style: preserve-3d;
             transform-origin: left center;
             transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
@@ -53,7 +53,7 @@
         }
 
         .page.right-page {
-            left: 400px;
+            left: 600px;
         }
 
         .page-face {
@@ -81,8 +81,8 @@
 
         /* Content styles */
         .person-image {
-            width: 380px;
-            height: 520px;
+            width: 520px;
+            height: 650px;
             object-fit: contain;
             background: #111;
             border-radius: 15px;
@@ -117,19 +117,19 @@
         }
 
         .quiz-prompt {
-            font-size: 28px;
+            font-size: 36px;
             font-weight: bold;
             color: #333;
             margin-bottom: 20px;
         }
 
         .reveal-button {
-            padding: 12px 30px;
+            padding: 16px 40px;
             background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
             color: #000;
             border: none;
             border-radius: 30px;
-            font-size: 16px;
+            font-size: 20px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -144,6 +144,11 @@
         .answer-section {
             display: none;
             animation: fadeIn 0.5s ease;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
         }
 
         .answer-section.show {
@@ -151,16 +156,18 @@
         }
 
         .person-name {
-            font-size: 32px;
+            font-size: 36px;
             font-weight: bold;
-            color: #667eea;
+            color: #FFD700;
             margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .person-hint {
-            font-size: 18px;
-            color: #666;
+            font-size: 20px;
+            color: #FFA500;
             font-style: italic;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
         }
 
         @keyframes fadeIn {
@@ -311,14 +318,14 @@
         }
 
         /* Mobile responsive */
-        @media (max-width: 850px) {
+        @media (max-width: 1250px) {
             .flipbook {
-                width: 400px;
-                height: 600px;
+                width: 600px;
+                height: 800px;
             }
 
             .page {
-                width: 400px;
+                width: 600px;
             }
 
             .page.right-page {
@@ -326,8 +333,36 @@
             }
 
             .person-image {
-                width: 320px;
-                height: 420px;
+                width: 500px;
+                height: 630px;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .flipbook {
+                width: 90vw;
+                height: 80vh;
+            }
+
+            .page {
+                width: 90vw;
+            }
+
+            .person-image {
+                width: 80vw;
+                height: 60vh;
+            }
+
+            .quiz-prompt {
+                font-size: 28px;
+            }
+
+            .person-name {
+                font-size: 28px;
+            }
+
+            .person-hint {
+                font-size: 16px;
             }
         }
 
