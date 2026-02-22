@@ -99,7 +99,7 @@
         }
 
         .person-image.vision-testing {
-            animation: visionFocus 2.5s ease-out forwards, glow 3s ease-in-out infinite 2.5s;
+            animation: visionFocus 5s ease-out forwards, glow 3s ease-in-out infinite 5s;
         }
 
         @keyframes glow {
@@ -246,16 +246,24 @@
 
         @keyframes visionFocus {
             0% {
-                filter: blur(20px) brightness(0.7);
+                filter: blur(25px) brightness(0.6);
+                transform: scale(0.93);
+            }
+            30% {
+                filter: blur(18px) brightness(0.7);
                 transform: scale(0.95);
             }
             50% {
-                filter: blur(10px) brightness(0.85);
+                filter: blur(12px) brightness(0.8);
                 transform: scale(0.97);
             }
-            75% {
-                filter: blur(5px) brightness(0.95);
+            70% {
+                filter: blur(6px) brightness(0.9);
                 transform: scale(0.99);
+            }
+            85% {
+                filter: blur(2px) brightness(0.95);
+                transform: scale(0.995);
             }
             100% {
                 filter: blur(0) brightness(1);
