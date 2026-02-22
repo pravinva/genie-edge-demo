@@ -367,7 +367,7 @@
         <!-- Score -->
         <div class="score-board">
             <div class="score-title">SCORE</div>
-            <div class="score-value" id="score">0/12</div>
+            <div class="score-value" id="score">0/15</div>
         </div>
 
         <!-- Flipbook -->
@@ -377,7 +377,7 @@
                 <div class="page-face cover-page">
                     <h1>Tech Leaders Quiz</h1>
                     <p>Test your knowledge of influential tech figures</p>
-                    <p style="font-size: 16px; margin-bottom: 30px;">12 leaders to identify</p>
+                    <p style="font-size: 16px; margin-bottom: 30px;">15 leaders to identify</p>
                     <button class="start-button" onclick="startQuiz()">Start Quiz →</button>
                 </div>
                 <div class="page-face back"></div>
@@ -393,22 +393,13 @@
     </div>
 
     <script>
-        // Quiz data
+        // Quiz data - ordered from easier to harder
         const quizData = [
+            // Easiest - most recognizable
             {
-                src: 'pics/C.E._Shannon._Tekniska_museet_43069_(cropped).jpg',
-                name: 'Claude Shannon',
-                hint: 'Father of Information Theory, laid the foundation for digital circuit design theory'
-            },
-            {
-                src: 'pics/dario.jpg',
-                name: 'Dario Amodei',
-                hint: 'CEO and co-founder of Anthropic, former VP of Research at OpenAI'
-            },
-            {
-                src: 'pics/pete_steinberger.png',
-                name: 'Peter Steinberger',
-                hint: 'Founder and CEO of PSPDFKit, iOS development expert'
+                src: 'pics/jensen_huang.jpg',
+                name: 'Jensen Huang',
+                hint: 'Founder and CEO of NVIDIA, architect of GPU computing and AI hardware revolution'
             },
             {
                 src: 'pics/sam_altman.png',
@@ -416,34 +407,14 @@
                 hint: 'CEO of OpenAI, former president of Y Combinator'
             },
             {
-                src: 'pics/jensen_huang.jpg',
-                name: 'Jensen Huang',
-                hint: 'Founder and CEO of NVIDIA, architect of GPU computing and AI hardware revolution'
+                src: 'pics/dario.jpg',
+                name: 'Dario Amodei',
+                hint: 'CEO and co-founder of Anthropic, former VP of Research at OpenAI'
             },
             {
-                src: 'pics/david_blackwell.png',
-                name: 'David Blackwell',
-                hint: 'Pioneering statistician and mathematician, first African American inducted into the National Academy of Sciences'
-            },
-            {
-                src: 'pics/boris_cherny.png',
-                name: 'Boris Cherny',
-                hint: 'Software engineer and author of "Programming TypeScript"'
-            },
-            {
-                src: 'pics/dwarkesh_patel.png',
-                name: 'Dwarkesh Patel',
-                hint: 'Podcaster and host of "The Dwarkesh Podcast", interviewing leading AI researchers and tech leaders'
-            },
-            {
-                src: 'pics/alex_wang.jpg',
-                name: 'Alex Wang',
-                hint: 'Founder and CEO of Scale AI, youngest self-made billionaire'
-            },
-            {
-                src: 'pics/demis_hassabis.png',
-                name: 'Demis Hassabis',
-                hint: 'CEO and co-founder of DeepMind, creator of AlphaGo and AlphaFold'
+                src: 'pics/geoffrey_hinton.png',
+                name: 'Geoffrey Hinton',
+                hint: 'Godfather of AI, Turing Award winner, pioneer of deep learning and backpropagation'
             },
             {
                 src: 'pics/yann_lecun.png',
@@ -451,9 +422,56 @@
                 hint: 'Chief AI Scientist at Meta, Turing Award winner, pioneer of convolutional neural networks'
             },
             {
-                src: 'pics/geoffrey_hinton.png',
-                name: 'Geoffrey Hinton',
-                hint: 'Godfather of AI, Turing Award winner, pioneer of deep learning and backpropagation'
+                src: 'pics/demis_hassabis.png',
+                name: 'Demis Hassabis',
+                hint: 'CEO and co-founder of DeepMind, creator of AlphaGo and AlphaFold'
+            },
+            {
+                src: 'pics/mira_murati.png',
+                name: 'Mira Murati',
+                hint: 'Chief Technology Officer at OpenAI, led development of ChatGPT and DALL-E'
+            },
+            {
+                src: 'pics/fei_fei_li.png',
+                name: 'Fei-Fei Li',
+                hint: 'Co-Director of Stanford HAI, creator of ImageNet, "Godmother of AI"'
+            },
+            {
+                src: 'pics/ilya_alex.png',
+                name: 'Ilya Sutskever & Alex Krizhevsky',
+                hint: 'Ilya: Co-founder & Chief Scientist of OpenAI | Alex: Creator of AlexNet, revolutionized computer vision'
+            },
+            // Moderate difficulty
+            {
+                src: 'pics/alex_wang.jpg',
+                name: 'Alex Wang',
+                hint: 'Founder and CEO of Scale AI, youngest self-made billionaire'
+            },
+            {
+                src: 'pics/dwarkesh_patel.png',
+                name: 'Dwarkesh Patel',
+                hint: 'Podcaster and host of "The Dwarkesh Podcast", interviewing leading AI researchers'
+            },
+            {
+                src: 'pics/pete_steinberger.png',
+                name: 'Peter Steinberger',
+                hint: 'Founder and CEO of PSPDFKit, iOS development expert'
+            },
+            {
+                src: 'pics/boris_cherny.png',
+                name: 'Boris Cherny',
+                hint: 'Creator of Claude Code, Software engineer at Anthropic, author of "Programming TypeScript"'
+            },
+            // Hardest - put these last
+            {
+                src: 'pics/david_blackwell.png',
+                name: 'David Blackwell',
+                hint: 'Pioneering statistician and mathematician, first African American inducted into the National Academy of Sciences'
+            },
+            {
+                src: 'pics/C.E._Shannon._Tekniska_museet_43069_(cropped).jpg',
+                name: 'Claude Shannon',
+                hint: 'Father of Information Theory, laid the foundation for digital circuit design theory'
             }
         ];
 
@@ -487,7 +505,7 @@
                             <div class="person-hint">${person.hint}</div>
                         </div>
                     </div>
-                    <div class="page-number">Page ${index + 1} of 12</div>
+                    <div class="page-number">Page ${index + 1} of 15</div>
                 `;
 
                 // Back face (empty)
@@ -570,7 +588,7 @@
             if (currentPage === 0) {
                 indicator.textContent = 'Cover';
             } else {
-                indicator.textContent = `${currentPage} of 12`;
+                indicator.textContent = `${currentPage} of 15`;
             }
         }
 
@@ -591,7 +609,7 @@
 
         // Update score display
         function updateScore() {
-            document.getElementById('score').textContent = `${score}/12`;
+            document.getElementById('score').textContent = `${score}/15`;
         }
 
         // Keyboard navigation
