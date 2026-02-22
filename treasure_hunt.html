@@ -273,7 +273,7 @@ var CASES = [
     emoji: "E1",
     title: "The Executive Escalation",
     icon: "&#x1F4E7;",
-    flavour: "8:47am Monday. You're on your second coffee. Slack pings: your Delivery Lead has forwarded this — 'heads up, this went to our RVP too.'",
+    flavour: "8:47am Monday. You're on your second coffee. Slack pings: your Delivery Lead has forwarded this — 'heads up, this went to our RVP too.' You think to yourself: 'I love the smell of exec escalation on a Monday morning' — Colonel Kurtz, Apocalypse Now.",
     artifact: {
       type: "email",
       subject: "RE: RE: Databricks Delivery — Serious Concerns",
@@ -287,11 +287,98 @@ var CASES = [
     punchline: "The Unity Catalog scope creep probably happened in Week 3 when someone said 'while we're here...'. Classic."
   },
   {
-    label: "Case 2 — Enablement and Training",
+    label: "Case 2 — AI and Genie",
     emoji: "E2",
+    title: "Genie Told the CFO What?",
+    icon: "&#x1F916;",
+    flavour: "A superannuation fund went live with Databricks AI/BI Genie last month. The CFO used it to prep a board presentation. Unsupervised. You get this Slack message at 9am. 'You can't handle the truth!' — but Genie told it anyway.",
+    artifact: {
+      type: "email",
+      subject: "URGENT - Genie numbers completely wrong in board pack",
+      from: "Sarah Nguyen, Head of Data <s.nguyen@aussuper.com.au>",
+      to: "You",
+      body: "We have a serious problem.\n\nOur CFO used Genie this morning to pull FUM (Funds Under Management)\nfigures for the board pack — without checking with my team first.\n\nWhat Genie returned:\n  'Total FUM as at 30 Sep 2024: $47.3 billion'\n\nActual FUM from our verified source: $31.8 billion\n\nThe CFO has already sent the board pack to 12 directors.\nThe board meeting is in 3 hours.\n\nWhen I asked Genie the same question just now, it said:\n  'Based on the available data, FUM is approximately $47 billion,\n   though figures may vary depending on valuation methodology.'\n\nOur gold layer has the correct figures. I don't know why\nGenie is returning $47B. It sounds very confident.\n\nIs this a Databricks bug? Do we need to take Genie offline?\nThis is a potential APRA compliance issue.\n\nSarah"
+    },
+    question: "Why did Genie return $47.3B with full confidence? What's your immediate response — and what's your longer-term fix for governed AI/BI?",
+    hint: "Genie didn't make the number up from nothing. Where could $47.3B actually come from in their data environment?",
+    answer: "Why it happened:\n1. Genie queried the wrong table — possibly a silver/staging layer, pre-merger combined entity, or old snapshot not yet deprecated\n2. No semantic layer configured — Genie had no guardrails on which tables are authoritative for FUM\n3. No certified metrics or curated Genie Spaces — it was let loose on the raw catalog\n\nImmediate response:\n- Call Sarah now. Not Slack. This is serious.\n- Help draft a one-liner correction to the board pack before the meeting\n- Do NOT say 'Databricks bug' — this is a governance configuration issue\n\nLonger-term fix:\n- Define certified gold tables in Unity Catalog with clear descriptions and ownership\n- Configure Genie Spaces with approved data sources only — not the whole catalog\n- Set up certified metrics in AI/BI so Genie has a semantic anchor\n- Establish a verified-by-data-team workflow before any AI output goes to executives",
+    punchline: "Genie is only as smart as your semantic layer. If you haven't told it what's authoritative, it'll answer confidently anyway. That's the dangerous part."
+  },
+  {
+    label: "Case 3 — Program Management",
+    emoji: "E3",
+    title: "The Status Report Nobody Can Read",
+    icon: "&#x1F4CA;",
+    flavour: "A Delivery SA forwards the weekly status report going to the steering committee. 'Does this look OK to send?' they ask. Houston, we have a status report problem.",
+    artifact: {
+      type: "email",
+      subject: "Week 8 Status — DataPlatform Modernisation",
+      from: "Delivery SA <d.sa@databricks.com>",
+      to: "Steering Committee",
+      body: "Hi all, here is the Week 8 update.\n\nTASKS COMPLETED:\n  - Completed the DLT pipeline refactoring work that was started in\n    Week 5 and required rework due to schema evolution issues that\n    arose during the medallion architecture review on Tuesday the 14th\n    when we discovered that the upstream source system (JDE E1) has\n    inconsistent column typing across environments which required us\n    to use schema_of_json inference instead of explicit schema.\n  - Unity Catalog migration (see Week 6 notes)\n\nSTATUS: yellow (was red last week)\n\nRISKS:\n  - Things might be delayed if there are more surprises\n\nNEXT STEPS:\n  - Continue with remaining tasks\n  - TBD\n\nHours used: 312 of 400 (78%). Timeline: on track (probably).\n\nThanks,\nDan"
+    },
+    question: "This is going to a steering committee on Thursday. What's wrong — and rewrite the key sections out loud.",
+    hint: "Who reads this? What decisions do they need to make? What's missing for them to do that?",
+    answer: "Problems:\n1. Wall of text — steering committee needs status in 15 seconds\n2. Yellow status with no explanation of what changed from red or what's being done\n3. Risks are vague — no owner, no mitigation\n4. 78% hours used is a quiet alarm — 'probably on track' is not a status\n5. Next steps have no owners or due dates\n\nRewrite: One-line exec summary up top. RAG status with reason. Budget burn called out explicitly (78% hours, ~57% time elapsed = overrun risk). Risks: owner + mitigation. Next steps: who does what by when.",
+    punchline: "'Probably on track' at 78% budget is how you accidentally deliver a surprise. Steering committees hate surprises."
+  },
+  {
+    label: "Case 4 — Technical: Spark",
+    emoji: "E4",
+    title: "6pm Friday. NZ Telco. Goes Live Monday.",
+    icon: "&#x1F525;",
+    flavour: "It's 6:03pm AEST Friday. The on-call pings you. A major NZ telco's nightly load job just failed. They go live Monday. May the Spark be with you... but not after 6pm on Friday.",
+    artifact: {
+      type: "log",
+      body: "[18:01 NZST] Job FAILED: prod_nightly_load_v3  (runtime: 2h 14m, OOM)\n\nSparkContext: Driver OOM -- Java heap space\n  at org.apache.spark.sql.execution.collect (CollectExec.scala:89)\n\nQuery (simplified):\n  df = spark.read.table('silver.customer_events')   # 4.1B rows\n  summary = df.groupBy('customer_id','event_type') \\\n               .agg(collect_list('payload'))          # line 47 PROBLEM\n  summary.toPandas().to_csv('/tmp/output.csv')        # line 48 PROBLEM\n\nCluster config:\n  Driver:  r5.xlarge  (30 GB RAM)\n  Workers: 4 x m5.large\n  Mode:    Single-node legacy cluster (created 2022)\n\nLast successful run: Thursday  (600M rows)\nData note: Full NZ customer base onboarded at 5pm today (+3.5B new rows)"
+    },
+    question: "Why did this fail tonight specifically — and what's the fastest safe path to get it working before Monday?",
+    hint: "Two things on lines 47 and 48 should not exist in any 4-billion row job. What are they?",
+    answer: "Root cause:\n1. collect_list('payload') accumulates ALL payloads per customer into driver memory — fine at 600M rows, fatal OOM at 4.1B\n2. toPandas() pulls the entire result to the driver — always wrong at this scale\n3. Cluster was sized for 600M rows, never scaled after NZ onboarding\n\nFastest path to Monday:\n- Replace collect_list with count() or first() depending on business need\n- Replace toPandas().to_csv() with .write.csv() to distributed storage\n- Upsize cluster or switch to a job cluster with more workers\n- Smoke-test with 10M rows before full run",
+    punchline: "3.5 billion rows arrived at 5pm Friday. The job was written for a world where that couldn't happen. Classic."
+  },
+  {
+    label: "Case 5 — Delivery and Compatibility",
+    emoji: "E5",
+    title: "You Broke Our Pipelines",
+    icon: "&#x1F621;",
+    flavour: "A large Australian retailer upgraded to Databricks Runtime 15.x as part of a planned migration. Two days later, this lands — CC'd to their CTO and your Delivery Lead. You're gonna need a bigger cluster.",
+    artifact: {
+      type: "email",
+      subject: "Databricks upgrade has broken production — demanding explanation",
+      from: "James Otoole, Platform Eng Lead <j.otoole@retailco.com.au>",
+      to: "You; Delivery Lead; CTO",
+      body: "This is unacceptable.\n\nWe upgraded to DBR 15.x on Wednesday as recommended by your team.\nAs of Thursday morning, 14 of our 22 production pipelines have failed.\n\nRoot errors we are seeing:\n  1. pandas UDF signature changes — existing UDFs now throw TypeError\n  2. spark.sql.ansi.enabled now defaults to TRUE — integer overflow\n     errors on columns that were silently truncating before\n  3. MLflow autologging behaviour changed — model registry webhooks\n     are firing twice and corrupting experiment metadata\n  4. scikit-learn 1.3 pinned in requirements.txt is now incompatible\n     with the pre-installed version in DBR 15.x\n\nWe were not warned about any of these breaking changes.\nYour team said this was a 'straightforward upgrade.'\n\nWe are reverting to DBR 14.x tonight. We expect Databricks to:\n  a) Explain why we weren't warned\n  b) Provide a compatibility assessment BEFORE any future upgrades\n  c) Compensate us for 2 days of engineering time lost\n\nJames O'Toole\nPlatform Engineering Lead, RetailCo AU"
+    },
+    question: "How do you respond — and how do you rebuild trust and fix the process so this never happens again?",
+    hint: "Before you defend the upgrade, ask: was there a proper pre-upgrade compatibility assessment? Who owned that step?",
+    answer: "Own it first:\n- Call James and the CTO before replying by email — don't be defensive in writing when they're this angry\n- Acknowledge the impact directly. 'Straightforward upgrade' was clearly wrong framing.\n- Don't immediately debate compensation — that comes after trust is rebuilt\n\nAll four errors are real documented breaking changes in DBR 15.x that a proper pre-upgrade assessment would have caught:\n1. pandas UDF API change — caught in pre-upgrade testing\n2. ANSI mode defaulting to true — known 14 to 15 breaking change, a scan flags integer columns\n3. MLflow autologging changes — in the release notes\n4. Pre-installed library conflicts — exactly what a DBR compatibility matrix check is for\n\nFix the process — formalise a DBR upgrade runbook:\nRelease notes review > compatibility matrix check > staging upgrade > regression test suite > comms plan > prod upgrade with rollback window. This should be a standard DSA delivery artefact for any runtime upgrade engagement.",
+    punchline: "'Straightforward upgrade' are the two most dangerous words in platform delivery. Always run the compatibility matrix first."
+  },
+  {
+    label: "Case 6 — Cost Governance",
+    emoji: "E6",
+    title: "The $340K Surprise",
+    icon: "&#x1F4B8;",
+    flavour: "Last business day of the quarter. The customer's cloud finance team just ran their monthly reconciliation. Your AE forwards this with three question marks and nothing else. 'Show me the money!' Wait, where did ALL the money go?",
+    artifact: {
+      type: "email",
+      subject: "Databricks spend — Q3 actuals vs budget SEVERE variance",
+      from: "Linda Park, Cloud FinOps Lead <l.park@conglomerate.com.au>",
+      to: "AE (fwd to you)",
+      body: "Hi,\n\nWe have a significant problem with our Q3 Databricks spend.\n\n  Budget (Q3):     $180,000 AUD\n  Actual (Q3):     $341,700 AUD\n  Variance:        +$161,700  (+90%)\n\nTop cost drivers from our AWS Cost Explorer:\n  1. compute-databricks-all-purpose   $198,400   (58%)\n  2. compute-databricks-jobs           $87,200   (26%)\n  3. databricks-sql-warehouse          $44,100   (13%)\n\nWhat we know:\n  - No new workloads were approved in Q3\n  - 4 active workspaces — costs are not tagged by team or project\n  - Photon is enabled on all warehouses (we were told it was 'included')\n  - Our data science team 'runs experiments' on all-purpose clusters\n  - Auto-termination policy: exists in policy but not enforced\n  - Committed Use commitment for $120K/quarter —\n    we blew through it in Week 6\n\nWe need a full explanation and a remediation plan by end of week.\nThe CFO is involved.\n\nLinda Park\nFinOps, Conglomerate AU"
+    },
+    question: "Diagnose the top 3 root causes from the data — and build Linda a credible remediation plan she can take to the CFO by Friday.",
+    hint: "Look at the split: 58% all-purpose compute. And the data science team 'runs experiments'. What does that tell you about cluster lifecycle?",
+    answer: "Root causes:\n1. All-purpose clusters used for everything — $198K (58%) on always-on shared compute. Data science experiments running with no auto-termination enforcement means clusters run overnight and through weekends. Job clusters for scheduled workloads would cost a fraction.\n2. Zero cost attribution — no tagging by team or project means nobody feels the bill. You can't govern what you can't see.\n3. CUD blown in Week 6 of 13 — $120K Committed Use exhausted halfway through the quarter, then everything ran at on-demand rates for 7 weeks. No spend alerts, no guardrails, no mid-quarter correction.\n\nRemediation plan:\nImmediate: Audit all running clusters now. Terminate anything idle. Enforce auto-termination at 30 mins max via cluster policy.\nShort term: Tag all clusters and warehouses by team/project. Enable account-level cost monitoring. Set budget alerts at 50%, 75%, 90% of quarterly budget.\nStructural: Move scheduled jobs to job clusters (60-70% cheaper). Cluster policies to prevent unapproved large all-purpose clusters. Right-size SQL warehouses.\nBonus: Show Linda system.billing.usage in Unity Catalog system tables — per-cluster, per-user spend visibility. Most customers don't know this exists.",
+    punchline: "'Photon is included' means included in DBU pricing — not free. Someone always finds this out the hard way."
+  },
+  {
+    label: "Case 7 — Enablement and Training",
+    emoji: "E7",
     title: "The Enablement Disaster",
     icon: "&#x1F9D1;&#x200D;&#x1F3EB;",
-    flavour: "You're reviewing the post-engagement survey for a 3-day Databricks enablement you ran for a major energy retailer in Brisbane.",
+    flavour: "You're reviewing the post-engagement survey for a 3-day Databricks enablement you ran for a major energy retailer in Brisbane. Life is like a box of demos — you never know if anyone's actually learning.",
     artifact: {
       type: "slides",
       title: "Post-Training Feedback — EnergyRetail AU",
@@ -311,98 +398,11 @@ var CASES = [
     punchline: "'We watched demos for 8 hours' is the training equivalent of teaching someone to swim by describing water."
   },
   {
-    label: "Case 3 — Program Management",
-    emoji: "E3",
-    title: "The Status Report Nobody Can Read",
-    icon: "&#x1F4CA;",
-    flavour: "A Delivery SA forwards the weekly status report going to the steering committee. 'Does this look OK to send?' they ask.",
-    artifact: {
-      type: "email",
-      subject: "Week 8 Status — DataPlatform Modernisation",
-      from: "Delivery SA <d.sa@databricks.com>",
-      to: "Steering Committee",
-      body: "Hi all, here is the Week 8 update.\n\nTASKS COMPLETED:\n  - Completed the DLT pipeline refactoring work that was started in\n    Week 5 and required rework due to schema evolution issues that\n    arose during the medallion architecture review on Tuesday the 14th\n    when we discovered that the upstream source system (JDE E1) has\n    inconsistent column typing across environments which required us\n    to use schema_of_json inference instead of explicit schema.\n  - Unity Catalog migration (see Week 6 notes)\n\nSTATUS: yellow (was red last week)\n\nRISKS:\n  - Things might be delayed if there are more surprises\n\nNEXT STEPS:\n  - Continue with remaining tasks\n  - TBD\n\nHours used: 312 of 400 (78%). Timeline: on track (probably).\n\nThanks,\nDan"
-    },
-    question: "This is going to a steering committee on Thursday. What's wrong — and rewrite the key sections out loud.",
-    hint: "Who reads this? What decisions do they need to make? What's missing for them to do that?",
-    answer: "Problems:\n1. Wall of text — steering committee needs status in 15 seconds\n2. Yellow status with no explanation of what changed from red or what's being done\n3. Risks are vague — no owner, no mitigation\n4. 78% hours used is a quiet alarm — 'probably on track' is not a status\n5. Next steps have no owners or due dates\n\nRewrite: One-line exec summary up top. RAG status with reason. Budget burn called out explicitly (78% hours, ~57% time elapsed = overrun risk). Risks: owner + mitigation. Next steps: who does what by when.",
-    punchline: "'Probably on track' at 78% budget is how you accidentally deliver a surprise. Steering committees hate surprises."
-  },
-  {
-    label: "Case 4 — Technical: Spark",
-    emoji: "E4",
-    title: "6pm Friday. NZ Telco. Goes Live Monday.",
-    icon: "&#x1F525;",
-    flavour: "It's 6:03pm AEST Friday. The on-call pings you. A major NZ telco's nightly load job just failed. They go live Monday.",
-    artifact: {
-      type: "log",
-      body: "[18:01 NZST] Job FAILED: prod_nightly_load_v3  (runtime: 2h 14m, OOM)\n\nSparkContext: Driver OOM -- Java heap space\n  at org.apache.spark.sql.execution.collect (CollectExec.scala:89)\n\nQuery (simplified):\n  df = spark.read.table('silver.customer_events')   # 4.1B rows\n  summary = df.groupBy('customer_id','event_type') \\\n               .agg(collect_list('payload'))          # line 47 PROBLEM\n  summary.toPandas().to_csv('/tmp/output.csv')        # line 48 PROBLEM\n\nCluster config:\n  Driver:  r5.xlarge  (30 GB RAM)\n  Workers: 4 x m5.large\n  Mode:    Single-node legacy cluster (created 2022)\n\nLast successful run: Thursday  (600M rows)\nData note: Full NZ customer base onboarded at 5pm today (+3.5B new rows)"
-    },
-    question: "Why did this fail tonight specifically — and what's the fastest safe path to get it working before Monday?",
-    hint: "Two things on lines 47 and 48 should not exist in any 4-billion row job. What are they?",
-    answer: "Root cause:\n1. collect_list('payload') accumulates ALL payloads per customer into driver memory — fine at 600M rows, fatal OOM at 4.1B\n2. toPandas() pulls the entire result to the driver — always wrong at this scale\n3. Cluster was sized for 600M rows, never scaled after NZ onboarding\n\nFastest path to Monday:\n- Replace collect_list with count() or first() depending on business need\n- Replace toPandas().to_csv() with .write.csv() to distributed storage\n- Upsize cluster or switch to a job cluster with more workers\n- Smoke-test with 10M rows before full run",
-    punchline: "3.5 billion rows arrived at 5pm Friday. The job was written for a world where that couldn't happen. Classic."
-  },
-  {
-    label: "Case 5 — AI and Genie",
-    emoji: "E5",
-    title: "Genie Told the CFO What?",
-    icon: "&#x1F916;",
-    flavour: "A superannuation fund went live with Databricks AI/BI Genie last month. The CFO used it to prep a board presentation. Unsupervised. You get this Slack message at 9am.",
-    artifact: {
-      type: "email",
-      subject: "URGENT - Genie numbers completely wrong in board pack",
-      from: "Sarah Nguyen, Head of Data <s.nguyen@aussuper.com.au>",
-      to: "You",
-      body: "We have a serious problem.\n\nOur CFO used Genie this morning to pull FUM (Funds Under Management)\nfigures for the board pack — without checking with my team first.\n\nWhat Genie returned:\n  'Total FUM as at 30 Sep 2024: $47.3 billion'\n\nActual FUM from our verified source: $31.8 billion\n\nThe CFO has already sent the board pack to 12 directors.\nThe board meeting is in 3 hours.\n\nWhen I asked Genie the same question just now, it said:\n  'Based on the available data, FUM is approximately $47 billion,\n   though figures may vary depending on valuation methodology.'\n\nOur gold layer has the correct figures. I don't know why\nGenie is returning $47B. It sounds very confident.\n\nIs this a Databricks bug? Do we need to take Genie offline?\nThis is a potential APRA compliance issue.\n\nSarah"
-    },
-    question: "Why did Genie return $47.3B with full confidence? What's your immediate response — and what's your longer-term fix for governed AI/BI?",
-    hint: "Genie didn't make the number up from nothing. Where could $47.3B actually come from in their data environment?",
-    answer: "Why it happened:\n1. Genie queried the wrong table — possibly a silver/staging layer, pre-merger combined entity, or old snapshot not yet deprecated\n2. No semantic layer configured — Genie had no guardrails on which tables are authoritative for FUM\n3. No certified metrics or curated Genie Spaces — it was let loose on the raw catalog\n\nImmediate response:\n- Call Sarah now. Not Slack. This is serious.\n- Help draft a one-liner correction to the board pack before the meeting\n- Do NOT say 'Databricks bug' — this is a governance configuration issue\n\nLonger-term fix:\n- Define certified gold tables in Unity Catalog with clear descriptions and ownership\n- Configure Genie Spaces with approved data sources only — not the whole catalog\n- Set up certified metrics in AI/BI so Genie has a semantic anchor\n- Establish a verified-by-data-team workflow before any AI output goes to executives",
-    punchline: "Genie is only as smart as your semantic layer. If you haven't told it what's authoritative, it'll answer confidently anyway. That's the dangerous part."
-  },
-  {
-    label: "Case 6 — Delivery and Compatibility",
-    emoji: "E6",
-    title: "You Broke Our Pipelines",
-    icon: "&#x1F621;",
-    flavour: "A large Australian retailer upgraded to Databricks Runtime 15.x as part of a planned migration. Two days later, this lands — CC'd to their CTO and your Delivery Lead.",
-    artifact: {
-      type: "email",
-      subject: "Databricks upgrade has broken production — demanding explanation",
-      from: "James Otoole, Platform Eng Lead <j.otoole@retailco.com.au>",
-      to: "You; Delivery Lead; CTO",
-      body: "This is unacceptable.\n\nWe upgraded to DBR 15.x on Wednesday as recommended by your team.\nAs of Thursday morning, 14 of our 22 production pipelines have failed.\n\nRoot errors we are seeing:\n  1. pandas UDF signature changes — existing UDFs now throw TypeError\n  2. spark.sql.ansi.enabled now defaults to TRUE — integer overflow\n     errors on columns that were silently truncating before\n  3. MLflow autologging behaviour changed — model registry webhooks\n     are firing twice and corrupting experiment metadata\n  4. scikit-learn 1.3 pinned in requirements.txt is now incompatible\n     with the pre-installed version in DBR 15.x\n\nWe were not warned about any of these breaking changes.\nYour team said this was a 'straightforward upgrade.'\n\nWe are reverting to DBR 14.x tonight. We expect Databricks to:\n  a) Explain why we weren't warned\n  b) Provide a compatibility assessment BEFORE any future upgrades\n  c) Compensate us for 2 days of engineering time lost\n\nJames O'Toole\nPlatform Engineering Lead, RetailCo AU"
-    },
-    question: "How do you respond — and how do you rebuild trust and fix the process so this never happens again?",
-    hint: "Before you defend the upgrade, ask: was there a proper pre-upgrade compatibility assessment? Who owned that step?",
-    answer: "Own it first:\n- Call James and the CTO before replying by email — don't be defensive in writing when they're this angry\n- Acknowledge the impact directly. 'Straightforward upgrade' was clearly wrong framing.\n- Don't immediately debate compensation — that comes after trust is rebuilt\n\nAll four errors are real documented breaking changes in DBR 15.x that a proper pre-upgrade assessment would have caught:\n1. pandas UDF API change — caught in pre-upgrade testing\n2. ANSI mode defaulting to true — known 14 to 15 breaking change, a scan flags integer columns\n3. MLflow autologging changes — in the release notes\n4. Pre-installed library conflicts — exactly what a DBR compatibility matrix check is for\n\nFix the process — formalise a DBR upgrade runbook:\nRelease notes review > compatibility matrix check > staging upgrade > regression test suite > comms plan > prod upgrade with rollback window. This should be a standard DSA delivery artefact for any runtime upgrade engagement.",
-    punchline: "'Straightforward upgrade' are the two most dangerous words in platform delivery. Always run the compatibility matrix first."
-  },
-  {
-    label: "Case 7 — Cost Governance",
-    emoji: "E7",
-    title: "The $340K Surprise",
-    icon: "&#x1F4B8;",
-    flavour: "Last business day of the quarter. The customer's cloud finance team just ran their monthly reconciliation. Your AE forwards this with three question marks and nothing else.",
-    artifact: {
-      type: "email",
-      subject: "Databricks spend — Q3 actuals vs budget SEVERE variance",
-      from: "Linda Park, Cloud FinOps Lead <l.park@conglomerate.com.au>",
-      to: "AE (fwd to you)",
-      body: "Hi,\n\nWe have a significant problem with our Q3 Databricks spend.\n\n  Budget (Q3):     $180,000 AUD\n  Actual (Q3):     $341,700 AUD\n  Variance:        +$161,700  (+90%)\n\nTop cost drivers from our AWS Cost Explorer:\n  1. compute-databricks-all-purpose   $198,400   (58%)\n  2. compute-databricks-jobs           $87,200   (26%)\n  3. databricks-sql-warehouse          $44,100   (13%)\n\nWhat we know:\n  - No new workloads were approved in Q3\n  - 4 active workspaces — costs are not tagged by team or project\n  - Photon is enabled on all warehouses (we were told it was 'included')\n  - Our data science team 'runs experiments' on all-purpose clusters\n  - Auto-termination policy: exists in policy but not enforced\n  - Committed Use commitment for $120K/quarter —\n    we blew through it in Week 6\n\nWe need a full explanation and a remediation plan by end of week.\nThe CFO is involved.\n\nLinda Park\nFinOps, Conglomerate AU"
-    },
-    question: "Diagnose the top 3 root causes from the data — and build Linda a credible remediation plan she can take to the CFO by Friday.",
-    hint: "Look at the split: 58% all-purpose compute. And the data science team 'runs experiments'. What does that tell you about cluster lifecycle?",
-    answer: "Root causes:\n1. All-purpose clusters used for everything — $198K (58%) on always-on shared compute. Data science experiments running with no auto-termination enforcement means clusters run overnight and through weekends. Job clusters for scheduled workloads would cost a fraction.\n2. Zero cost attribution — no tagging by team or project means nobody feels the bill. You can't govern what you can't see.\n3. CUD blown in Week 6 of 13 — $120K Committed Use exhausted halfway through the quarter, then everything ran at on-demand rates for 7 weeks. No spend alerts, no guardrails, no mid-quarter correction.\n\nRemediation plan:\nImmediate: Audit all running clusters now. Terminate anything idle. Enforce auto-termination at 30 mins max via cluster policy.\nShort term: Tag all clusters and warehouses by team/project. Enable account-level cost monitoring. Set budget alerts at 50%, 75%, 90% of quarterly budget.\nStructural: Move scheduled jobs to job clusters (60-70% cheaper). Cluster policies to prevent unapproved large all-purpose clusters. Right-size SQL warehouses.\nBonus: Show Linda system.billing.usage in Unity Catalog system tables — per-cluster, per-user spend visibility. Most customers don't know this exists.",
-    punchline: "'Photon is included' means included in DBU pricing — not free. Someone always finds this out the hard way."
-  },
-  {
     label: "Case 8 — The Final Riddle",
     emoji: "E8",
     title: "The Vault",
     icon: "&#x1F9E9;",
-    flavour: "One lock remains. Solve this riddle and the workspace admin password is yours.",
+    flavour: "One lock remains. Solve this riddle and the workspace admin password is yours. The first rule of SOW Club is: nobody reads the SOW.",
     artifact: {
       type: "riddle",
       body: "I'm on every slide deck but live in no data centre.\nI'm promised in Week 1 and defined in Week 8.\nCustomers ask if I'm done. I'm never done.\nI have owners, but they're always in a meeting.\n\nI'm not a sprint. I'm not a ticket.\nI'm not a runbook — though I should be.\nI contain the answers to everything,\nbut no-one reads me after sign-off.\n\nSuccess teams love me.\nDelivery teams fear me.\nPresales promised me.\nI sit in Confluence, unread and unmerged.\n\nWhat am I?"
@@ -413,7 +413,6 @@ var CASES = [
     punchline: "Somewhere right now a customer is asking 'but isn't that in scope?' and someone is quietly opening a PDF they haven't read since signing."
   }
 ];
-
 var teams = [];
 var caseIdx = 0;
 var casePhase = "locked";
