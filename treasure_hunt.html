@@ -740,7 +740,7 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
 
   function createRecognition() {
     recognition = new SpeechRecognition();
-    recognition.continuous = true;  // Keep listening continuously
+    recognition.continuous = false;  // Single shot mode - stop after each command
     recognition.interimResults = true;  // Show results as speaking
     recognition.lang = 'en-US';
     recognition.maxAlternatives = 3;
@@ -754,18 +754,12 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         if (event.results[i].isFinal) {
           if (transcript.includes('enhance')) {
             triggerEnhance();
-            // Keep voice button in listening state
-            if (voiceBtn && isListening) {
-              voiceBtn.innerHTML = "🎤 Listening...";
-              voiceBtn.style.background = "#00ff00";
-            }
+            // Stop voice recognition after command
+            window.stopVoiceRecognition();
           } else if (transcript.includes('normal') || transcript.includes('reset')) {
             disableEnhance();
-            // Keep voice button in listening state
-            if (voiceBtn && isListening) {
-              voiceBtn.innerHTML = "🎤 Listening...";
-              voiceBtn.style.background = "#00ff00";
-            }
+            // Stop voice recognition after command
+            window.stopVoiceRecognition();
           }
         }
       }
@@ -792,14 +786,11 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
 
     recognition.onend = function() {
       console.log('Speech recognition ended');
-      // Only restart if user still wants to listen
-      if (isListening && !isRestarting) {
-        setTimeout(() => {
-          if (isListening) {
-            console.log('Restarting after end...');
-            restartRecognition();
-          }
-        }, 1000);  // Longer delay to prevent loops
+      // Don't auto-restart - user must click button again
+      isListening = false;
+      if (voiceBtn) {
+        voiceBtn.innerHTML = "🎤 Enable Voice";
+        voiceBtn.style.background = "#FFD700";
       }
     };
   }
@@ -905,6 +896,11 @@ function updateEnhanceControls() {
   if (!isGameVisible && enhanceActive) {
     disableEnhance();
   }
+
+  // Stop voice if leaving game
+  if (!isGameVisible && isListening) {
+    window.stopVoiceRecognition();
+  }
 }
 
 // Add manual enhance button (only shows in game)
@@ -934,18 +930,23 @@ window.addEventListener("load", function() {
     };
     document.body.appendChild(enhanceBtn);
 
-    // Add hint
-    const hint = document.createElement("div");
-    hint.innerHTML = "💡 Press 'E' to ENHANCE (zoom in) - Press 'E' again to return to NORMAL";
-    hint.style.cssText = "position:fixed;top:100px;left:50%;transform:translateX(-50%);background:rgba(0,255,0,0.1);color:#00ff00;padding:10px 20px;border-radius:10px;border:1px solid #00ff00;font-size:14px;z-index:200;animation:fadeIn 1s;max-width:400px;text-align:center";
-    hint.id = "enhance-hint";
-    document.body.appendChild(hint);
-
-    // Hide hint after 5 seconds
+    // Only show hint if game is active
     setTimeout(() => {
-      hint.style.opacity = "0";
-      setTimeout(() => hint.remove(), 500);
-    }, 5000);
+      const gameScreen = document.getElementById("game");
+      if (gameScreen && gameScreen.style.display === "flex") {
+        const hint = document.createElement("div");
+        hint.innerHTML = "💡 Press 'E' to ENHANCE (zoom in) - Press 'E' again to return to NORMAL";
+        hint.style.cssText = "position:fixed;top:100px;left:50%;transform:translateX(-50%);background:rgba(0,255,0,0.1);color:#00ff00;padding:10px 20px;border-radius:10px;border:1px solid #00ff00;font-size:14px;z-index:200;animation:fadeIn 1s;max-width:400px;text-align:center";
+        hint.id = "enhance-hint";
+        document.body.appendChild(hint);
+
+        // Hide hint after 5 seconds
+        setTimeout(() => {
+          hint.style.opacity = "0";
+          setTimeout(() => hint.remove(), 500);
+        }, 5000);
+      }
+    }, 1000);
   }, 2000);
 });
 </script>
