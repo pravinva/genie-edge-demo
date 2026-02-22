@@ -127,12 +127,12 @@
             box-shadow: 0 0 30px rgba(255, 215, 0, 0.5),
                         0 0 60px rgba(255, 215, 0, 0.3),
                         0 0 90px rgba(255, 215, 0, 0.2);
-            filter: blur(20px) brightness(0.7);
-            transform: scale(0.95);
+            filter: blur(30px) brightness(0.5);
+            transform: scale(0.92);
         }
 
         .person-image.vision-testing {
-            animation: visionFocus 5s ease-out forwards, glow 3s ease-in-out infinite 5s;
+            animation: visionFocus 10s ease-out forwards, glow 3s ease-in-out infinite 10s;
         }
 
         @keyframes glow {
@@ -279,24 +279,44 @@
 
         @keyframes visionFocus {
             0% {
-                filter: blur(25px) brightness(0.6);
+                filter: blur(30px) brightness(0.5);
+                transform: scale(0.92);
+            }
+            15% {
+                filter: blur(25px) brightness(0.55);
                 transform: scale(0.93);
             }
             30% {
-                filter: blur(18px) brightness(0.7);
+                filter: blur(20px) brightness(0.6);
+                transform: scale(0.94);
+            }
+            40% {
+                filter: blur(16px) brightness(0.65);
                 transform: scale(0.95);
             }
             50% {
-                filter: blur(12px) brightness(0.8);
+                filter: blur(12px) brightness(0.7);
+                transform: scale(0.96);
+            }
+            60% {
+                filter: blur(9px) brightness(0.75);
                 transform: scale(0.97);
             }
             70% {
-                filter: blur(6px) brightness(0.9);
+                filter: blur(6px) brightness(0.8);
+                transform: scale(0.98);
+            }
+            80% {
+                filter: blur(4px) brightness(0.85);
                 transform: scale(0.99);
             }
-            85% {
-                filter: blur(2px) brightness(0.95);
+            90% {
+                filter: blur(2px) brightness(0.93);
                 transform: scale(0.995);
+            }
+            95% {
+                filter: blur(1px) brightness(0.97);
+                transform: scale(0.998);
             }
             100% {
                 filter: blur(0) brightness(1);
