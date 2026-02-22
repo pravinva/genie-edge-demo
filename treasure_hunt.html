@@ -738,7 +738,7 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
 
   function createRecognition() {
     recognition = new SpeechRecognition();
-    recognition.continuous = false;  // Changed to false for better reliability
+    recognition.continuous = true;  // Keep listening continuously
     recognition.interimResults = true;  // Show results as speaking
     recognition.lang = 'en-US';
     recognition.maxAlternatives = 3;
@@ -748,44 +748,68 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         const transcript = event.results[i][0].transcript.toLowerCase();
         console.log("Heard: " + transcript);
 
-        if (transcript.includes('enhance')) {
-          triggerEnhance();
-          // Restart recognition after command
-          setTimeout(() => {
-            if (isListening) restartRecognition();
-          }, 1000);
-        } else if (transcript.includes('normal') || transcript.includes('reset')) {
-          disableEnhance();
+        // Only process final results to avoid multiple triggers
+        if (event.results[i].isFinal) {
+          if (transcript.includes('enhance')) {
+            triggerEnhance();
+            // Don't restart immediately - let it finish naturally
+          } else if (transcript.includes('normal') || transcript.includes('reset')) {
+            disableEnhance();
+          }
         }
       }
     };
 
     recognition.onerror = function(event) {
       console.log('Speech recognition error:', event.error);
-      isListening = false;
-      if (voiceBtn) {
-        voiceBtn.innerHTML = "🎤 Voice Error - Click to Retry";
-        voiceBtn.style.background = "#FF6B6B";
+      // Don't stop on all errors - some are recoverable
+      if (event.error === 'no-speech' || event.error === 'audio-capture') {
+        // These are recoverable, just continue
+        console.log('Recoverable error, continuing...');
+      } else if (event.error === 'aborted') {
+        // Ignore abort errors
+        console.log('Aborted, will auto-restart');
+      } else {
+        // Only stop for serious errors
+        isListening = false;
+        if (voiceBtn) {
+          voiceBtn.innerHTML = "🎤 Voice Error - Click to Retry";
+          voiceBtn.style.background = "#FF6B6B";
+        }
       }
     };
 
     recognition.onend = function() {
       console.log('Speech recognition ended');
-      // Auto-restart if button is still active
-      if (isListening) {
+      // Only restart if user still wants to listen
+      if (isListening && !isRestarting) {
         setTimeout(() => {
-          restartRecognition();
-        }, 100);
+          if (isListening) {
+            console.log('Restarting after end...');
+            restartRecognition();
+          }
+        }, 1000);  // Longer delay to prevent loops
       }
     };
   }
 
+  let isRestarting = false;
+
   function restartRecognition() {
+    // Prevent multiple simultaneous restarts
+    if (isRestarting) {
+      console.log("Already restarting, skipping...");
+      return;
+    }
+
+    isRestarting = true;
+
     if (recognition) {
       try {
         recognition.stop();
       } catch(e) {}
     }
+
     setTimeout(() => {
       createRecognition();
       if (isListening) {
@@ -796,7 +820,8 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
           console.log("Failed to restart:", e);
         }
       }
-    }, 200);
+      isRestarting = false;
+    }, 300);
   }
 
   // Start listening when game starts
