@@ -288,17 +288,21 @@
 
         .page-indicator {
             position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 18px;
+            top: 50%;
+            left: 120px;
+            transform: translateY(-50%);
+            font-size: 20px;
             font-weight: bold;
             color: #FFD700;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 10px 25px;
-            border-radius: 25px;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 15px 20px;
+            border-radius: 15px;
             z-index: 100;
             text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            writing-mode: horizontal-tb;
+            min-width: 100px;
+            text-align: center;
         }
 
         /* Score */
@@ -387,6 +391,9 @@
 
         /* Mobile responsive */
         @media (max-width: 1250px) {
+            .page-indicator {
+                left: 100px;
+            }
             .flipbook {
                 width: 600px;
                 height: 800px;
@@ -419,6 +426,13 @@
 
             .nav-next {
                 right: 10px;
+            }
+
+            .page-indicator {
+                left: 70px;
+                font-size: 16px;
+                padding: 10px 15px;
+                min-width: 80px;
             }
             .flipbook {
                 width: 90vw;
