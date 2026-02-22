@@ -413,6 +413,17 @@
             color: #FFD700;
         }
 
+        .score-detail {
+            font-size: 14px;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        .score-detail span {
+            color: #FFD700;
+            font-weight: bold;
+        }
+
         /* Title */
         .main-title {
             position: absolute;
@@ -582,6 +593,11 @@
         <div class="score-board">
             <div class="score-title">SCORE</div>
             <div class="score-value" id="score">0/15</div>
+            <div class="score-detail">
+                ✓ <span id="correct-count">0</span> |
+                ✗ <span id="incorrect-count">0</span> |
+                ? <span id="remaining-count">15</span>
+            </div>
         </div>
 
         <!-- Flipbook -->
