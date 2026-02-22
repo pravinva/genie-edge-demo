@@ -144,30 +144,93 @@
         .answer-section {
             display: none;
             animation: fadeIn 0.5s ease;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 20px;
-            border-radius: 15px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(20, 20, 20, 0.95));
+            padding: 25px;
+            border-radius: 20px;
             margin-top: 20px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            box-shadow:
+                0 10px 40px rgba(0, 0, 0, 0.5),
+                inset 0 0 20px rgba(255, 215, 0, 0.1);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            text-align: center;
         }
 
         .answer-section.show {
             display: block;
         }
 
+        @keyframes sparkle {
+            0%, 100% {
+                text-shadow:
+                    0 0 10px #FFD700,
+                    0 0 20px #FFD700,
+                    0 0 30px #FFA500,
+                    0 0 40px #FFA500;
+                color: #FFD700;
+            }
+            50% {
+                text-shadow:
+                    0 0 20px #FFD700,
+                    0 0 30px #FFD700,
+                    0 0 40px #FFA500,
+                    0 0 50px #FFA500,
+                    0 0 60px #FFA500;
+                color: #FFF700;
+            }
+        }
+
         .person-name {
-            font-size: 36px;
+            font-size: 42px;
             font-weight: bold;
-            color: #FFD700;
+            background: linear-gradient(45deg, #FFD700, #FFF700, #FFA500, #FFD700);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: sparkle 2s ease-in-out infinite, gradient-shift 3s ease infinite;
+            position: relative;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .person-name::before {
+            content: '✨';
+            position: absolute;
+            left: -30px;
+            animation: float 2s ease-in-out infinite;
+        }
+
+        .person-name::after {
+            content: '✨';
+            position: absolute;
+            right: -30px;
+            animation: float 2s ease-in-out infinite 0.5s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(10deg);
+            }
         }
 
         .person-hint {
             font-size: 20px;
             color: #FFA500;
             font-style: italic;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            text-shadow: 0 0 10px rgba(255, 165, 0, 0.5);
+            margin-top: 10px;
+            line-height: 1.4;
         }
 
         @keyframes fadeIn {
@@ -184,24 +247,12 @@
         }
 
         /* Navigation */
-        .nav-controls {
-            position: absolute;
-            bottom: 50px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 20px;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 15px 30px;
-            border-radius: 50px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            z-index: 100;
-        }
-
         .nav-button {
-            width: 50px;
-            height: 50px;
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 70px;
+            height: 70px;
             background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
             border: none;
             border-radius: 50%;
@@ -211,26 +262,43 @@
             cursor: pointer;
             transition: all 0.3s ease;
             color: #000;
-            font-size: 20px;
+            font-size: 32px;
             font-weight: bold;
+            z-index: 100;
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4);
         }
 
         .nav-button:hover:not(:disabled) {
-            transform: scale(1.1);
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.6);
+            transform: translateY(-50%) scale(1.15);
+            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.6);
         }
 
         .nav-button:disabled {
-            opacity: 0.5;
+            opacity: 0.3;
             cursor: not-allowed;
         }
 
+        .nav-prev {
+            left: 30px;
+        }
+
+        .nav-next {
+            right: 30px;
+        }
+
         .page-indicator {
-            font-size: 16px;
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 18px;
             font-weight: bold;
-            color: #333;
-            min-width: 80px;
-            text-align: center;
+            color: #FFD700;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 25px;
+            border-radius: 25px;
+            z-index: 100;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
         }
 
         /* Score */
@@ -339,6 +407,19 @@
         }
 
         @media (max-width: 650px) {
+            .nav-button {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+
+            .nav-prev {
+                left: 10px;
+            }
+
+            .nav-next {
+                right: 10px;
+            }
             .flipbook {
                 width: 90vw;
                 height: 80vh;
@@ -420,11 +501,9 @@
         </div>
 
         <!-- Navigation -->
-        <div class="nav-controls">
-            <button class="nav-button" id="prevBtn" onclick="previousPage()" disabled>‹</button>
-            <div class="page-indicator" id="pageIndicator">Cover</div>
-            <button class="nav-button" id="nextBtn" onclick="nextPage()">›</button>
-        </div>
+        <button class="nav-button nav-prev" id="prevBtn" onclick="previousPage()" disabled>‹</button>
+        <button class="nav-button nav-next" id="nextBtn" onclick="nextPage()">›</button>
+        <div class="page-indicator" id="pageIndicator">Cover</div>
     </div>
 
     <script>
