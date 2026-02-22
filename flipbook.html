@@ -91,10 +91,15 @@
             border: 3px solid transparent;
             background: linear-gradient(#111, #111) padding-box,
                         linear-gradient(45deg, #FFD700, #FFA500, #FF6B6B, #9B59B6, #3498DB, #2ECC71, #FFD700) border-box;
-            animation: glow 3s ease-in-out infinite;
             box-shadow: 0 0 30px rgba(255, 215, 0, 0.5),
                         0 0 60px rgba(255, 215, 0, 0.3),
                         0 0 90px rgba(255, 215, 0, 0.2);
+            filter: blur(20px) brightness(0.7);
+            transform: scale(0.95);
+        }
+
+        .person-image.vision-testing {
+            animation: visionFocus 2.5s ease-out forwards, glow 3s ease-in-out infinite 2.5s;
         }
 
         @keyframes glow {
@@ -237,6 +242,25 @@
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes visionFocus {
+            0% {
+                filter: blur(20px) brightness(0.7);
+                transform: scale(0.95);
+            }
+            50% {
+                filter: blur(10px) brightness(0.85);
+                transform: scale(0.97);
+            }
+            75% {
+                filter: blur(5px) brightness(0.95);
+                transform: scale(0.99);
+            }
+            100% {
+                filter: blur(0) brightness(1);
+                transform: scale(1);
+            }
         }
 
         /* Page number */
@@ -780,6 +804,14 @@
                 const page = document.getElementById(`page-${pageNum - 1}`);
                 if (page) {
                     page.style.display = 'block';
+
+                    // Restart vision focus animation
+                    const img = page.querySelector('.person-image');
+                    if (img) {
+                        img.classList.remove('vision-testing');
+                        void img.offsetWidth; // Force reflow
+                        img.classList.add('vision-testing');
+                    }
 
                     // Check if already answered
                     if (answered.has(pageNum - 1)) {
