@@ -462,6 +462,7 @@ function startGame() {
   caseIdx = 0;
   casePhase = "locked";
   renderScoreboard();
+  updateEnhanceControls();  // Show enhance controls when game starts
   renderMap();
   renderCase();
 }
@@ -627,6 +628,7 @@ function showVictory() {
   document.getElementById("game").style.display = "none";
   var v = document.getElementById("victory");
   v.style.display = "flex";
+  updateEnhanceControls();  // Hide enhance controls when game ends
   var conf = document.getElementById("confetti");
   var colors = ["#FF3621","#F5A623","#2ECC71","#9B59B6","#3498DB","#fff"];
   for (var i = 0; i < 120; i++) {
@@ -752,9 +754,18 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         if (event.results[i].isFinal) {
           if (transcript.includes('enhance')) {
             triggerEnhance();
-            // Don't restart immediately - let it finish naturally
+            // Keep voice button in listening state
+            if (voiceBtn && isListening) {
+              voiceBtn.innerHTML = "🎤 Listening...";
+              voiceBtn.style.background = "#00ff00";
+            }
           } else if (transcript.includes('normal') || transcript.includes('reset')) {
             disableEnhance();
+            // Keep voice button in listening state
+            if (voiceBtn && isListening) {
+              voiceBtn.innerHTML = "🎤 Listening...";
+              voiceBtn.style.background = "#00ff00";
+            }
           }
         }
       }
@@ -860,29 +871,49 @@ if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
 
   // Add button to enable voice
   setTimeout(() => {
-    if (document.getElementById("game")) {
-      voiceBtn = document.createElement("button");
-      voiceBtn.innerHTML = "🎤 Enable Voice";
-      voiceBtn.style.cssText = "position:fixed;bottom:20px;right:20px;background:#FFD700;color:#000;border:none;padding:10px 20px;border-radius:20px;font-weight:bold;cursor:pointer;z-index:200;font-size:14px";
-      voiceBtn.onclick = function() {
-        if (!isListening) {
-          window.startVoiceRecognition();
-        } else {
-          window.stopVoiceRecognition();
-        }
-      };
-      document.body.appendChild(voiceBtn);
-    }
+    voiceBtn = document.createElement("button");
+    voiceBtn.innerHTML = "🎤 Enable Voice";
+    voiceBtn.style.cssText = "position:fixed;bottom:20px;right:20px;background:#FFD700;color:#000;border:none;padding:10px 20px;border-radius:20px;font-weight:bold;cursor:pointer;z-index:200;font-size:14px;display:none";
+    voiceBtn.id = "voice-button";
+    voiceBtn.onclick = function() {
+      if (!isListening) {
+        window.startVoiceRecognition();
+      } else {
+        window.stopVoiceRecognition();
+      }
+    };
+    document.body.appendChild(voiceBtn);
   }, 1000);
 }
 
-// Add manual enhance button (always works)
+// Function to show/hide enhance controls based on screen
+function updateEnhanceControls() {
+  const gameScreen = document.getElementById("game");
+  const isGameVisible = gameScreen && gameScreen.style.display === "flex";
+
+  const enhanceBtn = document.getElementById("enhance-button");
+  const voiceBtn = document.getElementById("voice-button");
+
+  if (enhanceBtn) {
+    enhanceBtn.style.display = isGameVisible ? "block" : "none";
+  }
+  if (voiceBtn) {
+    voiceBtn.style.display = isGameVisible ? "block" : "none";
+  }
+
+  // Disable enhance if not in game
+  if (!isGameVisible && enhanceActive) {
+    disableEnhance();
+  }
+}
+
+// Add manual enhance button (only shows in game)
 window.addEventListener("load", function() {
   setTimeout(() => {
     // Add enhance button
     const enhanceBtn = document.createElement("button");
     enhanceBtn.innerHTML = "🔍 ENHANCE";
-    enhanceBtn.style.cssText = "position:fixed;bottom:20px;left:20px;background:linear-gradient(135deg, #00ff00, #00cc00);color:#000;border:none;padding:10px 20px;border-radius:20px;font-weight:bold;cursor:pointer;z-index:200;font-size:14px;box-shadow:0 0 20px rgba(0,255,0,0.3);transition:all 0.3s";
+    enhanceBtn.style.cssText = "position:fixed;bottom:20px;left:20px;background:linear-gradient(135deg, #00ff00, #00cc00);color:#000;border:none;padding:10px 20px;border-radius:20px;font-weight:bold;cursor:pointer;z-index:200;font-size:14px;box-shadow:0 0 20px rgba(0,255,0,0.3);transition:all 0.3s;display:none";
     enhanceBtn.id = "enhance-button";
     enhanceBtn.onclick = function() {
       if (!enhanceActive) {
