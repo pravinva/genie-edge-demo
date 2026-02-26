@@ -4,143 +4,197 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Genie at the Edge - ROI Analysis</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
-            --display: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
-            --mono: 'IBM Plex Mono', 'Courier New', monospace;
-            --text: #0A0A0A;
-            --muted: #6B7A99;
-            --line: #E8EBF0;
+            --ignition: #FF6B00;
+            --ignition-dim: #8B3A00;
             --databricks: #FF3621;
-            --ignition: #EC7917;
-            --amber: #F59E0B;
-            --teal: #00A9A5;
+            --databricks-dim: #8B1E12;
+            --bg: #FFFFFF;
+            --bg2: #F5F7FA;
+            --bg3: #EEF1F6;
+            --grid: #D8DEE9;
+            --text: #1A2233;
+            --text-dim: #6B7A99;
             --green: #007A52;
+            --cyan: #00A9A5;
+            --amber: #C96A00;
+            --mono: 'Share Tech Mono', monospace;
+            --display: 'Orbitron', sans-serif;
+            --body: 'Rajdhani', sans-serif;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: var(--display);
+            background: #FFFFFF;
             color: var(--text);
-            background: linear-gradient(180deg, #FEF9F5 0%, #FFFFFF 100%);
-            line-height: 1.6;
+            font-family: var(--body);
+            font-size: 16px;
+            overflow-x: hidden;
         }
 
-        .header {
-            background: white;
-            border-bottom: 1px solid var(--line);
-            padding: 20px 0;
+        /* Grid Background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(0,169,165,0.08) 1px, transparent 1px);
+            background-size: 28px 28px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Navigation */
+        .nav-header {
             position: sticky;
             top: 0;
-            z-index: 100;
+            background: rgba(255,255,255,0.95);
             backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid var(--grid);
+            z-index: 100;
+            padding: 20px 40px;
         }
 
-        .container {
+        .nav-content {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .logo {
+        .nav-logo {
+            font-family: var(--display);
             font-size: 24px;
             font-weight: 700;
-            background: linear-gradient(90deg, var(--databricks) 0%, var(--ignition) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            text-decoration: none;
+            color: var(--ignition);
         }
 
-        .nav {
+        .nav-links {
             display: flex;
             gap: 32px;
         }
 
-        .nav a {
-            color: var(--muted);
+        .nav-links a {
+            font-family: var(--mono);
+            font-size: 13px;
+            color: var(--text-dim);
             text-decoration: none;
-            font-weight: 500;
-            transition: color 0.2s;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: color 0.3s;
         }
 
-        .nav a:hover {
+        .nav-links a:hover {
             color: var(--databricks);
         }
 
+        /* Hero Section */
         .hero {
-            padding: 80px 0;
+            position: relative;
+            padding: 80px 40px;
             text-align: center;
-            border-bottom: 1px solid var(--line);
+            z-index: 1;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(ellipse, rgba(0,169,165,0.07) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: -1;
         }
 
         .hero h1 {
-            font-size: 48px;
-            font-weight: 700;
+            font-family: var(--display);
+            font-size: clamp(36px, 4vw, 56px);
+            font-weight: 900;
             margin-bottom: 16px;
-            letter-spacing: -0.02em;
+            letter-spacing: -1px;
         }
 
-        .hero .subtitle {
-            font-size: 20px;
-            color: var(--muted);
-            max-width: 600px;
+        .hero-sub {
+            font-size: 18px;
+            color: var(--text-dim);
+            max-width: 640px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Section Styling */
+        .section {
+            position: relative;
+            z-index: 1;
+            padding: 60px 40px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
-        .section {
-            padding: 80px 0;
+        .section-label {
+            font-family: var(--mono);
+            font-size: 14px;
+            color: var(--ignition);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            text-align: center;
         }
 
         .section-title {
+            font-family: var(--display);
             font-size: 36px;
             font-weight: 700;
-            margin-bottom: 48px;
             text-align: center;
-            letter-spacing: -0.02em;
+            margin-bottom: 48px;
+            letter-spacing: -0.5px;
         }
 
+        /* Assumptions Grid */
         .assumptions-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 32px;
-            margin-bottom: 64px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 60px;
         }
 
         .assumption-card {
-            background: white;
-            border: 1px solid var(--line);
-            border-radius: 12px;
-            padding: 32px;
+            background: #FFFFFF;
+            padding: 28px;
+            border: 1px solid var(--grid);
             position: relative;
-            overflow: hidden;
+            transition: all 0.3s;
         }
 
-        .assumption-card::before {
+        .assumption-card::after {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--databricks) 0%, var(--ignition) 100%);
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--ignition), var(--databricks));
+        }
+
+        .assumption-card:hover {
+            border-color: var(--ignition);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(255,107,0,0.1);
         }
 
         .assumption-title {
-            font-size: 20px;
+            font-family: var(--display);
+            font-size: 18px;
             font-weight: 600;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
             color: var(--text);
         }
 
@@ -155,7 +209,7 @@
             grid-template-columns: 1fr auto;
             gap: 16px;
             padding: 8px 0;
-            border-bottom: 1px solid #F5F5F5;
+            border-bottom: 1px solid var(--bg3);
         }
 
         .assumption-item:last-child {
@@ -163,8 +217,8 @@
         }
 
         .assumption-label {
-            color: var(--muted);
             font-size: 14px;
+            color: var(--text-dim);
         }
 
         .assumption-value {
@@ -174,10 +228,7 @@
             font-size: 14px;
         }
 
-        .roi-timeline {
-            margin-bottom: 64px;
-        }
-
+        /* Timeline Header */
         .timeline-header {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -186,40 +237,67 @@
         }
 
         .timeline-period {
-            text-align: center;
+            background: #FFFFFF;
             padding: 24px;
-            background: white;
-            border: 1px solid var(--line);
-            border-radius: 8px;
+            border: 1px solid var(--grid);
             position: relative;
+            transition: all 0.3s;
         }
 
-        .timeline-period.active {
-            border-color: var(--databricks);
-            background: #FFF4F0;
+        .timeline-period::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+        }
+
+        .timeline-period:nth-child(1)::after { background: var(--cyan); }
+        .timeline-period:nth-child(2)::after { background: var(--amber); }
+        .timeline-period:nth-child(3)::after { background: var(--green); }
+
+        .timeline-period:hover {
+            border-color: var(--ignition);
+            background: #FFF4EC;
         }
 
         .period-label {
             font-family: var(--mono);
-            font-size: 12px;
-            color: var(--muted);
+            font-size: 13px;
+            color: var(--text-dim);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 2px;
             margin-bottom: 8px;
         }
 
         .period-value {
+            font-family: var(--display);
             font-size: 32px;
             font-weight: 700;
-            color: var(--databricks);
         }
 
+        .timeline-period:nth-child(1) .period-value { color: var(--cyan); }
+        .timeline-period:nth-child(2) .period-value { color: var(--amber); }
+        .timeline-period:nth-child(3) .period-value { color: var(--green); }
+
+        /* Calculation Sections */
         .calculation-section {
-            background: white;
-            border: 1px solid var(--line);
-            border-radius: 12px;
-            padding: 48px;
+            background: #FFFFFF;
+            border: 1px solid var(--grid);
+            padding: 40px;
             margin-bottom: 32px;
+            position: relative;
+        }
+
+        .calculation-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--ignition) 0%, var(--databricks) 100%);
         }
 
         .calc-header {
@@ -228,10 +306,11 @@
             align-items: flex-start;
             margin-bottom: 32px;
             padding-bottom: 24px;
-            border-bottom: 2px solid var(--line);
+            border-bottom: 1px solid var(--bg3);
         }
 
         .calc-title {
+            font-family: var(--display);
             font-size: 24px;
             font-weight: 600;
         }
@@ -241,12 +320,16 @@
         }
 
         .calc-label {
-            font-size: 14px;
-            color: var(--muted);
+            font-family: var(--mono);
+            font-size: 13px;
+            color: var(--text-dim);
+            letter-spacing: 2px;
+            text-transform: uppercase;
             margin-bottom: 4px;
         }
 
         .calc-amount {
+            font-family: var(--display);
             font-size: 36px;
             font-weight: 700;
             color: var(--green);
@@ -254,7 +337,7 @@
 
         .calc-grid {
             display: grid;
-            gap: 24px;
+            gap: 20px;
         }
 
         .calc-item {
@@ -262,12 +345,18 @@
             grid-template-columns: 1fr auto;
             gap: 24px;
             padding: 20px;
-            background: #FAFAFA;
-            border-radius: 8px;
+            background: var(--bg2);
             align-items: center;
+            transition: all 0.3s;
+        }
+
+        .calc-item:hover {
+            background: var(--bg3);
+            transform: translateX(4px);
         }
 
         .calc-description h4 {
+            font-family: var(--display);
             font-size: 16px;
             font-weight: 600;
             margin-bottom: 8px;
@@ -276,15 +365,16 @@
         .calc-formula {
             font-family: var(--mono);
             font-size: 13px;
-            color: var(--muted);
+            color: var(--text-dim);
             background: white;
             padding: 8px 12px;
-            border-radius: 4px;
             display: inline-block;
             margin-top: 8px;
+            border-left: 3px solid var(--ignition);
         }
 
         .calc-result {
+            font-family: var(--display);
             font-size: 24px;
             font-weight: 700;
             color: var(--text);
@@ -299,7 +389,7 @@
 
         .metric {
             font-size: 12px;
-            color: var(--muted);
+            color: var(--text-dim);
         }
 
         .metric span {
@@ -307,14 +397,26 @@
             font-weight: 600;
             color: var(--text);
             margin-top: 4px;
+            font-family: var(--mono);
         }
 
+        /* Payback Chart */
         .payback-chart {
-            background: white;
-            border: 1px solid var(--line);
-            border-radius: 12px;
-            padding: 48px;
+            background: #FFFFFF;
+            border: 1px solid var(--grid);
+            padding: 40px;
             margin-top: 48px;
+            position: relative;
+        }
+
+        .payback-chart::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--cyan), var(--green));
         }
 
         .chart-header {
@@ -322,33 +424,36 @@
         }
 
         .chart-title {
+            font-family: var(--display);
             font-size: 24px;
             font-weight: 600;
             margin-bottom: 8px;
         }
 
         .chart-subtitle {
-            color: var(--muted);
+            font-family: var(--mono);
+            color: var(--text-dim);
+            font-size: 14px;
         }
 
         .chart-grid {
             display: grid;
             grid-template-columns: 100px 1fr;
-            gap: 24px;
+            gap: 16px;
             align-items: center;
         }
 
         .chart-label {
-            font-size: 14px;
-            color: var(--muted);
+            font-family: var(--mono);
+            font-size: 13px;
+            color: var(--text-dim);
             text-align: right;
         }
 
         .chart-bar {
             position: relative;
-            height: 40px;
-            background: #F5F5F5;
-            border-radius: 4px;
+            height: 32px;
+            background: var(--bg3);
             overflow: hidden;
         }
 
@@ -357,16 +462,18 @@
             top: 0;
             left: 0;
             height: 100%;
-            background: linear-gradient(90deg, var(--databricks) 0%, var(--ignition) 100%);
+            background: linear-gradient(90deg, var(--ignition) 0%, var(--databricks) 100%);
             display: flex;
             align-items: center;
             justify-content: flex-end;
             padding-right: 12px;
             color: white;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
+            font-family: var(--mono);
         }
 
+        /* Summary Cards */
         .summary-cards {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -375,53 +482,82 @@
         }
 
         .summary-card {
-            background: linear-gradient(135deg, #FFF4F0 0%, #FFFFFF 100%);
-            border: 1px solid var(--line);
-            border-radius: 12px;
+            background: #FFFFFF;
+            border: 1px solid var(--grid);
             padding: 32px;
             text-align: center;
+            position: relative;
+            transition: all 0.3s;
         }
 
-        .summary-icon {
-            font-size: 32px;
-            margin-bottom: 16px;
+        .summary-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
         }
 
-        .summary-value {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--databricks);
+        .summary-card:nth-child(1)::after { background: var(--cyan); }
+        .summary-card:nth-child(2)::after { background: var(--amber); }
+        .summary-card:nth-child(3)::after { background: var(--green); }
+
+        .summary-card:hover {
+            border-color: var(--ignition);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(255,107,0,0.1);
+        }
+
+        .summary-metric {
+            font-family: var(--mono);
+            font-size: 13px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 3px;
             margin-bottom: 8px;
         }
 
+        .summary-value {
+            font-family: var(--display);
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .summary-card:nth-child(1) .summary-value { color: var(--cyan); }
+        .summary-card:nth-child(2) .summary-value { color: var(--amber); }
+        .summary-card:nth-child(3) .summary-value { color: var(--green); }
+
         .summary-label {
-            color: var(--muted);
+            color: var(--text-dim);
             font-size: 14px;
         }
 
-        .footer-note {
-            margin-top: 64px;
+        /* Footer Note */
+        .methodology-note {
+            margin-top: 60px;
             padding: 32px;
-            background: #FFF9F5;
-            border: 1px solid #FFDCC7;
-            border-radius: 8px;
-            text-align: center;
+            background: var(--bg2);
+            border-left: 4px solid var(--ignition);
+            position: relative;
         }
 
-        .footer-note h3 {
+        .methodology-title {
+            font-family: var(--display);
             font-size: 18px;
             font-weight: 600;
             margin-bottom: 8px;
             color: var(--text);
         }
 
-        .footer-note p {
-            color: var(--muted);
+        .methodology-text {
+            color: var(--text-dim);
             font-size: 14px;
-            max-width: 600px;
-            margin: 0 auto;
+            line-height: 1.6;
         }
 
+        /* Responsive */
         @media (max-width: 768px) {
             .assumptions-grid {
                 grid-template-columns: 1fr;
@@ -438,145 +574,167 @@
             .metric-breakdown {
                 grid-template-columns: 1fr;
             }
+
+            .calc-item {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            animation: fadeUp 0.6s ease forwards;
         }
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">Genie at the Edge</div>
-                <nav class="nav">
-                    <a href="index.html">Overview</a>
-                    <a href="#assumptions">Assumptions</a>
-                    <a href="#calculations">Calculations</a>
-                    <a href="#payback">Payback</a>
-                </nav>
+    <nav class="nav-header">
+        <div class="nav-content">
+            <a href="index.html" class="nav-logo">GENIE AT THE EDGE</a>
+            <div class="nav-links">
+                <a href="index.html">Overview</a>
+                <a href="#assumptions">Assumptions</a>
+                <a href="#calculations">Calculations</a>
+                <a href="#payback">Analysis</a>
             </div>
         </div>
-    </header>
+    </nav>
 
     <section class="hero">
-        <div class="container">
-            <h1>ROI Analysis with Detailed Assumptions</h1>
-            <p class="subtitle">Base case financial model using industry benchmarks for manufacturing operations</p>
-        </div>
+        <div class="section-label">Financial Analysis</div>
+        <h1>Return on Investment Model</h1>
+        <p class="hero-sub">Base case financial model using industry benchmarks for manufacturing operations</p>
     </section>
 
     <section class="section" id="assumptions">
-        <div class="container">
-            <h2 class="section-title">Baseline Assumptions</h2>
+        <div class="section-label">Base Case</div>
+        <h2 class="section-title">Operating Assumptions</h2>
 
-            <div class="assumptions-grid">
-                <div class="assumption-card">
-                    <h3 class="assumption-title">Facility Profile</h3>
-                    <div class="assumption-list">
-                        <div class="assumption-item">
-                            <span class="assumption-label">Annual Revenue</span>
-                            <span class="assumption-value">$100M</span>
-                        </div>
-                        <div class="assumption-item">
-                            <span class="assumption-label">Production Lines</span>
-                            <span class="assumption-value">5 lines</span>
-                        </div>
-                        <div class="assumption-item">
-                            <span class="assumption-label">Operators per Shift</span>
-                            <span class="assumption-value">20 operators</span>
-                        </div>
-                        <div class="assumption-item">
-                            <span class="assumption-label">Shifts</span>
-                            <span class="assumption-value">3 shifts/day</span>
-                        </div>
-                        <div class="assumption-item">
-                            <span class="assumption-label">Operating Days</span>
-                            <span class="assumption-value">350 days/year</span>
-                        </div>
-                        <div class="assumption-item">
-                            <span class="assumption-label">Hourly Production Value</span>
-                            <span class="assumption-value">$11,905</span>
-                        </div>
+        <div class="assumptions-grid">
+            <div class="assumption-card">
+                <h3 class="assumption-title">Facility Profile</h3>
+                <div class="assumption-list">
+                    <div class="assumption-item">
+                        <span class="assumption-label">Annual Revenue</span>
+                        <span class="assumption-value">$100M</span>
+                    </div>
+                    <div class="assumption-item">
+                        <span class="assumption-label">Production Lines</span>
+                        <span class="assumption-value">5 lines</span>
+                    </div>
+                    <div class="assumption-item">
+                        <span class="assumption-label">Operators per Shift</span>
+                        <span class="assumption-value">20 operators</span>
+                    </div>
+                    <div class="assumption-item">
+                        <span class="assumption-label">Shifts</span>
+                        <span class="assumption-value">3 shifts/day</span>
+                    </div>
+                    <div class="assumption-item">
+                        <span class="assumption-label">Operating Days</span>
+                        <span class="assumption-value">350 days/year</span>
+                    </div>
+                    <div class="assumption-item">
+                        <span class="assumption-label">Hourly Production Value</span>
+                        <span class="assumption-value">$11,905</span>
                     </div>
                 </div>
+            </div>
 
-                <div class="assumption-card">
-                    <h3 class="assumption-title">Current Performance Metrics</h3>
-                    <div class="assumption-list">
-                        <div class="assumption-item">
-                            <span class="assumption-label">Unplanned Downtime</span>
-                            <span class="assumption-value">8% (700 hrs/yr)</span>
-                        </div>
-                        <div class="assumption-item">
-                            <span class="assumption-label">Avg Downtime Cost</span>
-                            <span class="assumption-value">$15,000/hour</span>
-                        </div>
-                        <div class="assumption-item">
-                            <span class="assumption-label">False Alarm Rate</span>
-                            <span class="assumption-value">40 alarms/day</span>
-                        </div>
-                        <div class="assumption-item">
-                            <span class="assumption-label">Time per False Alarm</span>
-                            <span class="assumption-value">15 minutes</span>
-                        </div>
-                        <div class="assumption-item">
-                            <span class="assumption-label">Avg Operator Salary</span>
-                            <span class="assumption-value">$65,000/year</span>
-                        </div>
-                        <div class="assumption-item">
-                            <span class="assumption-label">Maintenance Budget</span>
-                            <span class="assumption-value">$5M/year</span>
-                        </div>
+            <div class="assumption-card">
+                <h3 class="assumption-title">Current Performance Metrics</h3>
+                <div class="assumption-list">
+                    <div class="assumption-item">
+                        <span class="assumption-label">Unplanned Downtime</span>
+                        <span class="assumption-value">8% (700 hrs/yr)</span>
+                    </div>
+                    <div class="assumption-item">
+                        <span class="assumption-label">Avg Downtime Cost</span>
+                        <span class="assumption-value">$15,000/hour</span>
+                    </div>
+                    <div class="assumption-item">
+                        <span class="assumption-label">False Alarm Rate</span>
+                        <span class="assumption-value">40 alarms/day</span>
+                    </div>
+                    <div class="assumption-item">
+                        <span class="assumption-label">Time per False Alarm</span>
+                        <span class="assumption-value">15 minutes</span>
+                    </div>
+                    <div class="assumption-item">
+                        <span class="assumption-label">Avg Operator Salary</span>
+                        <span class="assumption-value">$65,000/year</span>
+                    </div>
+                    <div class="assumption-item">
+                        <span class="assumption-label">Maintenance Budget</span>
+                        <span class="assumption-value">$5M/year</span>
                     </div>
                 </div>
+            </div>
 
-                <div class="assumption-card">
-                    <h3 class="assumption-title">Technology Investment</h3>
-                    <div class="assumption-list">
-                        <div class="assumption-item">
-                            <span class="assumption-label">Ignition Platform License</span>
-                            <span class="assumption-value">$150,000</span>
-                        </div>
-                        <div class="assumption-item">
-                            <span class="assumption-label">Databricks Platform (Year 1)</span>
-                            <span class="assumption-value">$200,000</span>
-                        </div>
-                        <div class="assumption-item">
-                            <span class="assumption-label">Implementation Services</span>
-                            <span class="assumption-value">$250,000</span>
-                        </div>
-                        <div class="assumption-item">
-                            <span class="assumption-label">Training & Change Mgmt</span>
-                            <span class="assumption-value">$50,000</span>
-                        </div>
-                        <div class="assumption-item">
-                            <span class="assumption-label">Total Investment</span>
-                            <span class="assumption-value">$650,000</span>
-                        </div>
+            <div class="assumption-card">
+                <h3 class="assumption-title">Technology Investment</h3>
+                <div class="assumption-list">
+                    <div class="assumption-item">
+                        <span class="assumption-label">Ignition Platform License</span>
+                        <span class="assumption-value">$150,000</span>
+                    </div>
+                    <div class="assumption-item">
+                        <span class="assumption-label">Databricks Platform (Year 1)</span>
+                        <span class="assumption-value">$200,000</span>
+                    </div>
+                    <div class="assumption-item">
+                        <span class="assumption-label">Implementation Services</span>
+                        <span class="assumption-value">$250,000</span>
+                    </div>
+                    <div class="assumption-item">
+                        <span class="assumption-label">Training & Change Mgmt</span>
+                        <span class="assumption-value">$50,000</span>
+                    </div>
+                    <div class="assumption-item">
+                        <span class="assumption-label">Total Investment</span>
+                        <span class="assumption-value">$650,000</span>
                     </div>
                 </div>
+            </div>
 
-                <div class="assumption-card">
-                    <h3 class="assumption-title">Base Case Performance Targets</h3>
-                    <div class="assumption-list">
-                        <div class="assumption-item">
-                            <span class="assumption-label">Downtime Reduction</span>
-                            <span class="assumption-value">15% (105 hrs/yr)</span>
-                        </div>
-                        <div class="assumption-item">
-                            <span class="assumption-label">False Alarm Reduction</span>
-                            <span class="assumption-value">50% (20 alarms/day)</span>
-                        </div>
-                        <div class="assumption-item">
-                            <span class="assumption-label">First-Time Fix Rate</span>
-                            <span class="assumption-value">25% improvement</span>
-                        </div>
-                        <div class="assumption-item">
-                            <span class="assumption-label">Predictive Maintenance</span>
-                            <span class="assumption-value">20% of equipment</span>
-                        </div>
-                        <div class="assumption-item">
-                            <span class="assumption-label">Report Automation</span>
-                            <span class="assumption-value">2 hours/day saved</span>
-                        </div>
+            <div class="assumption-card">
+                <h3 class="assumption-title">Base Case Performance Targets</h3>
+                <div class="assumption-list">
+                    <div class="assumption-item">
+                        <span class="assumption-label">Downtime Reduction</span>
+                        <span class="assumption-value">15% (105 hrs/yr)</span>
+                    </div>
+                    <div class="assumption-item">
+                        <span class="assumption-label">False Alarm Reduction</span>
+                        <span class="assumption-value">50% (20 alarms/day)</span>
+                    </div>
+                    <div class="assumption-item">
+                        <span class="assumption-label">First-Time Fix Rate</span>
+                        <span class="assumption-value">25% improvement</span>
+                    </div>
+                    <div class="assumption-item">
+                        <span class="assumption-label">Predictive Maintenance</span>
+                        <span class="assumption-value">20% of equipment</span>
+                    </div>
+                    <div class="assumption-item">
+                        <span class="assumption-label">Report Automation</span>
+                        <span class="assumption-value">2 hours/day saved</span>
                     </div>
                 </div>
             </div>
@@ -584,289 +742,286 @@
     </section>
 
     <section class="section" id="calculations">
-        <div class="container">
-            <h2 class="section-title">Detailed ROI Calculations</h2>
+        <div class="section-label">Detailed Analysis</div>
+        <h2 class="section-title">ROI Calculations</h2>
 
-            <div class="timeline-header">
-                <div class="timeline-period active">
-                    <div class="period-label">Month 1</div>
-                    <div class="period-value">$156K</div>
-                </div>
-                <div class="timeline-period active">
-                    <div class="period-label">Months 2-3</div>
-                    <div class="period-value">$570K</div>
-                </div>
-                <div class="timeline-period active">
-                    <div class="period-label">Year 1 Total</div>
-                    <div class="period-value">$2.38M</div>
+        <div class="timeline-header">
+            <div class="timeline-period">
+                <div class="period-label">Month 1</div>
+                <div class="period-value">$156K</div>
+            </div>
+            <div class="timeline-period">
+                <div class="period-label">Months 2-3</div>
+                <div class="period-value">$570K</div>
+            </div>
+            <div class="timeline-period">
+                <div class="period-label">Year 1 Total</div>
+                <div class="period-value">$2.38M</div>
+            </div>
+        </div>
+
+        <div class="calculation-section">
+            <div class="calc-header">
+                <div class="calc-title">Month 1: Initial Operating Leverage</div>
+                <div class="calc-total">
+                    <div class="calc-label">Monthly Savings</div>
+                    <div class="calc-amount">$156,250</div>
                 </div>
             </div>
 
-            <div class="calculation-section">
-                <div class="calc-header">
-                    <div class="calc-title">Month 1: Initial Operating Leverage</div>
-                    <div class="calc-total">
-                        <div class="calc-label">Monthly Savings</div>
-                        <div class="calc-amount">$156,250</div>
+            <div class="calc-grid">
+                <div class="calc-item">
+                    <div class="calc-description">
+                        <h4>False Alarm Reduction</h4>
+                        <div class="calc-formula">20 alarms × 15 min × $31.25/hr × 30 days = $7,031/month</div>
+                        <div class="metric-breakdown">
+                            <div class="metric">Before<span>40/day</span></div>
+                            <div class="metric">After<span>20/day</span></div>
+                            <div class="metric">Reduction<span>50%</span></div>
+                        </div>
                     </div>
+                    <div class="calc-result">$7,031</div>
                 </div>
 
-                <div class="calc-grid">
-                    <div class="calc-item">
-                        <div class="calc-description">
-                            <h4>False Alarm Reduction</h4>
-                            <div class="calc-formula">20 alarms × 15 min × $31.25/hr × 30 days = $7,031/month</div>
-                            <div class="metric-breakdown">
-                                <div class="metric">Before<span>40/day</span></div>
-                                <div class="metric">After<span>20/day</span></div>
-                                <div class="metric">Reduction<span>50%</span></div>
-                            </div>
+                <div class="calc-item">
+                    <div class="calc-description">
+                        <h4>Faster Issue Resolution (30% improvement)</h4>
+                        <div class="calc-formula">10 issues/day × 1.2 hrs saved × $15,000/hr ÷ 10 = $18,000/month</div>
+                        <div class="metric-breakdown">
+                            <div class="metric">Avg Resolution<span>4h → 2.8h</span></div>
+                            <div class="metric">Issues/Day<span>10</span></div>
+                            <div class="metric">Time Saved<span>12 hrs/day</span></div>
                         </div>
-                        <div class="calc-result">$7,031</div>
                     </div>
+                    <div class="calc-result">$18,000</div>
+                </div>
 
-                    <div class="calc-item">
-                        <div class="calc-description">
-                            <h4>Faster Issue Resolution (30% improvement)</h4>
-                            <div class="calc-formula">10 issues/day × 1.2 hrs saved × $15,000/hr ÷ 10 = $18,000/month</div>
-                            <div class="metric-breakdown">
-                                <div class="metric">Avg Resolution<span>4h → 2.8h</span></div>
-                                <div class="metric">Issues/Day<span>10</span></div>
-                                <div class="metric">Time Saved<span>12 hrs/day</span></div>
-                            </div>
+                <div class="calc-item">
+                    <div class="calc-description">
+                        <h4>Report Automation</h4>
+                        <div class="calc-formula">2 hrs/day × $31.25/hr × 30 days = $1,875/month</div>
+                        <div class="metric-breakdown">
+                            <div class="metric">Manual Reports<span>8 hrs/day</span></div>
+                            <div class="metric">Automated<span>2 hrs/day</span></div>
+                            <div class="metric">Efficiency<span>25%</span></div>
                         </div>
-                        <div class="calc-result">$18,000</div>
                     </div>
+                    <div class="calc-result">$1,875</div>
+                </div>
 
-                    <div class="calc-item">
-                        <div class="calc-description">
-                            <h4>Report Automation</h4>
-                            <div class="calc-formula">2 hrs/day × $31.25/hr × 30 days = $1,875/month</div>
-                            <div class="metric-breakdown">
-                                <div class="metric">Manual Reports<span>8 hrs/day</span></div>
-                                <div class="metric">Automated<span>2 hrs/day</span></div>
-                                <div class="metric">Efficiency<span>25%</span></div>
-                            </div>
+                <div class="calc-item">
+                    <div class="calc-description">
+                        <h4>Early Downtime Prevention (Quick Wins)</h4>
+                        <div class="calc-formula">700 hrs × 5% captured × $15,000/hr ÷ 12 = $43,750/month</div>
+                        <div class="metric-breakdown">
+                            <div class="metric">Annual Downtime<span>700 hrs</span></div>
+                            <div class="metric">Quick Wins<span>5%</span></div>
+                            <div class="metric">Hours Saved<span>2.9/month</span></div>
                         </div>
-                        <div class="calc-result">$1,875</div>
                     </div>
+                    <div class="calc-result">$43,750</div>
+                </div>
+            </div>
+        </div>
 
-                    <div class="calc-item">
-                        <div class="calc-description">
-                            <h4>Early Downtime Prevention (Quick Wins)</h4>
-                            <div class="calc-formula">700 hrs × 5% captured × $15,000/hr ÷ 12 = $43,750/month</div>
-                            <div class="metric-breakdown">
-                                <div class="metric">Annual Downtime<span>700 hrs</span></div>
-                                <div class="metric">Quick Wins<span>5%</span></div>
-                                <div class="metric">Hours Saved<span>2.9/month</span></div>
-                            </div>
-                        </div>
-                        <div class="calc-result">$43,750</div>
-                    </div>
+        <div class="calculation-section">
+            <div class="calc-header">
+                <div class="calc-title">Months 2-3: ML Model Value Realization</div>
+                <div class="calc-total">
+                    <div class="calc-label">Monthly Run Rate</div>
+                    <div class="calc-amount">$285,000</div>
                 </div>
             </div>
 
-            <div class="calculation-section">
-                <div class="calc-header">
-                    <div class="calc-title">Months 2-3: ML Model Value Realization</div>
-                    <div class="calc-total">
-                        <div class="calc-label">Monthly Run Rate</div>
-                        <div class="calc-amount">$285,000</div>
+            <div class="calc-grid">
+                <div class="calc-item">
+                    <div class="calc-description">
+                        <h4>Predictive Maintenance Impact</h4>
+                        <div class="calc-formula">105 hrs prevented × $15,000/hr × 20% ÷ 6 = $52,500/month</div>
+                        <div class="metric-breakdown">
+                            <div class="metric">Target Reduction<span>105 hrs/yr</span></div>
+                            <div class="metric">Coverage<span>20% equipment</span></div>
+                            <div class="metric">Monthly Impact<span>3.5 hrs</span></div>
+                        </div>
                     </div>
+                    <div class="calc-result">$52,500</div>
                 </div>
 
-                <div class="calc-grid">
-                    <div class="calc-item">
-                        <div class="calc-description">
-                            <h4>Predictive Maintenance Impact</h4>
-                            <div class="calc-formula">105 hrs prevented × $15,000/hr × 20% ÷ 6 = $52,500/month</div>
-                            <div class="metric-breakdown">
-                                <div class="metric">Target Reduction<span>105 hrs/yr</span></div>
-                                <div class="metric">Coverage<span>20% equipment</span></div>
-                                <div class="metric">Monthly Impact<span>3.5 hrs</span></div>
-                            </div>
+                <div class="calc-item">
+                    <div class="calc-description">
+                        <h4>First-Time Fix Rate Improvement</h4>
+                        <div class="calc-formula">50 fixes/month × 25% improvement × 3 hrs × $500/hr = $18,750/month</div>
+                        <div class="metric-breakdown">
+                            <div class="metric">Monthly Fixes<span>50</span></div>
+                            <div class="metric">Rework Avoided<span>12</span></div>
+                            <div class="metric">Hours Saved<span>37.5</span></div>
                         </div>
-                        <div class="calc-result">$52,500</div>
                     </div>
+                    <div class="calc-result">$18,750</div>
+                </div>
 
-                    <div class="calc-item">
-                        <div class="calc-description">
-                            <h4>First-Time Fix Rate Improvement</h4>
-                            <div class="calc-formula">50 fixes/month × 25% improvement × 3 hrs × $500/hr = $18,750/month</div>
-                            <div class="metric-breakdown">
-                                <div class="metric">Monthly Fixes<span>50</span></div>
-                                <div class="metric">Rework Avoided<span>12</span></div>
-                                <div class="metric">Hours Saved<span>37.5</span></div>
-                            </div>
+                <div class="calc-item">
+                    <div class="calc-description">
+                        <h4>Quality Yield Enhancement</h4>
+                        <div class="calc-formula">$100M × 2% defect × 10% reduction ÷ 12 = $16,667/month</div>
+                        <div class="metric-breakdown">
+                            <div class="metric">Defect Rate<span>2% → 1.8%</span></div>
+                            <div class="metric">Annual Defects<span>$2M</span></div>
+                            <div class="metric">Reduction<span>10%</span></div>
                         </div>
-                        <div class="calc-result">$18,750</div>
                     </div>
+                    <div class="calc-result">$16,667</div>
+                </div>
 
-                    <div class="calc-item">
-                        <div class="calc-description">
-                            <h4>Quality Yield Enhancement</h4>
-                            <div class="calc-formula">$100M × 2% defect × 10% reduction ÷ 12 = $16,667/month</div>
-                            <div class="metric-breakdown">
-                                <div class="metric">Defect Rate<span>2% → 1.8%</span></div>
-                                <div class="metric">Annual Defects<span>$2M</span></div>
-                                <div class="metric">Reduction<span>10%</span></div>
-                            </div>
+                <div class="calc-item">
+                    <div class="calc-description">
+                        <h4>Energy Cost Optimization</h4>
+                        <div class="calc-formula">$200,000/month energy × 5% savings = $10,000/month</div>
+                        <div class="metric-breakdown">
+                            <div class="metric">Monthly Energy<span>$200K</span></div>
+                            <div class="metric">ML Optimization<span>5%</span></div>
+                            <div class="metric">Savings<span>$10K</span></div>
                         </div>
-                        <div class="calc-result">$16,667</div>
                     </div>
+                    <div class="calc-result">$10,000</div>
+                </div>
+            </div>
+        </div>
 
-                    <div class="calc-item">
-                        <div class="calc-description">
-                            <h4>Energy Cost Optimization</h4>
-                            <div class="calc-formula">$200,000/month energy × 5% savings = $10,000/month</div>
-                            <div class="metric-breakdown">
-                                <div class="metric">Monthly Energy<span>$200K</span></div>
-                                <div class="metric">ML Optimization<span>5%</span></div>
-                                <div class="metric">Savings<span>$10K</span></div>
-                            </div>
-                        </div>
-                        <div class="calc-result">$10,000</div>
-                    </div>
+        <div class="calculation-section">
+            <div class="calc-header">
+                <div class="calc-title">Year 1: Annualized Operating Impact</div>
+                <div class="calc-total">
+                    <div class="calc-label">Annual EBITDA Impact</div>
+                    <div class="calc-amount">$2,380,000</div>
                 </div>
             </div>
 
-            <div class="calculation-section">
-                <div class="calc-header">
-                    <div class="calc-title">Year 1: Annualized Operating Impact</div>
-                    <div class="calc-total">
-                        <div class="calc-label">Annual EBITDA Impact</div>
-                        <div class="calc-amount">$2,380,000</div>
+            <div class="calc-grid">
+                <div class="calc-item">
+                    <div class="calc-description">
+                        <h4>Asset Availability Improvement</h4>
+                        <div class="calc-formula">105 hours × $15,000/hour = $1,575,000/year</div>
+                        <div class="metric-breakdown">
+                            <div class="metric">Baseline<span>700 hrs/yr</span></div>
+                            <div class="metric">Target<span>595 hrs/yr</span></div>
+                            <div class="metric">Recovery<span>105 hrs</span></div>
+                        </div>
                     </div>
+                    <div class="calc-result">$1,575,000</div>
                 </div>
 
-                <div class="calc-grid">
-                    <div class="calc-item">
-                        <div class="calc-description">
-                            <h4>Asset Availability Improvement</h4>
-                            <div class="calc-formula">105 hours × $15,000/hour = $1,575,000/year</div>
-                            <div class="metric-breakdown">
-                                <div class="metric">Baseline<span>700 hrs/yr</span></div>
-                                <div class="metric">Target<span>595 hrs/yr</span></div>
-                                <div class="metric">Recovery<span>105 hrs</span></div>
-                            </div>
+                <div class="calc-item">
+                    <div class="calc-description">
+                        <h4>Maintenance OpEx Reduction</h4>
+                        <div class="calc-formula">$5M budget × 12% reduction = $600,000/year</div>
+                        <div class="metric-breakdown">
+                            <div class="metric">Reactive<span>60% → 48%</span></div>
+                            <div class="metric">Predictive<span>15% → 27%</span></div>
+                            <div class="metric">Cost Avoidance<span>12%</span></div>
                         </div>
-                        <div class="calc-result">$1,575,000</div>
                     </div>
+                    <div class="calc-result">$600,000</div>
+                </div>
 
-                    <div class="calc-item">
-                        <div class="calc-description">
-                            <h4>Maintenance OpEx Reduction</h4>
-                            <div class="calc-formula">$5M budget × 12% reduction = $600,000/year</div>
-                            <div class="metric-breakdown">
-                                <div class="metric">Reactive<span>60% → 48%</span></div>
-                                <div class="metric">Predictive<span>15% → 27%</span></div>
-                                <div class="metric">Cost Avoidance<span>12%</span></div>
-                            </div>
+                <div class="calc-item">
+                    <div class="calc-description">
+                        <h4>Yield Enhancement Value</h4>
+                        <div class="calc-formula">$100M × 0.21% yield improvement = $210,000/year</div>
+                        <div class="metric-breakdown">
+                            <div class="metric">Yield Before<span>94.5%</span></div>
+                            <div class="metric">Yield After<span>94.71%</span></div>
+                            <div class="metric">Revenue Impact<span>$210K</span></div>
                         </div>
-                        <div class="calc-result">$600,000</div>
                     </div>
+                    <div class="calc-result">$210,000</div>
+                </div>
 
-                    <div class="calc-item">
-                        <div class="calc-description">
-                            <h4>Yield Enhancement Value</h4>
-                            <div class="calc-formula">$100M × 0.21% yield improvement = $210,000/year</div>
-                            <div class="metric-breakdown">
-                                <div class="metric">Yield Before<span>94.5%</span></div>
-                                <div class="metric">Yield After<span>94.71%</span></div>
-                                <div class="metric">Revenue Impact<span>$210K</span></div>
-                            </div>
+                <div class="calc-item">
+                    <div class="calc-description">
+                        <h4>Labor Productivity Gains</h4>
+                        <div class="calc-formula">60 operators × 5% efficiency × $65K = $195,000/year</div>
+                        <div class="metric-breakdown">
+                            <div class="metric">FTE Equivalent<span>3</span></div>
+                            <div class="metric">Redeployed<span>100%</span></div>
+                            <div class="metric">Value Creation<span>$195K</span></div>
                         </div>
-                        <div class="calc-result">$210,000</div>
                     </div>
+                    <div class="calc-result">$195,000</div>
+                </div>
 
-                    <div class="calc-item">
-                        <div class="calc-description">
-                            <h4>Labor Productivity Gains</h4>
-                            <div class="calc-formula">60 operators × 5% efficiency × $65K = $195,000/year</div>
-                            <div class="metric-breakdown">
-                                <div class="metric">FTE Equivalent<span>3</span></div>
-                                <div class="metric">Redeployed<span>100%</span></div>
-                                <div class="metric">Value Creation<span>$195K</span></div>
-                            </div>
+                <div class="calc-item">
+                    <div class="calc-description">
+                        <h4>Utility Cost Optimization</h4>
+                        <div class="calc-formula">$2.4M annual × 5% reduction = $120,000/year</div>
+                        <div class="metric-breakdown">
+                            <div class="metric">Baseline<span>$200K/mo</span></div>
+                            <div class="metric">Optimized<span>$190K/mo</span></div>
+                            <div class="metric">Annual Impact<span>$120K</span></div>
                         </div>
-                        <div class="calc-result">$195,000</div>
                     </div>
-
-                    <div class="calc-item">
-                        <div class="calc-description">
-                            <h4>Utility Cost Optimization</h4>
-                            <div class="calc-formula">$2.4M annual × 5% reduction = $120,000/year</div>
-                            <div class="metric-breakdown">
-                                <div class="metric">Baseline<span>$200K/mo</span></div>
-                                <div class="metric">Optimized<span>$190K/mo</span></div>
-                                <div class="metric">Annual Impact<span>$120K</span></div>
-                            </div>
-                        </div>
-                        <div class="calc-result">$120,000</div>
-                    </div>
+                    <div class="calc-result">$120,000</div>
                 </div>
             </div>
         </div>
     </section>
 
     <section class="section" id="payback">
-        <div class="container">
-            <div class="payback-chart">
-                <div class="chart-header">
-                    <h3 class="chart-title">Cumulative Cash Flow Analysis</h3>
-                    <p class="chart-subtitle">Initial CapEx: $650,000 | Payback Period: 3.3 months</p>
-                </div>
-
-                <div class="chart-grid">
-                    <div class="chart-label">Month 1</div>
-                    <div class="chart-bar">
-                        <div class="bar-fill" style="width: 24%">$156K</div>
-                    </div>
-
-                    <div class="chart-label">Month 2</div>
-                    <div class="chart-bar">
-                        <div class="bar-fill" style="width: 44%">$285K</div>
-                    </div>
-
-                    <div class="chart-label">Month 3</div>
-                    <div class="chart-bar">
-                        <div class="bar-fill" style="width: 68%">$441K</div>
-                    </div>
-
-                    <div class="chart-label">Month 6</div>
-                    <div class="chart-bar">
-                        <div class="bar-fill" style="width: 145%">$940K</div>
-                    </div>
-
-                    <div class="chart-label">Year 1</div>
-                    <div class="chart-bar">
-                        <div class="bar-fill" style="width: 366%">$2.38M</div>
-                    </div>
-                </div>
+        <div class="payback-chart">
+            <div class="chart-header">
+                <h3 class="chart-title">Cumulative Cash Flow Analysis</h3>
+                <p class="chart-subtitle">Initial CapEx: $650,000 | Payback Period: 3.3 months</p>
             </div>
 
-            <div class="summary-cards">
-                <div class="summary-card">
-                    <div class="summary-icon">📊</div>
-                    <div class="summary-value">3.7x</div>
-                    <div class="summary-label">Return on Investment</div>
+            <div class="chart-grid">
+                <div class="chart-label">Month 1</div>
+                <div class="chart-bar">
+                    <div class="bar-fill" style="width: 24%">$156K</div>
                 </div>
-                <div class="summary-card">
-                    <div class="summary-icon">⏱️</div>
-                    <div class="summary-value">3.3 mo</div>
-                    <div class="summary-label">Payback Period</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-icon">💰</div>
-                    <div class="summary-value">$1.73M</div>
-                    <div class="summary-label">Net Present Value</div>
-                </div>
-            </div>
 
-            <div class="footer-note">
-                <h3>Methodology Note</h3>
-                <p>All calculations based on industry-standard metrics from ISA, MESA International, and actual customer implementations. Downtime costs calculated using standard OEE methodology. Labor rates include fully-loaded costs (salary + benefits + overhead at 1.3x multiplier).</p>
+                <div class="chart-label">Month 2</div>
+                <div class="chart-bar">
+                    <div class="bar-fill" style="width: 44%">$285K</div>
+                </div>
+
+                <div class="chart-label">Month 3</div>
+                <div class="chart-bar">
+                    <div class="bar-fill" style="width: 68%">$441K</div>
+                </div>
+
+                <div class="chart-label">Month 6</div>
+                <div class="chart-bar">
+                    <div class="bar-fill" style="width: 145%">$940K</div>
+                </div>
+
+                <div class="chart-label">Year 1</div>
+                <div class="chart-bar">
+                    <div class="bar-fill" style="width: 366%">$2.38M</div>
+                </div>
             </div>
+        </div>
+
+        <div class="summary-cards">
+            <div class="summary-card">
+                <div class="summary-metric">ROI</div>
+                <div class="summary-value">3.7x</div>
+                <div class="summary-label">Return on Investment</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-metric">Payback</div>
+                <div class="summary-value">3.3 mo</div>
+                <div class="summary-label">Payback Period</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-metric">NPV</div>
+                <div class="summary-value">$1.73M</div>
+                <div class="summary-label">Net Present Value</div>
+            </div>
+        </div>
+
+        <div class="methodology-note">
+            <h3 class="methodology-title">Methodology Note</h3>
+            <p class="methodology-text">All calculations based on industry-standard metrics from ISA, MESA International, and actual customer implementations. Downtime costs calculated using standard OEE methodology. Labor rates include fully-loaded costs (salary + benefits + overhead at 1.3x multiplier).</p>
         </div>
     </section>
 </body>
