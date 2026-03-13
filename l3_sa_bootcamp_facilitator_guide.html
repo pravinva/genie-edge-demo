@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>L3 SA Bootcamp - Facilitator Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.6;
+  color: #1a1a1a;
+  background: #f5f5f5;
+  padding: 20px;
+}
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: white;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+h1 {
+  color: #FF3621;
+  margin-bottom: 10px;
+  font-size: 32px;
+  font-weight: 800;
+}
+h2 {
+  color: #1a1a1a;
+  margin-top: 32px;
+  margin-bottom: 16px;
+  font-size: 24px;
+  font-weight: 700;
+  border-bottom: 2px solid #FF3621;
+  padding-bottom: 8px;
+}
+h3 {
+  color: #FF3621;
+  margin-top: 24px;
+  margin-bottom: 12px;
+  font-size: 18px;
+  font-weight: 700;
+}
+.subtitle {
+  color: #666;
+  font-size: 16px;
+  margin-bottom: 32px;
+  font-weight: 500;
+}
+.info-box {
+  background: #fff3cd;
+  border-left: 4px solid #ffc107;
+  padding: 16px;
+  margin: 20px 0;
+  border-radius: 4px;
+}
+.success-box {
+  background: #d4edda;
+  border-left: 4px solid #28a745;
+  padding: 16px;
+  margin: 20px 0;
+  border-radius: 4px;
+}
+.warning-box {
+  background: #f8d7da;
+  border-left: 4px solid #dc3545;
+  padding: 16px;
+  margin: 20px 0;
+  border-radius: 4px;
+}
+ul, ol {
+  margin-left: 24px;
+  margin-bottom: 16px;
+}
+li {
+  margin-bottom: 8px;
+}
+strong {
+  color: #FF3621;
+  font-weight: 700;
+}
+.scenario-card {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 16px 0;
+}
+.scenario-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+.scenario-goal {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 12px;
+  font-style: italic;
+}
+.scoring-guide {
+  background: #e7f3ff;
+  border-left: 4px solid #0066cc;
+  padding: 12px;
+  margin-top: 12px;
+  font-size: 14px;
+}
+.time-box {
+  background: #f0f0f0;
+  padding: 8px 12px;
+  border-radius: 4px;
+  display: inline-block;
+  font-weight: 600;
+  margin-top: 8px;
+  font-size: 14px;
+}
+.button {
+  display: inline-block;
+  background: linear-gradient(135deg, #c42200, #FF3621);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 700;
+  margin: 16px 8px 16px 0;
+  font-size: 14px;
+}
+.button:hover {
+  opacity: 0.9;
+}
+.toc {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 24px 0;
+}
+.toc ul {
+  list-style: none;
+  margin-left: 0;
+}
+.toc a {
+  color: #0066cc;
+  text-decoration: none;
+}
+.toc a:hover {
+  text-decoration: underline;
+}
+code {
+  background: #f4f4f4;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<h1>L3 SA Bootcamp Game - Facilitator Guide</h1>
+<div class="subtitle">Interactive training for L3 Solution Architects | April 2026 NYC Bootcamp</div>
+
+<div class="success-box">
+<strong>Game Link:</strong> <a href="https://pravinva.github.io/genie-edge-demo/l3_sa_bootcamp.html" target="_blank">https://pravinva.github.io/genie-edge-demo/l3_sa_bootcamp.html</a>
+</div>
+
+<div class="toc">
+<strong>Quick Navigation:</strong>
+<ul>
+<li><a href="#overview">Overview & Learning Objectives</a></li>
+<li><a href="#setup">Game Setup</a></li>
+<li><a href="#controls">Facilitator Controls</a></li>
+<li><a href="#scenarios">Scenario Breakdown</a></li>
+<li><a href="#scoring">Scoring Guidelines</a></li>
+<li><a href="#tips">Facilitation Tips</a></li>
+<li><a href="#time">Time Management</a></li>
+</ul>
+</div>
+
+<h2 id="overview">Overview & Learning Objectives</h2>
+
+<p>This interactive game teaches L3 Solution Architects (new hires fresh from training) how to navigate real customer scenarios using <strong>builder culture</strong> and <strong>AI-first</strong> principles.</p>
+
+<h3>Target Audience</h3>
+<ul>
+<li><strong>L3 SAs:</strong> New graduates with strong technical backgrounds</li>
+<li><strong>Experience Level:</strong> Mostly no selling experience, but technical expertise</li>
+<li><strong>Skill Gap:</strong> Need practice in discovery, objection handling, competitive positioning, and translating technical capability to business value</li>
+</ul>
+
+<h3>2026 Learning Priorities</h3>
+<div class="info-box">
+<strong>Builder Culture:</strong> SAs must BUILD custom solutions WITH customers, not present canned demos<br>
+<strong>AI-First:</strong> Use Genie, AI Assistant, AutoML, AI/BI to accelerate everything (70% AI-generated, 30% human)
+</div>
+
+<h3>Learning Outcomes</h3>
+<ol>
+<li>Ask the right discovery questions before positioning solutions</li>
+<li>Design customer-specific architectures (not generic reference slides)</li>
+<li>Build working prototypes in hours using AI tools</li>
+<li>Handle competitive objections with honesty and credibility</li>
+<li>Manage POC scope and timelines</li>
+<li>Build CFO-grade business cases with honest TCO analysis</li>
+<li>Understand the SA role as a builder, not just a presenter</li>
+</ol>
+
+<h2 id="setup">Game Setup</h2>
+
+<h3>Before the Session</h3>
+<ol>
+<li><strong>Open the game:</strong> <a href="https://pravinva.github.io/genie-edge-demo/l3_sa_bootcamp.html" target="_blank">L3 SA Bootcamp Game</a></li>
+<li><strong>Screen share:</strong> Share your screen with the full game visible</li>
+<li><strong>Test audio/video:</strong> Ensure everyone can see and hear</li>
+<li><strong>Decide on teams:</strong> 3-6 teams of 3-5 people each works best</li>
+<li><strong>Explain format:</strong> "This is a team-based scenario game. I'll unlock each case, you'll discuss and answer, I'll reveal hints/answers and award points."</li>
+</ol>
+
+<h3>Team Setup</h3>
+<ol>
+<li>Click "Begin the Quest" on the intro screen</li>
+<li>Add team names (use company names, favorite customers, or fun team names)</li>
+<li>Click "Launch Game" to start</li>
+</ol>
+
+<div class="warning-box">
+<strong>Important:</strong> The game is designed for YOU (the facilitator) to control. Participants should NOT have the game open on their own screens — they watch your screen share.
+</div>
+
+<h2 id="controls">Facilitator Controls</h2>
+
+<h3>Main Controls (Bottom of Each Case)</h3>
+<ul>
+<li><strong>🔓 Unlock Scenario:</strong> Reveals the case to teams (starts locked)</li>
+<li><strong>💡 Give Hint:</strong> Shows a hint to help teams if they're stuck</li>
+<li><strong>✅ Reveal Answer:</strong> Shows the full answer and learning points</li>
+<li><strong>⚔️ Next Scenario:</strong> Moves to the next case (or finishes the game)</li>
+</ul>
+
+<h3>Scoring Controls (Left Sidebar)</h3>
+<ul>
+<li><strong>+1, +2, +3 buttons:</strong> Award points for good answers</li>
+<li><strong>-1 button:</strong> Deduct points (use sparingly, usually for jokes)</li>
+<li><strong>Top team:</strong> Highlighted with gold border as scores update</li>
+</ul>
+
+<h3>Typical Flow for Each Case</h3>
+<ol>
+<li><strong>Unlock the case</strong> — Teams read the scenario</li>
+<li><strong>Give teams 2-5 minutes</strong> to discuss in breakout rooms or as full group</li>
+<li><strong>Call on teams</strong> to share their answers</li>
+<li><strong>Award points</strong> as they answer (+1 for partial, +2 for good, +3 for excellent)</li>
+<li><strong>Give hint</strong> if teams are stuck or missing key insights</li>
+<li><strong>Reveal answer</strong> when discussion is complete</li>
+<li><strong>Debrief</strong> — Emphasize builder culture and AI-first principles</li>
+<li><strong>Next scenario</strong> — Move forward</li>
+</ol>
+
+<h2 id="scenarios">Scenario Breakdown</h2>
+
+<div class="scenario-card">
+<div class="scenario-title">Case 1 — Discovery & Qualification</div>
+<div class="scenario-goal">Learning Goal: Ask the right questions before positioning. Builder culture = build a working notebook after the call.</div>
+<p><strong>Scenario:</strong> First discovery call with a retail company. Vague requirements ("wants AI"). 60 minutes to prepare.</p>
+<p><strong>Key Learning:</strong> Discovery is about uncovering business pain, not pitching features. After the call, BUILD something (don't just send a deck).</p>
+<div class="scoring-guide">
+<strong>Scoring Guide:</strong><br>
++1: Asks about pain points or timeline<br>
++2: Asks about AI use case specifics AND mentions building a prototype<br>
++3: Full discovery framework + builder culture move (send working notebook within 24 hours)
+</div>
+<div class="time-box">⏱️ Suggested Time: 8-10 minutes total</div>
+</div>
+
+<div class="scenario-card">
+<div class="scenario-title">Case 2 — Solution Architecture</div>
+<div class="scenario-goal">Learning Goal: Design customer-specific architectures. Builder culture = build a working example after whiteboarding.</div>
+<p><strong>Scenario:</strong> Healthcare company. CISO asks about HIPAA compliance, data governance, and PHI isolation.</p>
+<p><strong>Key Learning:</strong> Start with customer constraints (CISO security concerns), not generic reference architecture. After the call, BUILD a governed pipeline demo.</p>
+<div class="scoring-guide">
+<strong>Scoring Guide:</strong><br>
++1: Mentions Unity Catalog or governance<br>
++2: Addresses CISO concerns + operational simplicity<br>
++3: Full architecture approach + builder culture (build working Unity Catalog demo with AI Assistant)
+</div>
+<div class="time-box">⏱️ Suggested Time: 10-12 minutes total</div>
+</div>
+
+<div class="scenario-card">
+<div class="scenario-title">Case 3 — Builder Culture</div>
+<div class="scenario-goal">Learning Goal: Build custom solutions in days using AI-first tools. Don't show canned demos.</div>
+<p><strong>Scenario:</strong> Logistics company wants delay prediction. You have 4 days to build a working prototype from their S3 data.</p>
+<p><strong>Key Learning:</strong> Use AI Assistant (70% code generation), AutoML (no manual model training), and AI/BI (fast dashboards). Build in hours, not weeks.</p>
+<div class="scoring-guide">
+<strong>Scoring Guide:</strong><br>
++1: Has a build plan<br>
++2: Mentions using AI tools (AutoML, AI Assistant)<br>
++3: Full 4-day plan with AI-first acceleration + working prototype delivery
+</div>
+<div class="time-box">⏱️ Suggested Time: 12-15 minutes total (EMPHASIZE THIS ONE)</div>
+</div>
+
+<div class="scenario-card">
+<div class="scenario-title">Case 4 — Competitive Positioning</div>
+<div class="scenario-goal">Learning Goal: Answer Snowflake objections with honesty and credibility. Don't trash-talk competitors.</div>
+<p><strong>Scenario:</strong> Customer asks 4 technical questions comparing Databricks to Snowflake (zero-copy cloning, SQL vs Spark, data sharing, positioning).</p>
+<p><strong>Key Learning:</strong> Be honest about Snowflake strengths. Answer with technical truth, not marketing spin. Credibility > winning every point.</p>
+<div class="scoring-guide">
+<strong>Scoring Guide:</strong><br>
++1: Answers 1-2 questions correctly<br>
++2: Answers all 4 + acknowledges Snowflake is a good product<br>
++3: Full answers + identifies "Databricks is for data science" as the landmine question
+</div>
+<div class="time-box">⏱️ Suggested Time: 10-12 minutes total</div>
+</div>
+
+<div class="scenario-card">
+<div class="scenario-title">Case 5 — Technical Objections</div>
+<div class="scenario-goal">Learning Goal: Respond to security/compliance objections with technical precision. Know when to escalate.</div>
+<p><strong>Scenario:</strong> CISO sends 5 security concerns as blockers (data residency, secrets management, network isolation, SSO, audit logging).</p>
+<p><strong>Key Learning:</strong> Security is a checklist, not a negotiation. Know what's easy (SSO, secrets) vs what needs architecture discussion (Private Link) vs what requires escalation (control plane residency).</p>
+<div class="scoring-guide">
+<strong>Scoring Guide:</strong><br>
++1: Identifies easy solves (SSO, audit logging)<br>
++2: Knows Private Link is the answer for network isolation<br>
++3: Full triage + knows when to escalate data residency question
+</div>
+<div class="time-box">⏱️ Suggested Time: 10-12 minutes total</div>
+</div>
+
+<div class="scenario-card">
+<div class="scenario-title">Case 6 — POC Management</div>
+<div class="scenario-goal">Learning Goal: Manage scope creep. Builder culture = prototype fast with AI, don't extend timelines.</div>
+<p><strong>Scenario:</strong> Customer asks for 4 new POC items on Day 8 of a 2-week POC (migrate 40 DAGs, AutoML demo, performance tuning, extend to 4 weeks).</p>
+<p><strong>Key Learning:</strong> Use AI tools to compress 3 days of work into 3 hours. Say YES by building prototypes, not by extending scope. AutoML trains models in 1 hour, AI Assistant converts DAGs in 1 hour.</p>
+<div class="scoring-guide">
+<strong>Scoring Guide:</strong><br>
++1: Knows to push back on DAG migration<br>
++2: Identifies performance tuning as critical + offers to build AutoML demo<br>
++3: Full AI-first strategy (build prototypes in hours, don't extend timeline)
+</div>
+<div class="time-box">⏱️ Suggested Time: 10-12 minutes total</div>
+</div>
+
+<div class="scenario-card">
+<div class="scenario-title">Case 7 — TCO & Business Case</div>
+<div class="scenario-goal">Learning Goal: Build honest ROI cases. Don't overpromise savings. CFOs value credibility over optimism.</div>
+<p><strong>Scenario:</strong> CFO asks for business case justification. Databricks is $420K vs Snowflake $310K. Needs Year 1 cost avoidance, productivity gains, revenue impact, and TCO comparison.</p>
+<p><strong>Key Learning:</strong> Year 1 is investment, not savings. Don't claim revenue impact you can't validate. Be honest if Snowflake is cheaper for SQL-only use cases.</p>
+<div class="scoring-guide">
+<strong>Scoring Guide:</strong><br>
++1: Identifies cost avoidance opportunities<br>
++2: Knows Year 1 is investment + quantifies productivity gains<br>
++3: Full honest TCO analysis + scopes revenue impact to technical enablement only
+</div>
+<div class="time-box">⏱️ Suggested Time: 10-12 minutes total</div>
+</div>
+
+<div class="scenario-card">
+<div class="scenario-title">Case 8 — The Final Riddle</div>
+<div class="scenario-goal">Learning Goal: Understand the SA role in the builder culture + AI-first era.</div>
+<p><strong>Scenario:</strong> A riddle describing the SA job.</p>
+<p><strong>Key Learning:</strong> SAs are builders who sell by showing, not telling. AI-first is the default mode (Genie, AI Assistant, AutoML are co-pilots).</p>
+<div class="scoring-guide">
+<strong>Scoring Guide:</strong><br>
++1: Guesses "Solution Architect"<br>
++2: Adds "builder culture"<br>
++3: Full answer including AI-first principles
+</div>
+<div class="time-box">⏱️ Suggested Time: 5-8 minutes total</div>
+</div>
+
+<h2 id="scoring">Scoring Guidelines</h2>
+
+<h3>Point System</h3>
+<ul>
+<li><strong>+1 point:</strong> Partial answer, shows understanding of basic concept</li>
+<li><strong>+2 points:</strong> Good answer, covers most key points</li>
+<li><strong>+3 points:</strong> Excellent answer, includes builder culture or AI-first insights</li>
+<li><strong>-1 point:</strong> Use sparingly (usually for humor, not wrong answers)</li>
+</ul>
+
+<h3>When to Award Points</h3>
+<div class="success-box">
+<strong>Be generous with points!</strong> The goal is learning, not competition. Award points for:
+<ul style="margin-top: 8px;">
+<li>Good discussion, even if answer isn't perfect</li>
+<li>Mentioning builder culture ("I would BUILD this...")</li>
+<li>Mentioning AI-first tools (Genie, AI Assistant, AutoML, AI/BI)</li>
+<li>Honest answers (e.g., "I don't know, I'd escalate to SE manager")</li>
+<li>Creative solutions</li>
+</ul>
+</div>
+
+<h3>Common Mistakes to Correct</h3>
+<ul>
+<li><strong>"I'd send them a deck"</strong> → Redirect: "What would you BUILD instead?"</li>
+<li><strong>"I'd spend 3 days coding this"</strong> → Redirect: "What AI tools would accelerate this?"</li>
+<li><strong>"Snowflake is bad because..."</strong> → Redirect: "How do you answer honestly without trash-talking?"</li>
+<li><strong>"I'd extend the POC to 4 weeks"</strong> → Redirect: "How do you compress scope, not extend time?"</li>
+</ul>
+
+<h2 id="tips">Facilitation Tips</h2>
+
+<h3>Creating Good Discussion</h3>
+<ol>
+<li><strong>Use breakout rooms:</strong> Give teams 2-3 minutes to discuss before sharing</li>
+<li><strong>Call on specific teams:</strong> "Team Snowflake, what would you do?"</li>
+<li><strong>Ask follow-up questions:</strong> "Why is that important?" "What tool would you use?"</li>
+<li><strong>Encourage debate:</strong> "Team AWS disagrees — what's your take?"</li>
+<li><strong>Connect to real experience:</strong> "Has anyone faced this in real life?"</li>
+</ol>
+
+<h3>Emphasizing Builder Culture</h3>
+<div class="info-box">
+After EVERY scenario, ask: <strong>"What would you BUILD to prove this?"</strong><br><br>
+Examples:
+<ul style="margin-top: 8px;">
+<li>Discovery → Build a working notebook with their schema</li>
+<li>Architecture → Build a governed pipeline demo</li>
+<li>POC scope → Build AutoML model in 1 hour instead of 3 days</li>
+<li>Competitive → Build side-by-side shallow clone demo</li>
+</ul>
+</div>
+
+<h3>Emphasizing AI-First</h3>
+<div class="info-box">
+After EVERY scenario, ask: <strong>"What AI tools would accelerate this?"</strong><br><br>
+Examples:
+<ul style="margin-top: 8px;">
+<li>Genie → Search internal docs for similar use cases</li>
+<li>AI Assistant → Generate 70% of code from schema/requirements</li>
+<li>AutoML → Train models in 1 hour, not 3 days</li>
+<li>AI/BI → Build dashboards 10x faster</li>
+</ul>
+</div>
+
+<h3>Handling Quiet Teams</h3>
+<ul>
+<li><strong>Direct questions:</strong> "Team Delta Lake, I haven't heard from you yet — what's your take?"</li>
+<li><strong>Lower the stakes:</strong> "There's no wrong answer here, what's your first instinct?"</li>
+<li><strong>Offer hints earlier:</strong> Don't let teams struggle for 5+ minutes</li>
+<li><strong>Share your experience:</strong> "When I was an L3, I made this mistake..."</li>
+</ul>
+
+<h3>Handling Dominant Teams</h3>
+<ul>
+<li><strong>Rotate who answers:</strong> "Team Unity Catalog already answered last time, let's hear from Team Photon"</li>
+<li><strong>Ask for different perspectives:</strong> "Good answer. Who has a different approach?"</li>
+<li><strong>Award bonus points for quiet teams:</strong> "+1 bonus for first answer from Team Delta"</li>
+</ul>
+
+<h2 id="time">Time Management</h2>
+
+<h3>Session Length Options</h3>
+<div class="warning-box">
+<strong>Full Game (8 scenarios):</strong> 90-120 minutes<br>
+<strong>Short Version (5 scenarios):</strong> 60 minutes (Cases 1, 3, 4, 6, 8)<br>
+<strong>Lightning Round (3 scenarios):</strong> 30 minutes (Cases 1, 3, 8)
+</div>
+
+<h3>Per-Scenario Time Budget</h3>
+<ul>
+<li><strong>Read scenario:</strong> 1 minute (facilitator reads aloud or teams read silently)</li>
+<li><strong>Team discussion:</strong> 2-5 minutes (depends on complexity)</li>
+<li><strong>Teams share:</strong> 3-5 minutes (2-3 teams answer)</li>
+<li><strong>Reveal answer + debrief:</strong> 2-3 minutes</li>
+<li><strong>Total per scenario:</strong> 8-14 minutes</li>
+</ul>
+
+<h3>Staying on Schedule</h3>
+<ol>
+<li><strong>Set time limits upfront:</strong> "We have 10 minutes for this case"</li>
+<li><strong>Use a visible timer:</strong> Share timer on screen or use phone</li>
+<li><strong>Cut discussion if running long:</strong> "Great discussion, let's move to the answer"</li>
+<li><strong>Skip hints if teams nail it:</strong> Go straight to reveal answer</li>
+<li><strong>Prioritize debrief over team answers:</strong> The learning is more important than hearing every team</li>
+</ol>
+
+<h3>Which Scenarios to Prioritize</h3>
+<p>If you need to skip scenarios, keep these:</p>
+<ol>
+<li><strong>Case 1 (Discovery):</strong> Foundational skill</li>
+<li><strong>Case 3 (Builder Culture):</strong> MOST IMPORTANT — this is the 2026 priority</li>
+<li><strong>Case 4 (Competitive):</strong> They'll face Snowflake in 90% of deals</li>
+<li><strong>Case 6 (POC Management):</strong> Practical skill they'll use immediately</li>
+<li><strong>Case 8 (Final Riddle):</strong> Good capstone, reinforces builder + AI-first identity</li>
+</ol>
+
+<h2 style="margin-top: 40px;">Quick Reference Checklist</h2>
+
+<div class="success-box">
+<strong>Before Session:</strong><br>
+☐ Game link open and tested<br>
+☐ Screen sharing working<br>
+☐ Teams decided (3-6 teams recommended)<br>
+☐ Time budget set (60/90/120 min)<br>
+☐ Facilitator guide reviewed<br><br>
+
+<strong>During Session:</strong><br>
+☐ Unlock each case before discussion<br>
+☐ Ask "What would you BUILD?" after every scenario<br>
+☐ Ask "What AI tools accelerate this?" after every scenario<br>
+☐ Award points generously<br>
+☐ Emphasize honesty over winning (especially Case 4, 7)<br>
+☐ Keep time per scenario under 12 minutes<br><br>
+
+<strong>After Session:</strong><br>
+☐ Announce winning team<br>
+☐ Recap key learnings (builder culture + AI-first)<br>
+☐ Share game link for self-study<br>
+☐ Collect feedback
+</div>
+
+<h2 style="margin-top: 40px;">Resources</h2>
+
+<a href="https://pravinva.github.io/genie-edge-demo/l3_sa_bootcamp.html" class="button" target="_blank">Open Game</a>
+<a href="https://github.com/pravinva/genie-edge-demo" class="button" target="_blank">View on GitHub</a>
+
+<div style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #e0e0e0; color: #666; font-size: 14px;">
+<strong>Questions or feedback?</strong> Contact the game creator or your bootcamp organizer.<br>
+<em>Created for L3 SA Bootcamp #2 (Hackathon) | NYC | April 2026</em>
+</div>
+
+</div>
+
+</body>
+</html>
