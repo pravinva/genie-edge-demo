@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<!-- saved from url=(0083) -->
+<!-- saved from url=(0083)file:///Users/pravin.varma/Downloads/perspective-databricks-intelligence%20(9).html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ignition + Databricks | Intelligent Operations Platform</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
 <link href="./Ignition + Databricks _ Intelligent Operations Platform_files/css2" rel="stylesheet">
 <style>
  :root {
@@ -895,15 +894,15 @@
 <nav class="nav">
  <div class="nav-brand"><span>IGNITION</span> × DATABRICKS</div>
  <ul class="nav-links">
- <li><a href="#architecture">DIAGRAM</a></li>
-    <li><a href="#zerobus">ZEROBUS</a></li>
- <li><a href="#stack">STACK</a></li>
- <li><a href="#hmi">HMI</a></li>
- <li><a href="#genie">GENIE</a></li>
- <li><a href="#roi">ROI</a></li>
- <li><a href="#latency">LATENCY</a></li>
-    <li><a href="#compare">COMPARE</a></li>
- <li><a href="#roadmap">ROADMAP</a></li>
+ <li><a href="file:///Users/pravin.varma/Downloads/perspective-databricks-intelligence%20(9).html#architecture">DIAGRAM</a></li>
+    <li><a href="file:///Users/pravin.varma/Downloads/perspective-databricks-intelligence%20(9).html#zerobus">ZEROBUS</a></li>
+ <li><a href="file:///Users/pravin.varma/Downloads/perspective-databricks-intelligence%20(9).html#stack">STACK</a></li>
+ <li><a href="file:///Users/pravin.varma/Downloads/perspective-databricks-intelligence%20(9).html#hmi">HMI</a></li>
+ <li><a href="file:///Users/pravin.varma/Downloads/perspective-databricks-intelligence%20(9).html#genie">GENIE</a></li>
+ <li><a href="file:///Users/pravin.varma/Downloads/perspective-databricks-intelligence%20(9).html#roi">ROI</a></li>
+ <li><a href="file:///Users/pravin.varma/Downloads/perspective-databricks-intelligence%20(9).html#latency">LATENCY</a></li>
+    <li><a href="file:///Users/pravin.varma/Downloads/perspective-databricks-intelligence%20(9).html#compare">COMPARE</a></li>
+ <li><a href="file:///Users/pravin.varma/Downloads/perspective-databricks-intelligence%20(9).html#roadmap">ROADMAP</a></li>
  </ul>
  <div class="status-bar">
  <div class="status-live">SYSTEM LIVE</div>
@@ -965,7 +964,7 @@
     <span style="width:24px;height:1px;background:#FF6B00;display:inline-block;"></span>SYSTEM ARCHITECTURE
   </div>
   <h2 style="font-family:&#39;Orbitron&#39;,sans-serif; font-size:clamp(26px,3vw,40px); font-weight:700; color:#1A2233; margin-bottom:10px; line-height:1.2;">Event-Driven Data Flow</h2>
-  <p style="font-size:17px; color:#6B7A99; margin-bottom:36px; max-width:840px; line-height:1.6;">The ML model auto-generates full recommendations without human intervention. Lakebase fires a PostgreSQL NOTIFY webhook to Ignition in under 100ms — no polling. Operators write decisions directly back to Lakebase via JDBC. Genie is the on-demand expert, called only when an operator clicks "Ask AI Why".</p>
+  <p style="font-size:17px; color:#6B7A99; margin-bottom:36px; max-width:840px; line-height:1.6;">The ML model auto-generates full recommendations without human intervention. Perspective queries Lakebase directly for the latest recommendations on a short refresh cadence. Operators write decisions directly back to Lakebase via JDBC. Genie is the on-demand expert, called only when an operator clicks "Ask AI Why".</p>
 
   <!-- FY27 LEGEND -->
   <div style="display:flex; gap:14px; flex-wrap:wrap; margin-bottom:40px; align-items:center;">
@@ -1051,14 +1050,14 @@
         <div style="background:#F5F0FF; border-left:3px solid #7B2FBE; padding:7px 10px; font-size:12px; color:#1A2233; font-weight:600;">50ms queries (vs 5–15s on Delta)</div>
         <div style="background:#F5F0FF; border-left:3px solid #7B2FBE; padding:7px 10px; font-size:12px; color:#1A2233;">ACID transactions · Connection pooling</div>
         <div style="background:#F5F0FF; border-left:3px solid #7B2FBE; padding:7px 10px; font-size:12px; color:#1A2233;">Exactly-once · 5-min deduplication</div>
-        <div style="background:#EEF6F0; border-left:3px solid #007A52; padding:7px 10px; font-size:12px; color:#007A52; font-weight:700;">PG NOTIFY → webhook fires instantly</div>
+        <div style="background:#EEF6F0; border-left:3px solid #007A52; padding:7px 10px; font-size:12px; color:#007A52; font-weight:700;">Perspective reads Lakebase directly</div>
       </div>
     </div>
 
     <!-- ARROW 4 -->
     <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:0 2px;">
       <svg width="44" height="20" viewBox="0 0 44 20"><line x1="0" y1="10" x2="32" y2="10" stroke="#FF3621" stroke-width="2.5"></line><path d="M28,5 L44,10 L28,15 Z" fill="#FF3621"></path></svg>
-      <div style="font-family:&#39;Share Tech Mono&#39;,monospace; font-size:10px; color:#FF3621; text-align:center; line-height:1.4;">webhook<br>&lt;100ms</div>
+      <div style="font-family:&#39;Share Tech Mono&#39;,monospace; font-size:10px; color:#FF3621; text-align:center; line-height:1.4;">direct<br>query</div>
     </div>
 
     <!-- BOX 5: PERSPECTIVE -->
@@ -1110,7 +1109,7 @@
       <div style="display:flex; flex-direction:column; gap:8px;">
         <div style="display:flex; align-items:flex-start; gap:12px; padding:10px 14px; background:#F5F7FA; border-left:3px solid #1A2233; border-radius:2px;">
           <div style="font-family:&#39;Share Tech Mono&#39;,monospace; font-size:11px; color:#6B7A99; margin-top:1px; white-space:nowrap;">~20s</div>
-          <div style="font-size:13px; color:#1A2233;">ML recommendation written to Lakebase → PG NOTIFY → webhook fires → Perspective session receives push update</div>
+          <div style="font-size:13px; color:#1A2233;">ML recommendation written to Lakebase → Perspective refresh query picks up latest row</div>
         </div>
         <div style="display:flex; align-items:flex-start; gap:12px; padding:10px 14px; background:#FFF2F0; border-left:3px solid #FF3621; border-radius:2px;">
           <div style="font-family:&#39;Share Tech Mono&#39;,monospace; font-size:11px; color:#FF3621; margin-top:1px; white-space:nowrap;">&lt;500ms</div>
@@ -1237,8 +1236,8 @@
         </div>
         <div style="background:#FFF0FF; border-radius:3px; padding:10px 12px;">
           <div style="font-family:&#39;Share Tech Mono&#39;,monospace; font-size:10px; color:#7B2FBE; margin-bottom:4px;">LAKEBASE</div>
-          <div style="font-size:13px; color:#1A2233; font-weight:700;">PG NOTIFY push</div>
-          <div style="font-size:12px; color:#6B7A99;">Instant, no polling</div>
+          <div style="font-size:13px; color:#1A2233; font-weight:700;">Direct query from Perspective</div>
+          <div style="font-size:12px; color:#6B7A99;">No webhook service to manage</div>
         </div>
         <div style="background:#F5F7FA; border-radius:3px; padding:10px 12px;">
           <div style="font-family:&#39;Share Tech Mono&#39;,monospace; font-size:10px; color:#6B7A99; margin-bottom:4px;">DELTA DIRECT</div>
@@ -1249,7 +1248,7 @@
     </div>
     <div>
       <div style="font-family:&#39;Share Tech Mono&#39;,monospace; font-size:12px; color:#7B2FBE; letter-spacing:2px; margin-bottom:12px;">LAKEBASE REMAINS THE SOURCE OF TRUTH FOR OPERATIONS</div>
-      <div style="font-size:14px; color:#1A2233; line-height:1.7;">Delta remains the source of truth for analytics and ML training. Lakebase is the operational bridge — it handles real-time queries, bidirectional operator updates via native JDBC, ACID transactions across recommendation + work order + equipment status tables, and push notifications. Operator decisions sync back to Delta asynchronously every 5 minutes.</div>
+      <div style="font-size:14px; color:#1A2233; line-height:1.7;">Delta remains the source of truth for analytics and ML training. Lakebase is the operational bridge — it handles low-latency reads from Perspective, bidirectional operator updates via native JDBC, and ACID transactions across recommendation + work order + equipment status tables. Operator decisions sync back to Delta asynchronously every 5 minutes.</div>
     </div>
   </div>
 
@@ -1609,12 +1608,12 @@
       <div style="display:grid; grid-template-columns: 180px 1fr 1fr; gap:2px;">
         <div style="background:#FFF0FF; border-left:3px solid #7B2FBE; padding:10px 14px; font-family:&#39;Share Tech Mono&#39;,monospace; font-size:12px; color:#7B2FBE; font-weight:700;">Write to Lakebase</div>
         <div style="background:#FFFFFF; padding:10px 14px; text-align:center; font-size:13px; color:#1A2233; border:1px solid #F0F0F0;"><span style="color:#007A52;">1s</span> / <span style="color:#C96A00;">2s</span> / <span style="color:#FF3621;">5s</span></div>
-        <div style="background:#FFFFFF; padding:10px 14px; font-size:13px; color:#6B7A99; border:1px solid #F0F0F0;">JDBC write + index update + PG NOTIFY</div>
+        <div style="background:#FFFFFF; padding:10px 14px; font-size:13px; color:#6B7A99; border:1px solid #F0F0F0;">JDBC write + index update</div>
       </div>
       <div style="display:grid; grid-template-columns: 180px 1fr 1fr; gap:2px;">
-        <div style="background:#FFF0FF; border-left:3px solid #7B2FBE; padding:10px 14px; font-family:&#39;Share Tech Mono&#39;,monospace; font-size:12px; color:#7B2FBE; font-weight:700;">Webhook → Ignition</div>
-        <div style="background:#FFFFFF; padding:10px 14px; text-align:center; font-size:13px; color:#1A2233; border:1px solid #F0F0F0;"><span style="color:#007A52;">100ms</span> / <span style="color:#C96A00;">200ms</span> / <span style="color:#FF3621;">1s</span></div>
-        <div style="background:#FFFFFF; padding:10px 14px; font-size:13px; color:#6B7A99; border:1px solid #F0F0F0;">HTTP POST to WebDev endpoint, tag write, session broadcast</div>
+        <div style="background:#FFF0FF; border-left:3px solid #7B2FBE; padding:10px 14px; font-family:&#39;Share Tech Mono&#39;,monospace; font-size:12px; color:#7B2FBE; font-weight:700;">Perspective query refresh</div>
+        <div style="background:#FFFFFF; padding:10px 14px; text-align:center; font-size:13px; color:#1A2233; border:1px solid #F0F0F0;"><span style="color:#007A52;">200ms</span> / <span style="color:#C96A00;">500ms</span> / <span style="color:#FF3621;">2s</span></div>
+        <div style="background:#FFFFFF; padding:10px 14px; font-size:13px; color:#6B7A99; border:1px solid #F0F0F0;">Named Query read from Lakebase + Perspective component refresh</div>
       </div>
       <div style="display:grid; grid-template-columns: 180px 1fr 1fr; gap:2px;">
         <div style="background:#EEF6F0; border-left:3px solid #007A52; padding:10px 14px; font-family:&#39;Share Tech Mono&#39;,monospace; font-size:12px; color:#007A52; font-weight:700;">TOTAL — ML PATH</div>
@@ -1642,44 +1641,41 @@
 <section class="section reveal" id="roi">
  <div class="section-label">Business Value</div>
  <h2 class="section-title">Return on Intelligence</h2>
- <p style="text-align: center; margin: -20px 0 40px 0; color: #6B7A99;">
-  Base case scenario for $100M annual revenue facility | <a href="roi_detailed.html" style="color: var(--databricks); text-decoration: none; border-bottom: 1px dotted;">View detailed assumptions →</a>
- </p>
 
  <div class="roi-grid">
  <div class="roi-card roi-m1">
  <div class="roi-period">MONTH 1 — IMMEDIATE</div>
- <div class="roi-stat">$156K</div>
- <div class="roi-desc">Monthly operational savings</div>
+ <div class="roi-stat">50%</div>
+ <div class="roi-desc">Faster issue resolution</div>
  <div class="roi-items">
- <div class="roi-item">50% false alarm reduction (20 alarms/day eliminated)</div>
- <div class="roi-item">30% faster resolution (4h → 2.8h average)</div>
- <div class="roi-item">2 hours/day report automation savings</div>
- <div class="roi-item">5% quick-win downtime prevention</div>
+ <div class="roi-item">50% faster issue resolution via Genie</div>
+ <div class="roi-item">70% reduction in false alarms</div>
+ <div class="roi-item">30% less manual report writing</div>
+ <div class="roi-item">Operator onboarding time cut in half</div>
  </div>
  </div>
 
  <div class="roi-card roi-m3">
- <div class="roi-period">MONTHS 2–3 — ML DEPLOYED</div>
- <div class="roi-stat">$285K</div>
- <div class="roi-desc">Per month with models active</div>
+ <div class="roi-period">MONTHS 2–3 — SHORT TERM</div>
+ <div class="roi-stat">$500K</div>
+ <div class="roi-desc">Per month in prevented losses</div>
  <div class="roi-items">
- <div class="roi-item">105 hrs/year downtime prevented @ $15K/hr</div>
- <div class="roi-item">25% first-time fix improvement (12 reworks avoided)</div>
- <div class="roi-item">20% equipment on predictive maintenance</div>
- <div class="roi-item">5% energy optimization ($10K/month)</div>
+ <div class="roi-item">25% reduction in unplanned downtime</div>
+ <div class="roi-item">40% better first-time fix rate</div>
+ <div class="roi-item">Predictive vs reactive maintenance</div>
+ <div class="roi-item">ML models continuously improving</div>
  </div>
  </div>
 
  <div class="roi-card roi-y1">
- <div class="roi-period">YEAR 1 — FULL IMPACT</div>
- <div class="roi-stat">$2.38M</div>
- <div class="roi-desc">Total annual EBITDA impact</div>
+ <div class="roi-period">YEAR 1 — STRATEGIC</div>
+ <div class="roi-stat">$8M</div>
+ <div class="roi-desc">Annual savings from optimization</div>
  <div class="roi-items">
- <div class="roi-item">$1.57M from 15% downtime reduction</div>
- <div class="roi-item">$600K maintenance cost savings (12% of $5M)</div>
- <div class="roi-item">$210K from 0.3% yield improvement</div>
- <div class="roi-item">3.7x ROI | 3.3 month payback on $650K</div>
+ <div class="roi-item">60% reduction in maintenance costs</div>
+ <div class="roi-item">85% operator satisfaction score</div>
+ <div class="roi-item">70% lower cost vs competitors</div>
+ <div class="roi-item">Full lakehouse ROI realized</div>
  </div>
  </div>
  </div>
