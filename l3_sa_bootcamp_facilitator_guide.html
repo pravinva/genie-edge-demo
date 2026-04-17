@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>L3 SA Bootcamp - Facilitator Guide</title>
+<title>FE Launchpad — Account Simulator (Facilitator)</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -161,388 +161,156 @@ code {
 
 <div class="container">
 
-<h1>L3 SA Bootcamp Game - Facilitator Guide</h1>
-<div class="subtitle">Interactive training for L3 Solution Architects | April FY2027 NYC Bootcamp</div>
+<h1>FE Launchpad — Account Simulator</h1>
+<div class="subtitle">Facilitator guide · “The Silent Erosion” (Meridian Health) · Four quarters, same account</div>
 
 <div style="margin-bottom: 20px;">
-<a href="l3_sa_bootcamp.html" class="button" target="_blank">▶️ Launch Game</a>
+<a href="l3_sa_bootcamp.html" class="button" target="_blank">▶️ Open simulator</a>
 </div>
 
 <div class="success-box">
-<strong>Game Link:</strong> <a href="https://pravinva.github.io/genie-edge-demo/l3_sa_bootcamp.html" target="_blank">https://pravinva.github.io/genie-edge-demo/l3_sa_bootcamp.html</a>
+<strong>Where to host:</strong> Use your existing <strong>Google Apps Script</strong> web app (or any HTTPS host) and upload the latest <code>l3_sa_bootcamp.html</code> from the <code>genie-edge-demo</code> repo. A public mirror may also be published on GitHub Pages under this project.<br><br>
+The <strong>participant-facing app intentionally does not show</strong> ground truth, hints, or correct answers — only account context, events, the action menu, and scoring entry for the facilitator.
 </div>
 
 <div class="toc">
-<strong>Quick Navigation:</strong>
+<strong>Quick navigation</strong>
 <ul>
-<li><a href="#overview">Overview & Learning Objectives</a></li>
-<li><a href="#setup">Game Setup</a></li>
-<li><a href="#controls">Facilitator Controls</a></li>
-<li><a href="#scenarios">Scenario Breakdown</a></li>
-<li><a href="#scoring">Scoring Guidelines</a></li>
-<li><a href="#tips">Facilitation Tips</a></li>
-<li><a href="#time">Time Management</a></li>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#setup">Setup</a></li>
+<li><a href="#controls">Controls &amp; scoring</a></li>
+<li><a href="#answer-key">GM answer key (confidential)</a></li>
+<li><a href="#rounds">Round-by-round notes</a></li>
+<li><a href="#tips">Discussion prompts</a></li>
+<li><a href="#time">Time budget</a></li>
 </ul>
 </div>
 
-<h2 id="overview">Overview & Learning Objectives</h2>
+<h2 id="overview">Overview</h2>
 
-<p>This interactive game teaches L3 Solution Architects (new hires fresh from training) how to navigate real customer scenarios using <strong>builder culture</strong> and <strong>AI-first</strong> principles.</p>
+<p>SE pairs work through <strong>Meridian Health Systems</strong> across <strong>four rounds</strong> (Q1–Q4). Each round: read <strong>Events</strong>, discuss <strong>diagnosis</strong> offline, then each pair chooses their <strong>top three actions</strong> from that quarter’s lettered menu. After teams debrief aloud, you reveal <strong>GM ground truth</strong> from the source scenario bank — not from the app.</p>
 
-<h3>Target Audience</h3>
+<h3>Learning objectives (from scenario bank)</h3>
 <ul>
-<li><strong>L3 SAs:</strong> New graduates with strong technical backgrounds</li>
-<li><strong>Experience Level:</strong> Mostly no selling experience, but technical expertise</li>
-<li><strong>Skill Gap:</strong> Need practice in discovery, objection handling, competitive positioning, and translating technical capability to business value</li>
+<li>Diagnose account-health signals and likely causes behind consumption changes</li>
+<li>Prioritize actions under partial information and limited time</li>
+<li>Know when to engage cross-functional partners (SSA, Technical Services, Support) vs when <em>not</em> to escalate</li>
+<li>Shift mindset from “save the account” to “grow the account” as the story evolves</li>
 </ul>
 
-<h3>FY2027 Learning Priorities</h3>
 <div class="info-box">
-<strong>1. Builder Culture (Attitude):</strong> SAs must BUILD custom solutions in vended workspaces (go/fevm) using realistic sector-specific synthetic data that demonstrates deep understanding of their business. Never use actual customer data or their workspaces. Don't present canned demos.<br>
-<strong>2. Genie (Product):</strong> Sell Genie for knowledge search and code generation (AI Assistant) — use it to build faster<br>
-<strong>3. Lakebase (Product Category):</strong> Position Lakebase as a NEW category (not lakehouse, not database) — unified data + AI platform
+<strong>Scoring in the app:</strong> <strong>3 points</strong> for each selected action that matches the optimal set for that round (max <strong>9</strong> per round, <strong>36</strong> total). After pairs report their three letters, enter them under each team in the sidebar and click <strong>Apply points for this team</strong>. The app shows how many points were recorded — <em>not</em> which letters were “supposed” to be correct.
 </div>
 
-<h3>Learning Outcomes</h3>
+<h2 id="setup">Setup</h2>
 <ol>
-<li>Ask the right discovery questions before positioning solutions</li>
-<li>Design customer-specific architectures (not generic reference slides)</li>
-<li>Build working prototypes in hours using AI tools</li>
-<li>Handle competitive objections with honesty and credibility</li>
-<li>Manage POC scope and timelines</li>
-<li>Build CFO-grade business cases with honest TCO analysis</li>
-<li>Understand the SA role as a builder, not just a presenter</li>
-</ol>
-
-<h2 id="setup">Game Setup</h2>
-
-<h3>Before the Session</h3>
-<ol>
-<li><strong>Open the game:</strong> <a href="https://pravinva.github.io/genie-edge-demo/l3_sa_bootcamp.html" target="_blank">L3 SA Bootcamp Game</a></li>
-<li><strong>Screen share:</strong> Share your screen with the full game visible</li>
-<li><strong>Test audio/video:</strong> Ensure everyone can see and hear</li>
-<li><strong>Decide on teams:</strong> 3-6 teams of 3-5 people each works best</li>
-<li><strong>Explain format:</strong> "This is a team-based scenario game. I'll unlock each case, you'll discuss and answer, I'll reveal hints/answers and award points."</li>
-</ol>
-
-<h3>Team Setup</h3>
-<ol>
-<li>Click "Begin the Quest" on the intro screen</li>
-<li>Add team names (use company names, favorite customers, or fun team names)</li>
-<li>Click "Launch Game" to start</li>
+<li>Open <code>l3_sa_bootcamp.html</code> on the projector (or deploy via Apps Script / internal hosting).</li>
+<li>Click <strong>Begin session</strong> → enter each pair’s <strong>team name</strong> → <strong>Launch simulator</strong>.</li>
+<li>Explain: diagnosis is offline; the app only shows events + action menu; you will reveal ground truth verbally after each round.</li>
 </ol>
 
 <div class="warning-box">
-<strong>Important:</strong> The game is designed for YOU (the facilitator) to control. Participants should NOT have the game open on their own screens — they watch your screen share.
+<strong>Screen share:</strong> Everyone can watch the main board. <strong>Scoring:</strong> Only the facilitator (or co-facilitator) should click letter chips and <strong>Apply points</strong> so scores stay accurate. Participants can keep notes on paper — they do not need their own copy of the app unless you choose that format.
 </div>
 
-<h2 id="controls">Facilitator Controls</h2>
-
-<h3>Main Controls (Bottom of Each Case)</h3>
+<h2 id="controls">Controls &amp; flow</h2>
 <ul>
-<li><strong>🔓 Unlock Scenario:</strong> Reveals the case to teams (starts locked)</li>
-<li><strong>💡 Give Hint:</strong> Shows a hint to help teams if they're stuck</li>
-<li><strong>✅ Reveal Answer:</strong> Shows the full answer and learning points</li>
-<li><strong>⚔️ Next Scenario:</strong> Moves to the next case (or finishes the game)</li>
+<li><strong>Unlock this round</strong> — Reveals events, diagnosis instructions, and the action table.</li>
+<li><strong>Sidebar</strong> — For each team, tap exactly <strong>three</strong> action codes they committed to, then <strong>Apply points for this team</strong>. Points = 3 × (how many of their picks match the optimal set for that round). Wrong picks are ignored (no negative points).</li>
+<li><strong>Lock round → next quarter</strong> — After debrief and scoring, advance. On Q4, the button reads <strong>Finish → standings</strong>.</li>
 </ul>
 
-<h3>Scoring Controls (Left Sidebar)</h3>
-<ul>
-<li><strong>+1, +2, +3 buttons:</strong> Award points for good answers</li>
-<li><strong>-1 button:</strong> Deduct points (use sparingly, usually for jokes)</li>
-<li><strong>Top team:</strong> Highlighted with gold border as scores update</li>
-</ul>
-
-<h3>Typical Flow for Each Case</h3>
-<ol>
-<li><strong>Unlock the case</strong> — Teams read the scenario</li>
-<li><strong>Give teams 2-5 minutes</strong> to discuss in breakout rooms or as full group</li>
-<li><strong>Call on teams</strong> to share their answers</li>
-<li><strong>Award points</strong> as they answer (+1 for partial, +2 for good, +3 for excellent)</li>
-<li><strong>Give hint</strong> if teams are stuck or missing key insights</li>
-<li><strong>Reveal answer</strong> when discussion is complete</li>
-<li><strong>Debrief</strong> — Emphasize builder culture and AI-first principles</li>
-<li><strong>Next scenario</strong> — Move forward</li>
-</ol>
-
-<h2 id="scenarios">Scenario Breakdown</h2>
-
-<div class="scenario-card">
-<div class="scenario-title">Case 1 — Discovery & Qualification</div>
-<div class="scenario-goal">Learning Goal: Ask the right questions before positioning. Builder culture = build a working notebook after the call.</div>
-<p><strong>Scenario:</strong> First discovery call with a retail company. Vague requirements ("wants AI"). 60 minutes to prepare.</p>
-<p><strong>Key Learning:</strong> Discovery is about uncovering business pain, not pitching features. After the call, BUILD something (don't just send a deck).</p>
-<div class="scoring-guide">
-<strong>Scoring Guide:</strong><br>
-+1: Asks about pain points or timeline<br>
-+2: Asks about AI use case specifics AND mentions building a prototype<br>
-+3: Full discovery framework + builder culture move (send working notebook within 24 hours)
-</div>
-<div class="time-box">⏱️ Suggested Time: 8-10 minutes total</div>
-</div>
-
-<div class="scenario-card">
-<div class="scenario-title">Case 2 — Solution Architecture</div>
-<div class="scenario-goal">Learning Goal: Design customer-specific architectures. Builder culture = build a working example after whiteboarding.</div>
-<p><strong>Scenario:</strong> Healthcare company. CISO asks about HIPAA compliance, data governance, and PHI isolation.</p>
-<p><strong>Key Learning:</strong> Start with customer constraints (CISO security concerns), not generic reference architecture. After the call, BUILD a governed pipeline demo.</p>
-<div class="scoring-guide">
-<strong>Scoring Guide:</strong><br>
-+1: Mentions Unity Catalog or governance<br>
-+2: Addresses CISO concerns + operational simplicity<br>
-+3: Full architecture approach + builder culture (build working Unity Catalog demo with AI Assistant)
-</div>
-<div class="time-box">⏱️ Suggested Time: 10-12 minutes total</div>
-</div>
-
-<div class="scenario-card">
-<div class="scenario-title">Case 3 — Builder Culture</div>
-<div class="scenario-goal">Learning Goal: Build custom solutions in days using AI-first tools and realistic synthetic data in vended workspaces (go/fevm). Never use actual customer data or their workspaces. Don't show canned demos.</div>
-<p><strong>Scenario:</strong> Logistics company wants delay prediction. You have 4 days to build a working prototype in a vended workspace using realistic synthetic logistics data that mirrors their scale and business.</p>
-<p><strong>Key Learning:</strong> Use go/fevm for vended workspaces, go/vibe for building, Genie Code (AI Assistant) for 70% code generation and synthetic data, AI Dev Kit (no manual model training), and AI/BI (fast dashboards). The key: demonstrate deep understanding of their business through realistic synthetic data. Build in hours, not weeks.</p>
-<div class="scoring-guide">
-<strong>Scoring Guide:</strong><br>
-+1: Has a build plan<br>
-+2: Mentions using vended workspaces (go/fevm) + AI tools (Genie Code/AI Assistant, AI Dev Kit) + synthetic data<br>
-+3: Full 4-day plan with go/fevm, go/vibe, AI-first acceleration + realistic synthetic data generation
-</div>
-<div class="time-box">⏱️ Suggested Time: 12-15 minutes total (EMPHASIZE THIS ONE)</div>
-</div>
-
-<div class="scenario-card">
-<div class="scenario-title">Case 4 — Competitive Positioning</div>
-<div class="scenario-goal">Learning Goal: Answer Snowflake objections with honesty and credibility. Don't trash-talk competitors.</div>
-<p><strong>Scenario:</strong> Customer asks 4 technical questions comparing Databricks to Snowflake (zero-copy cloning, SQL vs Spark, data sharing, positioning).</p>
-<p><strong>Key Learning:</strong> Be honest about Snowflake strengths. Answer with technical truth, not marketing spin. Credibility > winning every point.</p>
-<div class="scoring-guide">
-<strong>Scoring Guide:</strong><br>
-+1: Answers 1-2 questions correctly<br>
-+2: Answers all 4 + acknowledges Snowflake is a good product<br>
-+3: Full answers + identifies "Databricks is for data science" as the landmine question
-</div>
-<div class="time-box">⏱️ Suggested Time: 10-12 minutes total</div>
-</div>
-
-<div class="scenario-card">
-<div class="scenario-title">Case 5 — Technical Objections</div>
-<div class="scenario-goal">Learning Goal: Respond to security/compliance objections with technical precision. Know when to escalate.</div>
-<p><strong>Scenario:</strong> CISO sends 5 security concerns as blockers (data residency, secrets management, network isolation, SSO, audit logging).</p>
-<p><strong>Key Learning:</strong> Security is a checklist, not a negotiation. Know what's easy (SSO, secrets) vs what needs architecture discussion (Private Link) vs what requires escalation (control plane residency).</p>
-<div class="scoring-guide">
-<strong>Scoring Guide:</strong><br>
-+1: Identifies easy solves (SSO, audit logging)<br>
-+2: Knows Private Link is the answer for network isolation<br>
-+3: Full triage + knows when to escalate data residency question
-</div>
-<div class="time-box">⏱️ Suggested Time: 10-12 minutes total</div>
-</div>
-
-<div class="scenario-card">
-<div class="scenario-title">Case 6 — POC Management</div>
-<div class="scenario-goal">Learning Goal: Manage scope creep. Builder culture = prototype fast with AI, don't extend timelines.</div>
-<p><strong>Scenario:</strong> Customer asks for 4 new POC items on Day 8 of a 2-week POC (migrate 40 DAGs, AI Dev Kit demo, performance tuning, extend to 4 weeks).</p>
-<p><strong>Key Learning:</strong> Use AI tools to compress 3 days of work into 3 hours. Say YES by building prototypes, not by extending scope. AI Dev Kit trains models in 1 hour, AI Assistant converts DAGs in 1 hour.</p>
-<div class="scoring-guide">
-<strong>Scoring Guide:</strong><br>
-+1: Knows to push back on DAG migration<br>
-+2: Identifies performance tuning as critical + offers to build AI Dev Kit demo<br>
-+3: Full AI-first strategy (build prototypes in hours, don't extend timeline)
-</div>
-<div class="time-box">⏱️ Suggested Time: 10-12 minutes total</div>
-</div>
-
-<div class="scenario-card">
-<div class="scenario-title">Case 7 — TCO & Business Case</div>
-<div class="scenario-goal">Learning Goal: Build honest ROI cases. Don't overpromise savings. CFOs value credibility over optimism.</div>
-<p><strong>Scenario:</strong> CFO asks for business case justification. Databricks is $420K vs Snowflake $310K. Needs Year 1 cost avoidance, productivity gains, revenue impact, and TCO comparison.</p>
-<p><strong>Key Learning:</strong> Year 1 is investment, not savings. Don't claim revenue impact you can't validate. Be honest if Snowflake is cheaper for SQL-only use cases.</p>
-<div class="scoring-guide">
-<strong>Scoring Guide:</strong><br>
-+1: Identifies cost avoidance opportunities<br>
-+2: Knows Year 1 is investment + quantifies productivity gains<br>
-+3: Full honest TCO analysis + scopes revenue impact to technical enablement only
-</div>
-<div class="time-box">⏱️ Suggested Time: 10-12 minutes total</div>
-</div>
-
-<div class="scenario-card">
-<div class="scenario-title">Case 8 — The Final Riddle</div>
-<div class="scenario-goal">Learning Goal: Understand the SA role in the builder culture + AI-first era.</div>
-<p><strong>Scenario:</strong> A riddle describing the SA job.</p>
-<p><strong>Key Learning:</strong> SAs are builders who sell by showing, not telling. AI-first is the default mode (Genie, AI Assistant, AI Dev Kit are co-pilots).</p>
-<div class="scoring-guide">
-<strong>Scoring Guide:</strong><br>
-+1: Guesses "Solution Architect"<br>
-+2: Adds "builder culture"<br>
-+3: Full answer including AI-first principles
-</div>
-<div class="time-box">⏱️ Suggested Time: 5-8 minutes total</div>
-</div>
-
-<h2 id="scoring">Scoring Guidelines</h2>
-
-<h3>Point System</h3>
-<ul>
-<li><strong>+1 point:</strong> Partial answer, shows understanding of basic concept</li>
-<li><strong>+2 points:</strong> Good answer, covers most key points</li>
-<li><strong>+3 points:</strong> Excellent answer, includes builder culture or AI-first insights</li>
-<li><strong>-1 point:</strong> Use sparingly (usually for humor, not wrong answers)</li>
-</ul>
-
-<h3>When to Award Points</h3>
-<div class="success-box">
-<strong>Be generous with points!</strong> The goal is learning, not competition. Award points for:
-<ul style="margin-top: 8px;">
-<li>Good discussion, even if answer isn't perfect</li>
-<li>Mentioning builder culture ("I would BUILD this...")</li>
-<li>Mentioning AI-first tools (Genie, AI Assistant, AI Dev Kit, AI/BI)</li>
-<li>Honest answers (e.g., "I don't know, I'd escalate to SE manager")</li>
-<li>Creative solutions</li>
-</ul>
-</div>
-
-<h3>Common Mistakes to Correct</h3>
-<ul>
-<li><strong>"I'd send them a deck"</strong> → Redirect: "What would you BUILD instead?"</li>
-<li><strong>"I'd spend 3 days coding this"</strong> → Redirect: "What AI tools would accelerate this?"</li>
-<li><strong>"Snowflake is bad because..."</strong> → Redirect: "How do you answer honestly without trash-talking?"</li>
-<li><strong>"I'd extend the POC to 4 weeks"</strong> → Redirect: "How do you compress scope, not extend time?"</li>
-</ul>
-
-<h2 id="tips">Facilitation Tips</h2>
-
-<h3>Creating Good Discussion</h3>
-<ol>
-<li><strong>Use breakout rooms:</strong> Give teams 2-3 minutes to discuss before sharing</li>
-<li><strong>Call on specific teams:</strong> "Team Snowflake, what would you do?"</li>
-<li><strong>Ask follow-up questions:</strong> "Why is that important?" "What tool would you use?"</li>
-<li><strong>Encourage debate:</strong> "Team AWS disagrees — what's your take?"</li>
-<li><strong>Connect to real experience:</strong> "Has anyone faced this in real life?"</li>
-</ol>
-
-<h3>Emphasizing Builder Culture</h3>
-<div class="info-box">
-After EVERY scenario, ask: <strong>"What would you BUILD to prove this?"</strong><br><br>
-Examples:
-<ul style="margin-top: 8px;">
-<li>Discovery → Build a working notebook with their schema</li>
-<li>Architecture → Build a governed pipeline demo</li>
-<li>POC scope → Build AI Dev Kit model in 1 hour instead of 3 days</li>
-<li>Competitive → Build side-by-side shallow clone demo</li>
-</ul>
-</div>
-
-<h3>Emphasizing Genie (Product)</h3>
-<div class="info-box">
-After EVERY scenario, ask: <strong>"How does Genie accelerate this?"</strong><br><br>
-Examples:
-<ul style="margin-top: 8px;">
-<li>Discovery → Use Genie to search internal knowledge for similar customer use cases</li>
-<li>Architecture → Use Genie Code to generate pipeline code from requirements</li>
-<li>POC → Use Genie Space to let customers query data in natural language</li>
-<li>Competitive → Genie is our differentiator — it's not just query, it's code generation and knowledge search</li>
-</ul>
-<strong>Key Message:</strong> Genie is a PRODUCT we sell, not just a feature. Position it as the AI layer on top of Lakebase.
-</div>
-
-<h3>Emphasizing Lakebase (Product Category)</h3>
-<div class="info-box">
-After EVERY scenario, ask: <strong>"How does Lakebase enable this differently than a database or lakehouse?"</strong><br><br>
-Examples:
-<ul style="margin-top: 8px;">
-<li>Discovery → Lakebase unifies data + AI (not just storage + compute like lakehouse)</li>
-<li>Architecture → Unity Catalog, Delta Lake, serverless = Lakebase foundation</li>
-<li>Competitive → We're creating the Lakebase category — Snowflake is a cloud DW, we're unified data + AI</li>
-<li>POC → Build on Lakebase (governed, open, AI-native) not legacy database architecture</li>
-</ul>
-<strong>Key Message:</strong> Lakebase is a NEW category. Not lakehouse 2.0, not database 2.0. It's the platform where data and AI converge.
-</div>
-
-<h3>Handling Quiet Teams</h3>
-<ul>
-<li><strong>Direct questions:</strong> "Team Delta Lake, I haven't heard from you yet — what's your take?"</li>
-<li><strong>Lower the stakes:</strong> "There's no wrong answer here, what's your first instinct?"</li>
-<li><strong>Offer hints earlier:</strong> Don't let teams struggle for 5+ minutes</li>
-<li><strong>Share your experience:</strong> "When I was an L3, I made this mistake..."</li>
-</ul>
-
-<h3>Handling Dominant Teams</h3>
-<ul>
-<li><strong>Rotate who answers:</strong> "Team Unity Catalog already answered last time, let's hear from Team Photon"</li>
-<li><strong>Ask for different perspectives:</strong> "Good answer. Who has a different approach?"</li>
-<li><strong>Award bonus points for quiet teams:</strong> "+1 bonus for first answer from Team Delta"</li>
-</ul>
-
-<h2 id="time">Time Management</h2>
-
-<h3>Session Length Options</h3>
+<h2 id="answer-key">GM answer key (do not read until reveal)</h2>
 <div class="warning-box">
-<strong>Full Game (8 scenarios):</strong> 90-120 minutes<br>
-<strong>Short Version (5 scenarios):</strong> 60 minutes (Cases 1, 3, 4, 6, 8)<br>
-<strong>Lightning Round (3 scenarios):</strong> 30 minutes (Cases 1, 3, 8)
+These letters match the in-app scoring engine. Use the full narrative, anti-patterns, and discussion notes from your <strong>Scenario Bank &amp; Question Design</strong> PDF when you debrief — the app does not duplicate that text.
+</div>
+<table style="width:100%; border-collapse:collapse; margin:16px 0; font-size:14px;">
+<tr style="background:#f0f0f0;"><th style="text-align:left;padding:8px;border:1px solid #ccc;">Round</th><th style="text-align:left;padding:8px;border:1px solid #ccc;">Optimal top-3 (3 pts each)</th></tr>
+<tr><td style="padding:8px;border:1px solid #ccc;">Q1 — First Cracks</td><td style="padding:8px;border:1px solid #ccc;"><code>A</code>, <code>K</code>, <code>E</code></td></tr>
+<tr><td style="padding:8px;border:1px solid #ccc;">Q2 — Plot Thickens</td><td style="padding:8px;border:1px solid #ccc;"><code>B</code>, <code>C</code>, <code>D</code></td></tr>
+<tr><td style="padding:8px;border:1px solid #ccc;">Q3 — Turning Point</td><td style="padding:8px;border:1px solid #ccc;"><code>B</code>, <code>A</code>, <code>K</code> (cost review, ML SSA serving demo, Aisha presents wins to David)</td></tr>
+<tr><td style="padding:8px;border:1px solid #ccc;">Q4 — The Close</td><td style="padding:8px;border:1px solid #ccc;"><code>C</code>, <code>E</code>, <code>A</code></td></tr>
+</table>
+
+<h2 id="rounds">Round-by-round facilitation</h2>
+
+<div class="scenario-card">
+<div class="scenario-title">Q1 — The First Cracks</div>
+<p>Focus discussion on <strong>connecting signals</strong> (champion exit, SQL drop, Tom’s benchmarks). After teams share their three actions, reveal ground truth from the PDF, then score in the app.</p>
+<div class="time-box">⏱️ Suggested: 12–18 min</div>
 </div>
 
-<h3>Per-Scenario Time Budget</h3>
+<div class="scenario-card">
+<div class="scenario-title">Q2 — The Plot Thickens</div>
+<p>New VP from a Snowflake-heavy background, ML up / SQL down, UC ticket storm. Good tension: <strong>discovery vs pitch</strong>, <strong>when TS is warranted</strong>, and <strong>when ML SSA is premature</strong>.</p>
+<div class="time-box">⏱️ Suggested: 12–18 min · Optional: 2-min brainstorm of discovery questions for David</div>
+</div>
+
+<div class="scenario-card">
+<div class="scenario-title">Q3 — Turning Point</div>
+<p>TS fixed UC; David wants serving demo + cost review; Tom’s proposal lands. Debrief <strong>influence without blocking customer process</strong> and <strong>credible numbers vs vendor TCO decks</strong>.</p>
+<div class="time-box">⏱️ Suggested: 12–18 min</div>
+</div>
+
+<div class="scenario-card">
+<div class="scenario-title">Q4 — The Close</div>
+<p>Account has turned; choices shift to <strong>EBR + joint success plan + SQL Serverless POC</strong>. Contrast with “celebrate only” or over-rotating to TS migration too early.</p>
+<div class="time-box">⏱️ Suggested: 12–18 min</div>
+</div>
+
+<h2 id="scoring">Scoring reference</h2>
 <ul>
-<li><strong>Read scenario:</strong> 1 minute (facilitator reads aloud or teams read silently)</li>
-<li><strong>Team discussion:</strong> 2-5 minutes (depends on complexity)</li>
-<li><strong>Teams share:</strong> 3-5 minutes (2-3 teams answer)</li>
-<li><strong>Reveal answer + debrief:</strong> 2-3 minutes</li>
-<li><strong>Total per scenario:</strong> 8-14 minutes</li>
+<li><strong>Per pick:</strong> +3 if the letter is one of the three optimal actions for that round.</li>
+<li><strong>Cap:</strong> 9 points per round per team; 36 overall.</li>
+<li><strong>Ties:</strong> Allowed — standings screen orders by total.</li>
 </ul>
 
-<h3>Staying on Schedule</h3>
-<ol>
-<li><strong>Set time limits upfront:</strong> "We have 10 minutes for this case"</li>
-<li><strong>Use a visible timer:</strong> Share timer on screen or use phone</li>
-<li><strong>Cut discussion if running long:</strong> "Great discussion, let's move to the answer"</li>
-<li><strong>Skip hints if teams nail it:</strong> Go straight to reveal answer</li>
-<li><strong>Prioritize debrief over team answers:</strong> The learning is more important than hearing every team</li>
-</ol>
+<h2 id="tips">Discussion prompts (from scenario bank)</h2>
+<p>Use these after teams share their three actions and you reveal ground truth:</p>
+<ul>
+<li><em>Diagnosis:</em> “Who connected champion loss to the consumption story? Walk us through that reasoning.”</li>
+<li><em>Partial information:</em> “Did anyone treat these as three separate problems vs one arc?”</li>
+<li><em>Actions:</em> “Pair A pulled in an SSA early; Pair B did not — both can be argued. Make your case.”</li>
+<li><em>Risk:</em> “What could go wrong with the highest-leverage move you chose?”</li>
+<li><em>Escalation judgment:</em> “Was this a round where the best move was <strong>not</strong> to escalate? Who got that?”</li>
+<li><em>Discovery (Q2):</em> “You have 30 minutes with David — top three questions, <strong>no product names</strong>.”</li>
+<li><em>Reflection:</em> “What signal from this quarter would you watch on your own accounts Monday?”</li>
+</ul>
 
-<h3>Which Scenarios to Prioritize</h3>
-<p>If you need to skip scenarios, keep these:</p>
-<ol>
-<li><strong>Case 1 (Discovery):</strong> Foundational skill</li>
-<li><strong>Case 3 (Builder Culture):</strong> MOST IMPORTANT — this is the FY2027 priority</li>
-<li><strong>Case 4 (Competitive):</strong> They'll face Snowflake in 90% of deals</li>
-<li><strong>Case 6 (POC Management):</strong> Practical skill they'll use immediately</li>
-<li><strong>Case 8 (Final Riddle):</strong> Good capstone, reinforces builder + AI-first identity</li>
-</ol>
-
-<h2 style="margin-top: 40px;">Quick Reference Checklist</h2>
-
-<div class="success-box">
-<strong>Before Session:</strong><br>
-☐ Game link open and tested<br>
-☐ Screen sharing working<br>
-☐ Teams decided (3-6 teams recommended)<br>
-☐ Time budget set (60/90/120 min)<br>
-☐ Facilitator guide reviewed<br><br>
-
-<strong>During Session:</strong><br>
-☐ Unlock each case before discussion<br>
-☐ Ask "What would you BUILD?" after every scenario<br>
-☐ Ask "What AI tools accelerate this?" after every scenario<br>
-☐ Award points generously<br>
-☐ Emphasize honesty over winning (especially Case 4, 7)<br>
-☐ Keep time per scenario under 12 minutes<br><br>
-
-<strong>After Session:</strong><br>
-☐ Announce winning team<br>
-☐ Recap key learnings (builder culture + AI-first)<br>
-☐ Share game link for self-study<br>
-☐ Collect feedback
+<h2 id="time">Time management</h2>
+<div class="warning-box">
+<strong>Full run (4 rounds):</strong> about <strong>55–80 minutes</strong> (12–18 min per round + transitions).<br>
+<strong>Tight agenda:</strong> shorten pair discussion to ~5 min and debrief to ~5 min per round (~45 min total).
 </div>
+<ul>
+<li><strong>Read events aloud</strong> (optional) while the slide is unlocked — 1–2 min.</li>
+<li><strong>Pair work</strong> — diagnosis + agree on three letters — 5–8 min.</li>
+<li><strong>Share-outs</strong> — a few teams report — 4–6 min.</li>
+<li><strong>GM reveal + debate</strong> — use PDF narrative — 5–8 min.</li>
+<li><strong>Enter scores</strong> in sidebar — 1–2 min.</li>
+</ul>
+
+<h2 style="margin-top: 40px;">Checklist</h2>
+<div class="success-box">
+<strong>Before:</strong> Simulator opens · teams decided · PDF / answer key ready · timer optional<br>
+<strong>During:</strong> Unlock → discuss → share → <strong>verbal reveal</strong> → enter three letters per team → Apply points → next round<br>
+<strong>After:</strong> Show standings screen · recap themes · collect feedback
+</div>
+
+<h2 style="margin-top: 40px;">Deploying (Apps Script)</h2>
+<ol>
+<li>Copy the contents of <code>l3_sa_bootcamp.html</code> into an <strong>HtmlService</strong> file (e.g. <code>Index.html</code>) in your existing web app project, or serve it via <code>HtmlService.createHtmlOutputFromFile</code> / template as you already do for <code>?mode=l3bootcamp</code>.</li>
+<li>Redeploy the web app so the new HTML is live at your <code>script.google.com/.../exec</code> URL.</li>
+<li>Keep <code>l3_sa_bootcamp_facilitator_guide.html</code> alongside it if you link facilitators to the guide from the same folder/host.</li>
+</ol>
 
 <h2 style="margin-top: 40px;">Resources</h2>
-
-<a href="https://pravinva.github.io/genie-edge-demo/l3_sa_bootcamp.html" class="button" target="_blank">Open Game</a>
-<a href="https://github.com/pravinva/genie-edge-demo" class="button" target="_blank">View on GitHub</a>
+<a href="l3_sa_bootcamp.html" class="button" target="_blank">Open simulator (local)</a>
+<a href="https://github.com/pravinva/genie-edge-demo" class="button" target="_blank">View repo on GitHub</a>
 
 <div style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #e0e0e0; color: #666; font-size: 14px;">
-<strong>Questions or feedback?</strong> Contact the game creator or your bootcamp organizer.<br>
-<em>Created for L3 SA Bootcamp #2 (Hackathon) | NYC | April FY2027</em>
+<strong>Source material:</strong> FE Launchpad — Account Simulator scenario bank (Meridian / “The Silent Erosion”).<br>
+<em>App refresh: FE Launchpad account simulator · four-quarter scoring edition</em>
 </div>
 
 </div>
