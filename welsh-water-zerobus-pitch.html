@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welsh Water x Databricks — Unified OT Zerobus Connector</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300&family=Roboto:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --db-red:    #FF3621;
+  --db-dark:   #1B3139;
+  --db-mid:    #2E4A55;
+  --db-green:  #00A972;
+  --db-amber:  #C06000;
+  --db-muted:  #5A7580;
+  --db-rule:   #D4DFE3;
+  --bg:        #F3F5F6;
+  --bg-card:   #FFFFFF;
+  --bg-code:   #EDF1F3;
+  --text:      #1B3139;
+  --mono:      'JetBrains Mono', monospace;
+  --sans:      'Roboto', sans-serif;
+  --display:   'Barlow', sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+  height: 100vh; width: 100vw;
+  user-select: none;
+}
+.deck { width:100vw; height:100vh; position:relative; }
+.slide {
+  position:absolute; inset:0;
+  display:flex; flex-direction:column;
+  opacity:0; pointer-events:none;
+  transition: opacity 0.32s ease;
+}
+.slide.active { opacity:1; pointer-events:all; }
+
+/* progress */
+#progress {
+  position:fixed; bottom:0; left:0;
+  height:3px; background:var(--db-red);
+  transition:width 0.32s ease; z-index:100;
+}
+
+/* nav */
+#nav {
+  position:fixed; bottom:20px; right:24px;
+  display:flex; gap:8px; align-items:center; z-index:100;
+}
+#slide-counter {
+  font-family:var(--mono); font-size:9px;
+  color:var(--db-muted); letter-spacing:.12em; margin-right:6px;
+}
+.nav-btn {
+  width:32px; height:32px; border-radius:50%;
+  border:1px solid var(--db-rule); background:var(--bg-card);
+  color:var(--text); font-size:14px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 1px 4px rgba(27,49,57,.08);
+  transition:all .18s;
+}
+.nav-btn:hover { background:var(--db-red); border-color:var(--db-red); color:#fff; }
+
+/* mark */
+.db-mark {
+  position:fixed; top:20px; left:24px;
+  display:flex; align-items:center; gap:8px; z-index:100;
+}
+.db-mark svg { width:24px; height:24px; }
+.db-mark span {
+  font-family:var(--display); font-size:12px; font-weight:700;
+  letter-spacing:.06em; color:var(--db-muted);
+}
+
+/* shared */
+.slide-label {
+  font-family:var(--mono); font-size:9px;
+  letter-spacing:.18em; text-transform:uppercase;
+  color:var(--db-red); margin-bottom:5px;
+}
+.slide-title {
+  font-family:var(--display);
+  font-size:clamp(24px,2.8vw,38px);
+  font-weight:800; line-height:1.1;
+  color:var(--db-dark); margin-bottom:28px;
+}
+.slide-title span { color:var(--db-red); }
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(14px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.slide.active .slide-label { animation:fadeUp .4s .04s ease both; }
+.slide.active .slide-title { animation:fadeUp .4s .09s ease both; }
+.slide.active .anim-1      { animation:fadeUp .4s .13s ease both; }
+.slide.active .anim-2      { animation:fadeUp .4s .19s ease both; }
+
+/* ═══ SLIDE 1 — TITLE ═══ */
+#s1 {
+  background:var(--db-dark);
+  padding:80px 96px; justify-content:center; overflow:hidden;
+}
+#s1::before {
+  content:''; position:absolute;
+  top:-160px; right:-130px; width:580px; height:580px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(255,54,33,.13) 0%,transparent 68%);
+  pointer-events:none;
+}
+.s1-eye {
+  font-family:var(--mono); font-size:10px;
+  letter-spacing:.2em; text-transform:uppercase;
+  color:var(--db-red); margin-bottom:26px;
+  animation:fadeUp .45s ease both;
+}
+.s1-h {
+  font-family:var(--display);
+  font-size:clamp(38px,5vw,64px);
+  font-weight:800; line-height:1.04; color:#fff;
+  max-width:680px;
+  animation:fadeUp .45s .08s ease both;
+}
+.s1-h em { font-style:normal; color:var(--db-red); }
+.s1-sub {
+  margin-top:24px; font-size:15px; font-weight:300;
+  color:rgba(255,255,255,.5); max-width:480px; line-height:1.65;
+  animation:fadeUp .45s .15s ease both;
+}
+.s1-hr {
+  width:40px; height:3px; background:var(--db-red);
+  margin:32px 0 26px;
+  animation:fadeUp .45s .21s ease both;
+}
+.s1-meta {
+  display:flex; gap:44px;
+  animation:fadeUp .45s .27s ease both;
+}
+.s1-mi { display:flex; flex-direction:column; gap:3px; }
+.s1-ml {
+  font-family:var(--mono); font-size:9px;
+  letter-spacing:.15em; text-transform:uppercase;
+  color:rgba(255,255,255,.3);
+}
+.s1-mv { font-size:13px; font-weight:500; color:rgba(255,255,255,.78); }
+.s1-geo {
+  position:absolute; right:72px; top:50%;
+  transform:translateY(-50%); opacity:.05;
+  animation:fadeUp .6s .32s ease both;
+}
+
+/* ═══ SLIDE 2 — PROBLEM ═══ */
+#s2 { padding:68px 96px; }
+.chain {
+  display:flex; align-items:center;
+  flex-wrap:nowrap; margin-bottom:28px; overflow:hidden;
+}
+.cn { /* chain node */
+  background:var(--bg-card); border:1px solid var(--db-rule);
+  border-radius:7px; padding:11px 14px;
+  font-size:11px; font-weight:500; white-space:nowrap;
+  flex-shrink:0; line-height:1.4; color:var(--text);
+}
+.cn small { display:block; font-size:9px; color:var(--db-muted); font-weight:300; }
+.cn.bad { border-color:rgba(255,54,33,.3); background:rgba(255,54,33,.04); }
+.cn.ok  { border-color:rgba(0,169,114,.35); background:rgba(0,169,114,.04); }
+.ca { font-size:13px; padding:0 5px; color:var(--db-muted); flex-shrink:0; }
+.ca.r { color:var(--db-red); }
+.pain-grid {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:16px;
+}
+.pain-card {
+  background:var(--bg-card); border:1px solid var(--db-rule);
+  border-top:3px solid var(--db-red);
+  border-radius:9px; padding:20px 18px;
+}
+.pain-title {
+  font-family:var(--display); font-size:13px; font-weight:700;
+  margin-bottom:8px; color:var(--db-dark);
+}
+.pain-body {
+  font-size:12px; font-weight:300;
+  color:var(--db-muted); line-height:1.65;
+}
+
+/* ═══ SLIDE 3 — SOLUTION ═══ */
+#s3 { padding:68px 96px; }
+.two-col {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:36px; align-items:start;
+}
+.feat-list { display:flex; flex-direction:column; gap:16px; }
+.feat-item { display:flex; gap:12px; align-items:flex-start; }
+.feat-dot {
+  width:6px; height:6px; border-radius:50%;
+  background:var(--db-red); margin-top:7px; flex-shrink:0;
+}
+.feat-text strong {
+  display:block; font-family:var(--display);
+  font-size:13px; font-weight:700; margin-bottom:2px; color:var(--db-dark);
+}
+.feat-text span {
+  font-size:12px; font-weight:300;
+  color:var(--db-muted); line-height:1.6;
+}
+.arch-box {
+  background:var(--bg-code); border:1px solid var(--db-rule);
+  border-radius:9px; padding:22px 24px;
+  font-family:var(--mono); font-size:11px; line-height:1.85;
+  color:var(--db-muted);
+}
+.ahl  { color:var(--db-green); }
+.ahl2 { color:var(--db-amber); }
+.acm  { color:#B0C8CE; }
+
+/* ═══ SLIDE 4 — BEFORE/AFTER ═══ */
+#s4 { padding:68px 96px; }
+.ba-wrap { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.ba-panel { border-radius:9px; padding:22px 20px; }
+.ba-panel.before { background:#FFF7F6; border:1px solid rgba(255,54,33,.2); }
+.ba-panel.after  { background:#F3FBF8; border:1px solid rgba(0,169,114,.25); }
+.ba-lab {
+  font-family:var(--mono); font-size:9px;
+  letter-spacing:.18em; text-transform:uppercase;
+  margin-bottom:16px; font-weight:500;
+}
+.ba-lab.b { color:var(--db-red); }
+.ba-lab.a { color:var(--db-green); }
+.ba-row {
+  display:flex; gap:9px; margin-bottom:11px;
+  font-size:12px; line-height:1.5; align-items:flex-start;
+}
+.ba-row .ic { flex-shrink:0; font-style:normal; margin-top:1px; }
+.ba-row.x .ic { color:var(--db-red); font-weight:700; }
+.ba-row.c .ic { color:var(--db-green); font-weight:700; }
+.ba-row .tx { color:var(--db-muted); font-weight:300; }
+.ba-row .tx strong { color:var(--db-dark); font-weight:500; }
+
+/* ═══ SLIDES 5 & 6 — DISCOVERY ═══ */
+#s5, #s6 { padding:68px 96px; }
+.disc-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:18px;
+}
+.dg {
+  background:var(--bg-card); border:1px solid var(--db-rule);
+  border-radius:9px; padding:18px 18px 14px;
+}
+.dg-title {
+  font-family:var(--display); font-size:12px; font-weight:700;
+  color:var(--db-dark); margin-bottom:12px;
+  padding-bottom:9px; border-bottom:1px solid var(--db-rule);
+  display:flex; align-items:center; gap:7px;
+}
+.dtag {
+  font-family:var(--mono); font-size:8.5px;
+  letter-spacing:.08em; text-transform:uppercase;
+  padding:2px 7px; border-radius:20px;
+  background:rgba(255,54,33,.07); color:var(--db-red);
+  font-weight:400;
+}
+.dq {
+  display:flex; gap:9px; margin-bottom:8px;
+  font-size:12px; line-height:1.55; align-items:flex-start;
+}
+.dq .qn {
+  font-family:var(--mono); font-size:9px;
+  color:var(--db-red); flex-shrink:0;
+  margin-top:2px; font-weight:500;
+}
+.dq .qt { color:var(--db-muted); font-weight:300; }
+.dq .qt strong { color:var(--db-dark); font-weight:500; }
+
+/* ═══ SLIDE 7 — CONFIG ═══ */
+#s7 { padding:68px 96px; }
+.code-two-col { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.code-block {
+  background:var(--bg-code); border:1px solid var(--db-rule);
+  border-radius:9px; padding:20px 22px;
+  font-family:var(--mono); font-size:11px; line-height:1.78;
+  position:relative;
+}
+.code-block .ftag {
+  position:absolute; top:0; right:0;
+  background:rgba(255,54,33,.07);
+  border-bottom-left-radius:8px;
+  padding:3px 12px; font-size:8.5px;
+  letter-spacing:.1em; color:var(--db-red);
+}
+.cy { color:#1A6080; }
+.cv { color:#1A7A52; }
+.cnum { color:#B06000; }
+.cco { color:#B8CBCF; }
+
+/* ═══ SLIDE 8 — NEXT STEPS ═══ */
+#s8 { padding:68px 96px; }
+.steps { display:flex; flex-direction:column; gap:0; max-width:660px; }
+.step { display:flex; gap:22px; align-items:flex-start; padding-bottom:26px; position:relative; }
+.step:not(:last-child)::before {
+  content:''; position:absolute;
+  left:15px; top:35px; bottom:0;
+  width:1px; background:var(--db-rule);
+}
+.snum {
+  width:32px; height:32px; border-radius:50%;
+  border:1.5px solid var(--db-red);
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--mono); font-size:10px; font-weight:500;
+  color:var(--db-red); flex-shrink:0;
+  background:var(--bg); z-index:1;
+}
+.stitle {
+  font-family:var(--display); font-size:15px; font-weight:700;
+  margin-bottom:4px; color:var(--db-dark);
+}
+.sbody {
+  font-size:12px; font-weight:300;
+  color:var(--db-muted); line-height:1.65;
+}
+.stag {
+  display:inline-block; margin-top:6px;
+  padding:2px 9px; border-radius:20px;
+  font-family:var(--mono); font-size:9px;
+  background:rgba(192,96,0,.08); color:var(--db-amber);
+  border:1px solid rgba(192,96,0,.22);
+}
+</style>
+</head>
+<body>
+
+<div class="db-mark">
+  <svg viewBox="0 0 100 100" fill="none">
+    <path d="M50 5L95 30V70L50 95L5 70V30L50 5Z" fill="#FF3621" opacity=".9"/>
+    <path d="M50 20L80 37V63L50 80L20 63V37L50 20Z" fill="#1B3139"/>
+    <path d="M50 35L65 44V56L50 65L35 56V44L50 35Z" fill="#FF3621"/>
+  </svg>
+  <span>Databricks</span>
+</div>
+
+<div id="progress"></div>
+<div id="nav">
+  <span id="slide-counter">01 / 08</span>
+  <button class="nav-btn" id="prev">&#8592;</button>
+  <button class="nav-btn" id="next">&#8594;</button>
+</div>
+
+<div class="deck">
+
+<!-- 1 TITLE -->
+<div class="slide active" id="s1">
+  <div class="s1-eye">Welsh Water &middot; LUCID Workstream &middot; Phase 1</div>
+  <div class="s1-h">Unified OT<br><em>Zerobus</em><br>Connector</div>
+  <div class="s1-sub">A direct streaming path from OT field data to Databricks Delta Lake via Zerobus gRPC, with native protocol support across MQTT, OPC-UA, and Modbus.</div>
+  <div class="s1-hr"></div>
+  <div class="s1-meta">
+    <div class="s1-mi"><span class="s1-ml">Protocols</span><span class="s1-mv">MQTT &middot; OPC-UA &middot; Modbus</span></div>
+    <div class="s1-mi"><span class="s1-ml">Deployment</span><span class="s1-mv">Docker &middot; OT DMZ</span></div>
+    <div class="s1-mi"><span class="s1-ml">Egress</span><span class="s1-mv">Zerobus gRPC &rarr; Delta Lake</span></div>
+  </div>
+  <svg class="s1-geo" width="380" height="380" viewBox="0 0 380 380" fill="none">
+    <circle cx="190" cy="190" r="180" stroke="white" stroke-width="1"/>
+    <circle cx="190" cy="190" r="120" stroke="white" stroke-width="1"/>
+    <circle cx="190" cy="190" r="60"  stroke="white" stroke-width="1"/>
+    <line x1="10"  y1="190" x2="370" y2="190" stroke="white" stroke-width="1"/>
+    <line x1="190" y1="10"  x2="190" y2="370" stroke="white" stroke-width="1"/>
+    <line x1="63"  y1="63"  x2="317" y2="317" stroke="white" stroke-width="1"/>
+    <line x1="317" y1="63"  x2="63"  y2="317" stroke="white" stroke-width="1"/>
+  </svg>
+</div>
+
+<!-- 2 PROBLEM -->
+<div class="slide" id="s2">
+  <div class="slide-label">Current Architecture</div>
+  <div class="slide-title">LUCID Phase 1 <span>Ingest Path</span></div>
+  <div class="anim-1">
+    <div class="chain">
+      <div class="cn">Mosquitto<small>OT DMZ</small></div>
+      <div class="ca">&#8594;</div>
+      <div class="cn">Azure Durable<br>Function Timer</div>
+      <div class="ca">&#8594;</div>
+      <div class="cn">Azure SQL<br>Trigger</div>
+      <div class="ca">&#8594;</div>
+      <div class="cn">OPC-UA Handler<br>Azure Function</div>
+      <div class="ca">&#8594;</div>
+      <div class="cn">Event Grid<br>MQTT Broker</div>
+      <div class="ca">&#8594;</div>
+      <div class="cn">Azure<br>EventHub</div>
+      <div class="ca">&#8594;</div>
+      <div class="cn ok">Delta Lake<small>Raw</small></div>
+    </div>
+  </div>
+  <div class="pain-grid anim-2">
+    <div class="pain-card">
+      <div class="pain-title">OPC-UA via MQTT relay</div>
+      <div class="pain-body">ScopeX OPC-UA data is currently serialised into MQTT and decoded by the OPC-UA Handler Azure Function. The connector supports native OPC-UA, removing that relay step.</div>
+    </div>
+    <div class="pain-card">
+      <div class="pain-title">Multi-service ingest chain</div>
+      <div class="pain-body">The current path spans five Azure services between Mosquitto and Delta Lake. The connector consolidates protocol handling and buffering into a single process in the OT DMZ.</div>
+    </div>
+    <div class="pain-card">
+      <div class="pain-title">Technolog via AWS IoT Core</div>
+      <div class="pain-body">Technolog telemetry currently routes through AWS IoT Core before reaching Azure. Subject to contract ownership, this path can be consolidated into the Mosquitto broker directly.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 3 SOLUTION -->
+<div class="slide" id="s3">
+  <div class="slide-label">Connector Overview</div>
+  <div class="slide-title">Unified OT <span>Zerobus</span> Connector</div>
+  <div class="two-col anim-1">
+    <div class="feat-list">
+      <div class="feat-item">
+        <div class="feat-dot"></div>
+        <div class="feat-text">
+          <strong>Native MQTT subscriber</strong>
+          <span>Subscribes directly to Ovarro Mosquitto. Handles LUCID, Logger OPC-UA, and NRW OPC-UA topic groups in a single process. Sparkplug B auto-detection included.</span>
+        </div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-dot"></div>
+        <div class="feat-text">
+          <strong>Native OPC-UA client</strong>
+          <span>Connects directly to OPC-UA servers. Full hierarchical browse-path capture with vendor format detection for ISA-95 normalisation. Supports SignAndEncrypt security mode.</span>
+        </div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-dot"></div>
+        <div class="feat-text">
+          <strong>Zerobus gRPC egress</strong>
+          <span>Writes directly to Databricks Delta tables over gRPC/protobuf. Per-source routing to separate Delta tables configurable per source in a single deployment.</span>
+        </div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-dot"></div>
+        <div class="feat-text">
+          <strong>Backpressure and disk spooling</strong>
+          <span>Memory queue with automatic disk overflow on network congestion. Store-and-forward on the connector preserves data across transient connectivity interruptions.</span>
+        </div>
+      </div>
+      <div class="feat-item">
+        <div class="feat-dot"></div>
+        <div class="feat-text">
+          <strong>Docker-native, OT DMZ ready</strong>
+          <span>Single container. No Ignition Gateway required. Deployable alongside an existing Mosquitto broker. Web UI on :8080 with Prometheus metrics for operational visibility.</span>
+        </div>
+      </div>
+    </div>
+    <div class="arch-box">
+<span class="acm"># Data flow</span>
+
+<span class="ahl">Mosquitto (OT DMZ)</span>
+  &#x251C;&#x2500; LUCID Topics
+  &#x251C;&#x2500; Logger OPC-UA Topics
+  &#x2514;&#x2500; NRW OPC-UA Topics
+      &#x2502;
+      &#x25BC;
+<span class="ahl2">Unified OT Connector</span>
+  &#x251C;&#x2500; MQTT client
+  &#x251C;&#x2500; OPC-UA client  <span class="acm">(ScopeX direct)</span>
+  &#x251C;&#x2500; ISA-95 normaliser
+  &#x251C;&#x2500; Vendor detection
+  &#x2514;&#x2500; Backpressure + disk spool
+      &#x2502;
+      &#x25BC;
+<span class="ahl">Zerobus gRPC</span>
+      &#x2502;
+      &#x25BC;
+<span class="ahl">Delta Lake</span>
+  &#x251C;&#x2500; welsh_water.raw.lucid_telemetry
+  &#x251C;&#x2500; welsh_water.raw.logger_telemetry
+  &#x2514;&#x2500; welsh_water.raw.nrw_telemetry
+      &#x2502;
+      &#x25BC;
+<span class="ahl2">DLT Pipeline</span>  <span class="acm"># Bronze &#x2192; Gold unchanged</span>
+    </div>
+  </div>
+</div>
+
+<!-- 4 BEFORE / AFTER -->
+<div class="slide" id="s4">
+  <div class="slide-label">Architecture Options</div>
+  <div class="slide-title">Current Path vs <span>Connector Path</span></div>
+  <div class="ba-wrap anim-1">
+    <div class="ba-panel before">
+      <div class="ba-lab b">Current State</div>
+      <div class="ba-row"><span class="tx"><strong>Azure Durable Function timer</strong> polling Mosquitto on a schedule</span></div>
+      <div class="ba-row"><span class="tx"><strong>Azure SQL Trigger</strong> chaining into Azure Functions processing</span></div>
+      <div class="ba-row"><span class="tx"><strong>OPC-UA Handler Azure Function</strong> decoding MQTT-wrapped OPC-UA payloads from ScopeX egress</span></div>
+      <div class="ba-row"><span class="tx"><strong>Azure Event Grid MQTT Broker</strong> as pub/sub relay</span></div>
+      <div class="ba-row"><span class="tx"><strong>Azure EventHub</strong> as buffer between Event Grid and Delta Lake</span></div>
+      <div class="ba-row"><span class="tx"><strong>OPC-UA to MQTT serialisation</strong> required on ScopeX egress for Azure Functions consumption</span></div>
+    </div>
+    <div class="ba-panel after">
+      <div class="ba-lab a">With Unified Connector</div>
+      <div class="ba-row c"><span class="ic">&#x2013;</span><span class="tx"><strong>One Docker container</strong> in OT DMZ subscribes all three topic groups, writes to Delta Lake directly via Zerobus gRPC</span></div>
+      <div class="ba-row c"><span class="ic">&#x2013;</span><span class="tx"><strong>Direct OPC-UA to ScopeX</strong> &mdash; native hierarchical path capture, no serialisation step required</span></div>
+      <div class="ba-row c"><span class="ic">&#x2013;</span><span class="tx"><strong>Per-source Delta routing</strong> &mdash; lucid, logger, nrw each land in separate Raw tables in welsh_water catalog</span></div>
+      <div class="ba-row c"><span class="ic">&#x2013;</span><span class="tx"><strong>ISA-95 normalisation at ingestion</strong> &mdash; asset hierarchy applied before DLT Bronze processing</span></div>
+      <div class="ba-row c"><span class="ic">&#x2013;</span><span class="tx"><strong>NRW REST API path unchanged</strong> &mdash; Azure Function to SQL MI for public internet pull remains as-is</span></div>
+      <div class="ba-row c"><span class="ic">&#x2013;</span><span class="tx"><strong>Azure Databricks Prep and Train unchanged</strong> &mdash; DLT continues Bronze to Gold as designed</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- 5 DISCOVERY 1 -->
+<div class="slide" id="s5">
+  <div class="slide-label">Discovery Questions &mdash; 1 of 2</div>
+  <div class="slide-title">OT Topology <span>&amp; Network</span></div>
+  <div class="disc-grid anim-1">
+
+    <div class="dg">
+      <div class="dg-title">Mosquitto Broker <span class="dtag">OT DMZ</span></div>
+      <div class="dq"><span class="qn">Q1</span><span class="qt">Is the Ovarro Mosquitto HA setup active-active or active-passive, and which node is the subscriber endpoint for external clients?</span></div>
+      <div class="dq"><span class="qn">Q2</span><span class="qt">What are the <strong>actual topic paths</strong> for LUCID, Logger OPC-UA, and NRW OPC-UA? Are they documented or do we need a live broker scan to confirm structure?</span></div>
+      <div class="dq"><span class="qn">Q3</span><span class="qt">Is TLS or mutual TLS enforced on Mosquitto? Are client certificates issued per-subscriber or shared across consumers?</span></div>
+      <div class="dq"><span class="qn">Q4</span><span class="qt">What QoS level is configured per topic group &mdash; best-effort, QoS 1, or QoS 2?</span></div>
+    </div>
+
+    <div class="dg">
+      <div class="dg-title">ScopeX &amp; OPC-UA <span class="dtag">OT Core</span></div>
+      <div class="dq"><span class="qn">Q5</span><span class="qt">What is the ScopeX OPC-UA server endpoint and security mode &mdash; None, Sign, or SignAndEncrypt? Is a client certificate required?</span></div>
+      <div class="dq"><span class="qn">Q6</span><span class="qt">How many OPC-UA nodes are exposed, and is there an existing namespace or browse-path document we can review before deployment?</span></div>
+      <div class="dq"><span class="qn">Q7</span><span class="qt">Is OPC-UA egress currently subscription-based or polled? What is the configured change rate or polling interval on the server today?</span></div>
+    </div>
+
+    <div class="dg">
+      <div class="dg-title">Network &amp; Firewall <span class="dtag">SO-WAN</span></div>
+      <div class="dq"><span class="qn">Q8</span><span class="qt">What outbound ports are permitted from the OT DMZ toward Azure? Can the DMZ reach Databricks Zerobus endpoints on port 443 over gRPC / HTTP2?</span></div>
+      <div class="dq"><span class="qn">Q9</span><span class="qt">What is the committed bandwidth and typical latency on the SO-WAN link? Is there a documented SLA or contention ratio?</span></div>
+      <div class="dq"><span class="qn">Q10</span><span class="qt">Is there a deep-packet inspection or SSL intercept proxy between OT DMZ and Azure that could break gRPC or HTTP2 flows?</span></div>
+    </div>
+
+    <div class="dg">
+      <div class="dg-title">Technolog &amp; Utilicore <span class="dtag">AWS path</span></div>
+      <div class="dq"><span class="qn">Q11</span><span class="qt">Is the Technolog &rarr; Utilicore &rarr; AWS IoT Core path owned by Welsh Water or is it a managed service contract with Technolog / Ovarro?</span></div>
+      <div class="dq"><span class="qn">Q12</span><span class="qt">Can the Technolog MQTT topics be bridged back into the Ovarro Mosquitto broker, or must that path remain via AWS IoT Core for contractual reasons?</span></div>
+      <div class="dq"><span class="qn">Q13</span><span class="qt">Is WITS protocol data also in scope? The LUCID diagram references the WITS protocol &mdash; is that a separate pipeline or embedded in the existing topic groups?</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 6 DISCOVERY 2 -->
+<div class="slide" id="s6">
+  <div class="slide-label">Discovery Questions &mdash; 2 of 2</div>
+  <div class="slide-title">Data, Assets <span>&amp; Governance</span></div>
+  <div class="disc-grid anim-1">
+
+    <div class="dg">
+      <div class="dg-title">Data Volumes &amp; Quality <span class="dtag">sizing</span></div>
+      <div class="dq"><span class="qn">Q14</span><span class="qt">How many unique tags are active across LUCID, Logger, and NRW topic groups combined? What is the expected peak tag-change rate in events per second?</span></div>
+      <div class="dq"><span class="qn">Q15</span><span class="qt">What is the current payload format on the MQTT topics &mdash; plain JSON, Sparkplug B protobuf, or a Utilicore / Ovarro proprietary schema? Is there a sample payload available?</span></div>
+      <div class="dq"><span class="qn">Q16</span><span class="qt">Are there existing data completeness or latency SLAs on the ingest path? What is the acceptable maximum delay from field event to Delta table?</span></div>
+    </div>
+
+    <div class="dg">
+      <div class="dg-title">Asset Hierarchy &amp; Naming <span class="dtag">ISA-95</span></div>
+      <div class="dq"><span class="qn">Q17</span><span class="qt">Does Welsh Water have an existing site/area/equipment naming convention, or is the asset hierarchy implicit in the tag paths on the broker?</span></div>
+      <div class="dq"><span class="qn">Q18</span><span class="qt">Are the Logger OPC-UA topics structured as Kepware Channel.Device.Tag, a flat namespace, or a vendor-specific hierarchy? Is Kepware in use on the logger side?</span></div>
+      <div class="dq"><span class="qn">Q19</span><span class="qt">Is the EDM Asset Lookup referenced in the LUCID architecture available as a structured data source that can drive ISA-95 path normalisation at ingestion time?</span></div>
+    </div>
+
+    <div class="dg">
+      <div class="dg-title">Databricks Environment <span class="dtag">Azure</span></div>
+      <div class="dq"><span class="qn">Q20</span><span class="qt">Is the Databricks workspace already Zerobus-enabled? If not, what is the provisioning process and lead time in the Welsh Water Azure subscription?</span></div>
+      <div class="dq"><span class="qn">Q21</span><span class="qt">What Unity Catalog structure is already in place &mdash; is there an existing welsh_water catalog, or would raw Delta tables be provisioned under a shared catalog?</span></div>
+      <div class="dq"><span class="qn">Q22</span><span class="qt">Is the Azure Databricks workspace in the same region as the OT DMZ egress point? Cross-region gRPC adds latency and egress cost.</span></div>
+    </div>
+
+    <div class="dg">
+      <div class="dg-title">Change Management <span class="dtag">governance</span></div>
+      <div class="dq"><span class="qn">Q23</span><span class="qt">Who owns the OT DMZ change management process, and what is the typical lead time to approve and deploy a new Docker container in that zone?</span></div>
+      <div class="dq"><span class="qn">Q24</span><span class="qt">Is there a CIS benchmark or equivalent OT security hardening requirement for software running in the DMZ? The connector has a hardening mode &mdash; what controls are mandated?</span></div>
+      <div class="dq"><span class="qn">Q25</span><span class="qt">Who is the data owner for the NRW telemetry stream? Is there a data sharing or sovereignty requirement before that data lands in a Databricks-managed environment?</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 7 CONFIG -->
+<div class="slide" id="s7">
+  <div class="slide-label">Configuration</div>
+  <div class="slide-title">Connector Config for <span>Welsh Water</span></div>
+  <div class="code-two-col anim-1">
+    <div class="code-block">
+      <span class="ftag">sources / normalisation</span>
+<span class="cy">sources</span>:
+  - <span class="cy">name</span>: <span class="cv">"lucid_mqtt"</span>
+    <span class="cy">protocol</span>: <span class="cv">"mqtt"</span>
+    <span class="cy">endpoint</span>: <span class="cv">"mqtt://mosquitto:1883"</span>
+    <span class="cy">topics</span>:
+      - <span class="cv">"LUCID/#"</span>
+      - <span class="cv">"Logger/OPC-UA/#"</span>
+      - <span class="cv">"NRW/OPC-UA/#"</span>
+    <span class="cy">site</span>: <span class="cv">"welsh_water"</span>
+    <span class="cy">area</span>: <span class="cv">"network"</span>
+
+  - <span class="cy">name</span>: <span class="cv">"scopex_opcua"</span>
+    <span class="cy">protocol</span>: <span class="cv">"opcua"</span>
+    <span class="cy">endpoint</span>: <span class="cv">"opc.tcp://scopex:4840"</span>
+    <span class="cy">security_mode</span>: <span class="cv">"SignAndEncrypt"</span>
+    <span class="cy">site</span>: <span class="cv">"welsh_water"</span>
+    <span class="cy">area</span>: <span class="cv">"telemetry"</span>
+    <span class="cy">equipment</span>: <span class="cv">"scopex_regional"</span>
+
+<span class="cy">normalization</span>:
+  <span class="cy">enabled</span>: <span class="cnum">true</span>
+  <span class="cy">path_template</span>: <span class="cv">"{site}/{area}/{equipment}/{signal_type}"</span>
+    </div>
+    <div class="code-block">
+      <span class="ftag">zerobus targets</span>
+<span class="cy">zerobus</span>:
+  <span class="cy">enabled</span>: <span class="cnum">true</span>
+  <span class="cy">default_target</span>:
+    <span class="cy">workspace_host</span>: <span class="cv">"https://adb-xxx.azuredatabricks.net"</span>
+    <span class="cy">catalog</span>: <span class="cv">"welsh_water"</span>
+    <span class="cy">schema</span>: <span class="cv">"raw"</span>
+    <span class="cy">table</span>: <span class="cv">"ot_telemetry"</span>
+
+  <span class="cy">source_targets</span>:
+    <span class="cy">lucid_mqtt</span>:
+      <span class="cy">table</span>: <span class="cv">"lucid_telemetry"</span>
+    <span class="cy">scopex_opcua</span>:
+      <span class="cy">table</span>: <span class="cv">"scopex_telemetry"</span>
+
+  <span class="cy">auth</span>:
+    <span class="cy">client_id</span>:     <span class="cv">"${credential:zerobus.client_id}"</span>
+    <span class="cy">client_secret</span>: <span class="cv">"${credential:zerobus.client_secret}"</span>
+
+<span class="cco"># Store via:</span>
+<span class="cco"># python -m unified_connector.core</span>
+<span class="cco">#   .credential_manager store zerobus.*</span>
+    </div>
+  </div>
+</div>
+
+<!-- 8 NEXT STEPS -->
+<div class="slide" id="s8">
+  <div class="slide-label">Proposed Engagement</div>
+  <div class="slide-title">Next Steps with <span>Welsh Water</span></div>
+  <div class="steps anim-1">
+    <div class="step">
+      <div class="snum">01</div>
+      <div>
+        <div class="stitle">OT Environment Discovery</div>
+        <div class="sbody">Work through Q1&ndash;Q13 with Welsh Water OT and network teams. Confirm Mosquitto address, topic structure, ScopeX endpoint, SO-WAN outbound port availability, and AWS IoT Core contract ownership.</div>
+        <span class="stag">~1 day</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="snum">02</div>
+      <div>
+        <div class="stitle">Connector POC in OT DMZ</div>
+        <div class="sbody">Deploy Docker container in read-only mode. Run auto-discovery scan. Validate tag-change events flowing into Welsh Water Databricks workspace raw tables. Confirm ISA-95 path normalisation against EDM Asset Lookup hierarchy.</div>
+        <span class="stag">~1 week</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="snum">03</div>
+      <div>
+        <div class="stitle">DLT Pipeline Validation</div>
+        <div class="sbody">Run connector in parallel with existing EventHub path. Verify DLT pipelines consume from new raw tables without schema changes. Confirm data completeness parity over a 5-day window.</div>
+        <span class="stag">~3 days</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="snum">04</div>
+      <div>
+        <div class="stitle">Azure Functions Decommission</div>
+        <div class="sbody">On confirmed parity &mdash; remove Azure Durable Function, OPC-UA Handler, Event Grid MQTT Broker, and EventHub from the LUCID Ingest path. NRW REST API and Azure SQL MI remain unchanged.</div>
+        <span class="stag">Phase 1 cutover</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const progress = document.getElementById('progress');
+const counter = document.getElementById('slide-counter');
+let current = 0;
+function goTo(n) {
+  slides[current].classList.remove('active');
+  current = (n + slides.length) % slides.length;
+  slides[current].classList.add('active');
+  progress.style.width = ((current + 1) / slides.length * 100) + '%';
+  counter.textContent = String(current+1).padStart(2,'0') + ' / ' + String(slides.length).padStart(2,'0');
+}
+document.getElementById('next').addEventListener('click', () => goTo(current+1));
+document.getElementById('prev').addEventListener('click', () => goTo(current-1));
+document.addEventListener('keydown', e => {
+  if (['ArrowRight','ArrowDown',' '].includes(e.key)) { e.preventDefault(); goTo(current+1); }
+  if (['ArrowLeft','ArrowUp'].includes(e.key))        { e.preventDefault(); goTo(current-1); }
+});
+let tx = 0;
+document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; });
+document.addEventListener('touchend',   e => { const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 50) goTo(current + (dx < 0 ? 1 : -1)); });
+goTo(0);
+</script>
+</body>
+</html>
